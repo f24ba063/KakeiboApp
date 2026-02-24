@@ -2,9 +2,12 @@ package com.example.kakeiboApp.repository;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Mapper;
+
 import com.example.kakeiboApp.DTO.KakeiboDTO;
 import com.example.kakeiboApp.entity.Kakeibo;
 
+@Mapper
 public interface KakeiboMapper {
 	
 	//すべての要素を取得する
