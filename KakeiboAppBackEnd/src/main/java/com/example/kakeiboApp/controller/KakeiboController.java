@@ -1,4 +1,4 @@
-package com.example.kakeiboApp;
+package com.example.kakeiboApp.controller;
 
 import jakarta.transaction.Transactional;
 
