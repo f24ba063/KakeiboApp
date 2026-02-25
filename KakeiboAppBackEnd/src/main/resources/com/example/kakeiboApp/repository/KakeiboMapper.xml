@@ -52,4 +52,14 @@
 		and
 			make_date(#{year},#{month}, #{day})
 </select>
+
+<!-- db内に存在するすべての月を取得 -->
+<select id="getDistinctMonth" resultType="string">
+	select 
+		distinct to_char(trade_date, 'YYYY-MM')
+	from 
+		kakeibo
+		order by 1; 
+</select>
+
 </mapper>

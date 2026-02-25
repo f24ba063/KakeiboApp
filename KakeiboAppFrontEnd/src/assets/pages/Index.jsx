@@ -8,15 +8,15 @@ export default function Index() {
     const [KakeiboDto, setKakeiboDto] = useState([]);//家計簿全データ
     const [monthlyIncome, setMonthlyIncome] = useState(0);//月収
     const [monthlyOutgo, setMonthlyOutgo] = useState(0);//支出
-    const [month, setMonth] = useState(now.getMonth() + 1);//月を取得
     const [year, setYear] = useState(now.getFullYear());//年を取得
-    const [date, setDate] = useState(now.getDate());
+    const [month, setMonth] = useState(now.getMonth() + 1);//月を取得
+    const [date, setDate] = useState(now.getDate());//日を取得
+    const [currentMonth, setCurrentMonth] = useState(now.getMonth() + 1);//現在の月を取得
 
     //家計簿の全データを引き入れている
     useEffect(() => {
         fetch('http://localhost:8080/index',
-            { cache: "no-store" }
-        )
+            { cache: "no-store" } )
             .then(res => res.json())
             .then(data => setKakeiboDto(data));
     }, []);
@@ -24,14 +24,9 @@ export default function Index() {
     //今月の収入を取得
     useEffect(() => {
         fetch(`http://localhost:8080/index/monthlyIncome/${year}/${month}/${date}`,
-            { cache: "no-store" }
-        )
-            .then(res => {
-                return res.json();
-            })
-            .then(data => {
-                setMonthlyIncome(data)
-            }
+            { cache: "no-store" } )
+            .then(res => { return res.json();})
+            .then(data => { setMonthlyIncome(data)}
             );
     }, []);
 
@@ -40,24 +35,16 @@ export default function Index() {
         fetch(`http://localhost:8080/index/monthlyOutgo/${year}/${month}/${date}`,
             { cache: "no-store" }
         )
-            .then(res => {
-                return res.json();
-            })
-            .then(data => {
-                setMonthlyOutgo(data)
-            }
+            .then(res => { return res.json();})
+            .then(data => { setMonthlyOutgo(data) }
             );
     }, []);
 
-    //日付から「月」、「日」だけ取得
-    function formatDate(dateString) {
-        const d = new Date(dateString);
-        const date = d.getDay();
-        const month = d.getMonth();
-        const year = d.getFullYear() % 100;
-
-        return `${year}/${month}/${date}`;
-    }
+    //useEffetct(() => {
+    //    fetch('http://localhost:8080/index/checkExisting')
+    //        .then(res => res.json())
+    //        .then(data => set)
+    //})
 
     function formatDate2(year,month) {
         return `${year}年${month}月`;
@@ -65,15 +52,15 @@ export default function Index() {
 
     function dateGet(ry) {
         const y = new Date(ry);
-        const year = y.getYear();
-        const month = y.getMont() + 1;
+        const year = y.getYear() % 100;
+        const month = y.getMonth() + 1;
         const day = y.getDate() + 1;
         return `${year}/${month}/${day}`;
         }
 
     return (
         <>
-            <h1>おはよう</h1>
+            <h1>家計簿アプリ練習</h1>
             <h3>
                 <span>{formatDate2(year,month)}収入：{monthlyIncome}</span>
                 <br />
@@ -93,7 +80,7 @@ export default function Index() {
 
             <div id="card-base">
                 {KakeiboDto.
-                    filter(e => new Date(e.tradeDate).getMonth() + 1 == month)
+                    filter(e => new Date(e.tradeDate).getMonth() + 1 == currentMonth )
 
                     .map(e => (
                     //カード形式にした各種入出金

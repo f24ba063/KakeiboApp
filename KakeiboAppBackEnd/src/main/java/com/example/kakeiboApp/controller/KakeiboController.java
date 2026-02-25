@@ -42,5 +42,8 @@ public class KakeiboController{
 		return service.getMonthlyTotalOutgoService(year,month, day);
 	}
 	
-	
+	@GetMapping("checkExisting")
+	public List<String> getMonths(){
+		return service.getExistingMonthService();
+	}
 }

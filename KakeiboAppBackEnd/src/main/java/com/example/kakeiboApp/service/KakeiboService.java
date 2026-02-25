@@ -5,10 +5,15 @@ import java.util.List;
 import com.example.kakeiboApp.DTO.KakeiboDTO;
 
 public interface KakeiboService {
-	
+	//全ての要素を取得する
 	public List<KakeiboDTO>getAllService();
 		
+	//今から一か月前までの間の総収入を取得する
 	public Integer getMonthlyTotalIncomeService(Integer year, Integer month, Integer day);
 	
+	//今から一か月前までの間の総支出を取得する
 	public Integer getMonthlyTotalOutgoService(Integer year, Integer month, Integer day);
+	
+	//データに何月のものが存在するかを解析する
+	public List<String> getExistingMonthService();
 }
