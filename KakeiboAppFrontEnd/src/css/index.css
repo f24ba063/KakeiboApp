@@ -1,0 +1,73 @@
+﻿#trade-card{
+    margin: 10px;
+    padding: 5px;
+    border-radius: 5px;
+    width: 200px;
+    height: 250px;
+    background-color: #DDEEFF;
+    border:solid 1px black;
+    list-style-type: none;
+}
+
+#card-base {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+#date-figure-character {
+    position:relative;
+    top: 0px;
+    z-index:10;
+}
+
+#date-figure-background {
+    margin-right: 10px;
+    margin-left: 4px;
+    width: 190px;
+    background-color: #FFFFEE;
+    border: solid 1px #bbbbbb;
+    height: 45px;
+    position:relative;
+    top: -55px;
+    z-index:9;
+}
+
+#category-figure-character {
+    position: relative;
+    top:-53px;
+    z-index: 10;
+}
+
+#category-figure-background {
+    margin-right: 10px;
+    margin-left: 4px;
+    width: 190px;
+    background-color: #FFFFEE;
+    border: solid 1px #bbbbbb;
+    height: 45px;
+    position: relative;
+    top: -107px;
+    z-index: 9;
+}
+
+#memo-figure-character {
+    position: relative;
+    z-index: 10;
+    top:-110px;
+}
+
+#memo-figure-background {
+    margin-right: 10px;
+    margin-left: 4px;
+    width: 190px;
+    background-color: #FFFFEE;
+    border: solid 1px #bbbbbb;
+    height: 115px;
+    position: relative;
+    top: -160px;
+    z-index: 9;
+}
+
+#paging {
+}
+    

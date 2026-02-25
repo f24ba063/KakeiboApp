@@ -21,4 +21,13 @@ public class KakeiboServiceImpl implements KakeiboService {
 		return mapper.getAll();
 	}
 
+	@Override
+	public Integer getMonthlyTotalIncomeService(Integer year, Integer month, Integer day) {
+		return mapper.getMonthlyTotalIncome(year, month, day);
+	}
+	
+	@Override
+	public Integer getMonthlyTotalOutgoService(Integer year, Integer month, Integer day) {
+		return mapper.getMonthlyTotalOutgo(year, month, day);
+	}
 }
