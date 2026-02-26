@@ -78,9 +78,9 @@ export default function Index() {
                 </h3>
 
                 <h3>
-                    <span className="top-lines">今月収入/支出比：{monthlyIncome - monthlyOutgo }</span>
-                    <span className="top-lines">次の給料日：{nextSalaryDay}</span>
-                    <span>あいうえお</span>
+                    <span className="top-lines">今月収入/支出：{monthlyIncome > monthlyOutgo ? "+" : ""}{monthlyIncome - monthlyOutgo }</span>
+                    <span className="top-lines">次の給料日： {nextSalaryDay}</span>
+                    <span></span>
                 </h3>
 
                 <div id="paging">

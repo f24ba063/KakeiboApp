@@ -2,9 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\src",
-    "\\src\\assets\\pages",
-    "\\src\\css"
+    "\\src\\assets",
+    "\\src\\assets\\pages"
   ],
-  "SelectedNode": "\\src\\css\\index.css",
+  "SelectedNode": "\\src\\assets\\pages\\Index.jsx",
   "PreviewInSolutionExplorer": false
 }
