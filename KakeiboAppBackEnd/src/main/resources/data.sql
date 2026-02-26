@@ -50,6 +50,9 @@ values (17, '可処分', 'OUT', 17);
 
 
 --家計簿に各月10個程度ずつ、7か月分
+
+insert into kakeibo(trade_date, category_id, amount, memo, homeru)
+values('2025-7-11',  12, 20,  'おやつ', 1);
 --2025年8月
 insert into kakeibo(trade_date, category_id, amount, memo, homeru)
 values('2025-8-1',  11, 5800,  '2025年8月食費', 1);
@@ -290,6 +293,22 @@ values('2026-2-20', 12 , 9000 ,  '電気ガス');
 insert into kakeibo(trade_date, category_id, amount, memo)
 values('2026-2-27',  11,  2000,  '食費');
 
+-----------------------------2026年3月
+insert into kakeibo(trade_date, category_id, amount, memo)
+values('2026-3-1',  11,  4500,  '食費');
+
+insert into kakeibo(trade_date, category_id, amount, memo)
+values('2026-3-2',  15,  5000,  '雑費（ゲーム）');
+
+insert into kakeibo(trade_date, category_id, amount, memo)
+values('2026-3-4',  11,  6000,  '食費');
+
+insert into kakeibo(trade_date, category_id, amount, memo)
+values('2026-3-7',  15,  14000,  '雑費（宿泊）');
+
+
+insert into kakeibo(trade_date, category_id, amount, memo)
+values('2026-3-11',  1,  140000,  '給与');
 
 
 

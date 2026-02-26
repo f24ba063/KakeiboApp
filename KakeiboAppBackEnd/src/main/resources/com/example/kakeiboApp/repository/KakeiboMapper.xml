@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.kakeiboApp.repository.KakeiboMapper">
 
-<!--全ての家計簿を獲得-->
+<!-- 全ての情報を取得する -->
 <select id="getAll" resultType="com.example.kakeiboApp.DTO.KakeiboDTO">
 	select
 		K.id,
@@ -15,10 +15,33 @@
 		K.updated_at as updatedAt
 	from kakeibo K left join category C
 	on K.category_id = C.id
+	order by K.trade_date
+</select>
+
+<!--一か月分全ての家計簿を獲得-->
+<select id="getMonthly" resultType="com.example.kakeiboApp.DTO.KakeiboDTO">
+	select
+		K.id,
+		C.category,
+		K.trade_date as tradeDate,
+		K.amount,
+		K.homeru,
+		K.memo,
+		K.created_at as createdAt,
+		K.updated_at as updatedAt
+	from kakeibo K left join category C
+	on K.category_id = C.id
+	where
+		K.trade_date between
+			make_date(#{year},#{month}, #{day})
+		and
+			make_date(#{year},#{month}, #{day}) + interval '1 month' 
+			- interval '1 day'
+	order by K.trade_date
 </select>
 
 <!--今月の収入を獲得-->
-<select id="getMonthlyTotalIncome">
+<select id="getMonthlyTotalIncome" resultType="integer">
 	select 
 		coalesce(sum(K.amount) , 0)
 	from 
@@ -29,14 +52,14 @@
 		C.in_out = 'IN'
 	and	
 		K.trade_date between
-			make_date(#{year},#{month}, #{day}) - interval '1 month' 
-			+ interval '1 day'
-		and
 			make_date(#{year},#{month}, #{day})
+		and
+			make_date(#{year},#{month}, #{day}) + interval '1 month' 
+			- interval '1 day'
 </select>
 
 <!-- 今月の支出を獲得 -->
-<select id="getMonthlyTotalOutgo">
+<select id="getMonthlyTotalOutgo" resultType="integer">
 	select 
 		coalesce(sum(K.amount) , 0)
 	from 
@@ -47,19 +70,18 @@
 		C.in_out = 'OUT'
 	and	
 		K.trade_date between
-			make_date(#{year},#{month}, #{day}) - interval '1 month' 
-			+ interval '1 day'
-		and
 			make_date(#{year},#{month}, #{day})
+		and
+			make_date(#{year},#{month}, #{day}) + interval '1 month' 
+			- interval '1 day'
 </select>
 
-<!-- db内に存在するすべての月を取得 -->
-<select id="getDistinctMonth" resultType="string">
-	select 
-		distinct to_char(trade_date, 'YYYY-MM')
-	from 
-		kakeibo
-		order by 1; 
+<!--最新、最古のデータ日付をチェックして、ページめくりを禁止する基準にする-->
+<select id="getDataRange" resultType="com.example.kakeiboApp.DTO.DataRangeDTO">
+	select
+		max(trade_date) as newestData,
+		min(trade_date) as oldestData
+	from kakeibo
 </select>
 
 </mapper>

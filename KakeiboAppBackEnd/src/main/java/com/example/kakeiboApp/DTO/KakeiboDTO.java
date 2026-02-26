@@ -1,7 +1,7 @@
 package com.example.kakeiboApp.DTO;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,7 +16,7 @@ public class KakeiboDTO {
 	
 	String category;
 	
-	Date tradeDate;
+	LocalDate tradeDate;
 	
 	Integer amount;
 	

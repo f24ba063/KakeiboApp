@@ -1,4 +1,9 @@
-﻿#trade-card{
+﻿body{
+    background-color:#fee
+}
+
+/*カード全体の装飾*/
+#trade-card{
     margin: 10px;
     padding: 5px;
     border-radius: 5px;
@@ -9,17 +14,20 @@
     list-style-type: none;
 }
 
+/*カードの配置パターン*/
 #card-base {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
 }
 
+/*カードの日付文字列*/
 #date-figure-character {
     position:relative;
     top: 0px;
     z-index:10;
 }
 
+/*カードの日付背景*/
 #date-figure-background {
     margin-right: 10px;
     margin-left: 4px;
@@ -32,12 +40,14 @@
     z-index:9;
 }
 
+/*カードのカテゴリ文字列*/
 #category-figure-character {
     position: relative;
     top:-53px;
     z-index: 10;
 }
 
+/*カードのカテゴリ背景*/
 #category-figure-background {
     margin-right: 10px;
     margin-left: 4px;
@@ -50,12 +60,14 @@
     z-index: 9;
 }
 
+/*カードの詳細文字列*/
 #memo-figure-character {
     position: relative;
     z-index: 10;
     top:-110px;
 }
 
+/*カードの詳細背景*/
 #memo-figure-background {
     margin-right: 10px;
     margin-left: 4px;
@@ -67,7 +79,33 @@
     top: -160px;
     z-index: 9;
 }
-
-#paging {
-}
     
+/*収支パラメータ装飾*/
+.top-lines{
+    background-color:#ddffef;
+    border-radius:8px;
+    margin:5px;
+    padding: 8px;
+    border: solid 1px black;
+}
+
+/*ページめくり禁止メッセージ*/
+#warning{
+    color:red;
+}
+
+/*ページめくりボタン装飾*/
+.paging-button{
+    font-size: 25px;
+    padding: 4px;
+    margin:8px;
+    margin-right: 20px;
+    margin-left: 20px;
+    border-radius: 9px;
+    padding: 10px;
+    background-color: #bbbbbb;
+}
+
+#outbounds{
+    max-width: 750px;
+}

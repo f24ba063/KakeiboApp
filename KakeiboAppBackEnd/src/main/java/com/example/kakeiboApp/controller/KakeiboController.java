@@ -1,7 +1,5 @@
 package com.example.kakeiboApp.controller;
 
-import java.util.List;
-
 import jakarta.transaction.Transactional;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -10,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.kakeiboApp.DTO.KakeiboDTO;
+import com.example.kakeiboApp.DTO.MonthlyResponseDTO;
 import com.example.kakeiboApp.service.KakeiboService;
 
 import lombok.RequiredArgsConstructor;
@@ -23,27 +21,26 @@ import lombok.RequiredArgsConstructor;
 public class KakeiboController{
 	private final KakeiboService service;
 	
-	//DTOの全要素をよこす
-	@GetMapping
-	public List<KakeiboDTO> indexController() {
+	//指定した日の直前の11日から一か月の間（翌10日まで）の全データ取得
+	@GetMapping("/{year}/{month}/{day}")
+	public MonthlyResponseDTO indexController(@PathVariable Integer year, 
+			@PathVariable Integer month, @PathVariable Integer day) {
 		
-	return service.getAllService();
+		return service.getMonthlyDataService(year, month, day);
 	}
 	
+	//家計簿のページをめくるたび、いま確認している月の収入を獲得する
 	@GetMapping("/monthlyIncome/{year}/{month}/{day}")
 	public Integer returnMonthlyIncome(@PathVariable Integer year, 
 			@PathVariable Integer month, @PathVariable Integer day) {
 		return service.getMonthlyTotalIncomeService(year, month, day);
 	}
 	
+	//家計簿のページをめくるたび、いま確認している月の支出を確認する
 	@GetMapping("/monthlyOutgo/{year}/{month}/{day}")
 	public Integer returnMonthlyOutgo(@PathVariable Integer year, 
 			@PathVariable Integer month, @PathVariable Integer day) {
 		return service.getMonthlyTotalOutgoService(year,month, day);
 	}
-	
-	@GetMapping("checkExisting")
-	public List<String> getMonths(){
-		return service.getExistingMonthService();
-	}
+
 }
