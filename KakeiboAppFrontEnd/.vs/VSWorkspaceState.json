@@ -3,8 +3,9 @@
     "",
     "\\src",
     "\\src\\assets",
-    "\\src\\assets\\pages"
+    "\\src\\assets\\pages",
+    "\\src\\css"
   ],
-  "SelectedNode": "\\src\\assets\\pages\\Index.jsx",
+  "SelectedNode": "\\src\\css\\index.css",
   "PreviewInSolutionExplorer": false
 }
