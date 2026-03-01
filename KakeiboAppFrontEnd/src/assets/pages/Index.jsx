@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import getNextSalaryDay from '../../feature/getNextSalaryDay';
 import pageMonth from '../../feature/pageMonth'
+import { Link } from 'react-router-dom'
 import '../../css/index.css';
 
 export default function Index() {
@@ -85,16 +86,23 @@ export default function Index() {
 
                 <div id="paging">
                     <span>
+                        {/*前の月への移動リンク*/}
                         <button type="button" className="paging-button" onClick={() =>
                             pageMonth("back", year, month, setMonth, setYear)}
                             disabled={warning === "最古のデータ以前の月は閲覧できません！" }>
-                        前の月</button>
+                            前の月</button>
+
+                        {/*次の月への移動リンク*/}
                         <button type="button" className="paging-button" onClick={() => 
                             pageMonth("forward", year, month, setMonth, setYear)}
                             disabled={warning === "これより後のデータはありません"}>
-                        後の月</button>
-                        <button type="button">追加</button>
+                            後の月</button>
+
+                        {/*新規データ登録ページへ*/}
+                        <Link className="paging-button" to="/newdata">追加</Link>
                     </span>
+
+                    {/*表示ページをめくったとき、データが無かった時の各種警告文*/}
                     <p id="warning">{warning}</p>
                 </div>
 

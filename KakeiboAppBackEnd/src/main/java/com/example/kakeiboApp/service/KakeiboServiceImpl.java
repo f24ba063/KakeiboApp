@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.example.kakeiboApp.DTO.DataRangeDTO;
 import com.example.kakeiboApp.DTO.KakeiboDTO;
 import com.example.kakeiboApp.DTO.MonthlyResponseDTO;
+import com.example.kakeiboApp.entity.Category;
 import com.example.kakeiboApp.repository.KakeiboMapper;
 
 import lombok.Data;
@@ -108,4 +109,9 @@ public class KakeiboServiceImpl implements KakeiboService {
 		
 		return dataRangeDto;
 	}
+	
+	//カテゴリー選択肢情報を返す
+	public List<Category> getAllCategoryService() {
+		return mapper.getAllCategory();
+	};
 }

@@ -84,4 +84,16 @@
 	from kakeibo
 </select>
 
+<select id="getAllCategory" resultType="com.example.kakeiboApp.entity.Category">
+	select
+		id, category, in_out asinOut,sort_order as sortOrder
+	from category
+</select>
+<insert id="saveNewFile" >
+	insert into kakeibo(category, in_out, sort_order)
+	values
+	(#{category}, #{amount}, #{in_out}, "{sort_order}")
+</insert>
+
+
 </mapper>

@@ -104,6 +104,10 @@
     border-radius: 9px;
     padding: 10px;
     background-color: #bbbbbb;
+    border: solid 3px black;
+    text-decoration:none;
+    color:black;
+    cursor:pointer;
 }
 
 #outbounds{

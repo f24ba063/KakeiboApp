@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.example.kakeiboApp.DTO.DataRangeDTO;
 import com.example.kakeiboApp.DTO.KakeiboDTO;
+import com.example.kakeiboApp.entity.Category;
 import com.example.kakeiboApp.entity.Kakeibo;
 
 @Mapper
@@ -34,4 +35,11 @@ public interface KakeiboMapper {
 	
 	//データがどの期間から過去（未来）には存在しないかを調査する
 	public DataRangeDTO getDataRange();
+	
+	//プルダウンメニュー要素として、カテゴリ一覧を取得
+	public List<Category> getAllCategory();
+	
+	//新規作成データをkakeiboテーブルへinsert、indexページへ移動
+	public String saveNewFile();
+	
 }

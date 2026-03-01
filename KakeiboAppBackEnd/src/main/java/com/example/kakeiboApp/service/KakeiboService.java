@@ -5,6 +5,7 @@ import java.util.List;
 import com.example.kakeiboApp.DTO.DataRangeDTO;
 import com.example.kakeiboApp.DTO.KakeiboDTO;
 import com.example.kakeiboApp.DTO.MonthlyResponseDTO;
+import com.example.kakeiboApp.entity.Category;
 
 public interface KakeiboService {
 	//全ての要素を取得する
@@ -24,4 +25,7 @@ public interface KakeiboService {
 	
 	//最新、最古のデータの日付を調べる
 	public DataRangeDTO getDataRangeService();
+	
+	//入力画面で、カテゴリー要素の選択肢を返す
+	public List<Category> getAllCategoryService();
 }
