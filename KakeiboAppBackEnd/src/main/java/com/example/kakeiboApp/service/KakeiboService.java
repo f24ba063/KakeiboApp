@@ -6,6 +6,7 @@ import com.example.kakeiboApp.DTO.DataRangeDTO;
 import com.example.kakeiboApp.DTO.KakeiboDTO;
 import com.example.kakeiboApp.DTO.MonthlyResponseDTO;
 import com.example.kakeiboApp.entity.Category;
+import com.example.kakeiboApp.entity.Kakeibo;
 
 public interface KakeiboService {
 	//全ての要素を取得する
@@ -28,4 +29,7 @@ public interface KakeiboService {
 	
 	//入力画面で、カテゴリー要素の選択肢を返す
 	public List<Category> getAllCategoryService();
+	
+	//新規登録画面でデータセーブする
+	public void save(Kakeibo kakeibo);
 }

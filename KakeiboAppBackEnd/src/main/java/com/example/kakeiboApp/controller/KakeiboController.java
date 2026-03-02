@@ -1,7 +1,6 @@
 package com.example.kakeiboApp.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import jakarta.transaction.Transactional;
 
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.kakeiboApp.DTO.MonthlyResponseDTO;
 import com.example.kakeiboApp.entity.Category;
+import com.example.kakeiboApp.entity.Kakeibo;
 import com.example.kakeiboApp.service.KakeiboService;
 
 import lombok.RequiredArgsConstructor;
@@ -59,9 +59,8 @@ public class KakeiboController{
 	
 	//新規データセーブ
 	@PostMapping("/save")
-	public Map<String, Object> save(@RequestBody Map<String, Object> data) {
-		System.out.println(data);
-		return data;
+	public void save(@RequestBody Kakeibo kakeibo) {
+		service.save(kakeibo);
 	}
 
 }

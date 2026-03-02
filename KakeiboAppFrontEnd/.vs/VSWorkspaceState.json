@@ -2,11 +2,11 @@
   "ExpandedNodes": [
     "",
     "\\public",
-    "\\public\\img",
     "\\src",
     "\\src\\assets",
-    "\\src\\css",
+    "\\src\\assets\\pages",
     "\\src\\png"
   ],
+  "SelectedNode": "\\src\\assets\\pages\\NewData.jsx",
   "PreviewInSolutionExplorer": false
 }

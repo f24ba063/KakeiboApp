@@ -90,9 +90,9 @@
 	from category
 </select>
 <insert id="saveNewFile" >
-	insert into kakeibo(category, in_out, sort_order)
+	insert into kakeibo(category, amount, in_out, sort_order, memo)
 	values
-	(#{category}, #{amount}, #{in_out}, "{sort_order}")
+	(#{category}, #{amount}, #{in_out}, #{sort_order}, #{memo})
 </insert>
 
 

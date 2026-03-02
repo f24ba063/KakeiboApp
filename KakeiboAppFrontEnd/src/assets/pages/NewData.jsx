@@ -1,5 +1,6 @@
 
 import { useState, useEffect } from 'react'
+import { useNavigate } from "react-router-dom";
 import '../../css/newData.css'
 export default function NewData() {
        //カテゴリー(category)、日付(tradeDate)、
@@ -28,14 +29,19 @@ export default function NewData() {
     const handleSubmit = async e => {
         e.preventDefault();
 
-        const res = await fetch("http://localhost:8080/index/save", {
+        await fetch("http://localhost:8080/index/save", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type":"application/json"
+            },
             body: JSON.stringify(kakeibo)
         });
+    };
 
-        const data = await res.json();
-        console.log(data);
+    //戻るボタンでホームに移動
+    const navigate = useNavigate();
+    const moveHome = () => {
+        navigate("/index");
     }
 
     return (
@@ -51,17 +57,18 @@ export default function NewData() {
                     className="in-out-button" onClick={() => setInOut(false)}>支出</button>
 
             {/*入力フォーム*/}
-                <form action="@{/save}" onSubmit={handleSubmit}>
+                <form action="@{/save}" onSubmit={handleSubmit} method="post">
                     <label className="lbl">入出区分：{inOut ? "収入" : "支出"}</label>
                     {/*カテゴリ*/}
                     <select
-                        value={selectedId}
+                        value={kakeibo.category}
                         onChange={e => setSelectedId(e.target.value)}
                     >  
                         {categories
                             .filter(e => (e.id <= 10) == inOut)
                             .map(cat => (
-                            <option key={cat.id} value={cat.category}>
+                                <option key={cat.id} value={cat.id}
+                                    onChnge={ }>
                                 {cat.category}
                             </option>
                         )) }
@@ -116,9 +123,14 @@ export default function NewData() {
                             homeru: kakeibo.homeru === 1 ? 0 : 1
                         })}
                     />
+                    <br></br>
 
-                    <button type="submit">送信</button>
+                    <button type="submit" onClick={handleSubmit }>送信</button>
+                    
                 </form>
+                <br></br>
+
+                <button onClick={moveHome}>戻る</button>
             </div>
         </>
     )

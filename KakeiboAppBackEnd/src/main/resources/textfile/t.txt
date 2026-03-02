@@ -1,0 +1,13 @@
+reactページからspringにデータを投げる場合
+
+
+async e => {
+	e.preventDefault();
+	await fetch("http://localhost:8080/index/save",{
+		method:"post",
+		headers:{
+			"Contents-Type":"application/json"
+		},
+		body: JSON.stringify(kakeibo)
+	});
+};

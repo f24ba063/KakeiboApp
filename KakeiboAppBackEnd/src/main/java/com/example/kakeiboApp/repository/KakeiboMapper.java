@@ -40,6 +40,6 @@ public interface KakeiboMapper {
 	public List<Category> getAllCategory();
 	
 	//新規作成データをkakeiboテーブルへinsert、indexページへ移動
-	public String saveNewFile();
+	public String saveNewFile(Kakeibo kakeibo);
 	
 }
