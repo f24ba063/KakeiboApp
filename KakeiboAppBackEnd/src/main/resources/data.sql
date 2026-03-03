@@ -255,8 +255,8 @@ values('2026-1-18',  11,  1000,  '食費');
 insert into kakeibo(trade_date, category_id, amount, memo)
 values('2026-1-20', 12 , 9000 ,  '電気ガス');
 
-insert into kakeibo(trade_date, category_id, amount, memo)
-values('2026-1-27',  11,  1000,  '食費');
+insert into kakeibo(trade_date, category_id, amount, memo, homeru)
+values('2026-1-27',  11,  1000,  '食費', 1);
 
 
 -----------------------------2026年2月
@@ -284,14 +284,14 @@ values('2026-2-12',  16,  30000,  '実家へ振込');
 insert into kakeibo(trade_date, category_id, amount, memo)
 values('2026-2-15', 13 , 3500 ,  '電話代');
 
-insert into kakeibo(trade_date, category_id, amount, memo)
-values('2026-2-18',  11,  2000,  '食費');
+insert into kakeibo(trade_date, category_id, amount, memo, homeru)
+values('2026-2-18',  11,  2000,  '食費',1);
 
-insert into kakeibo(trade_date, category_id, amount, memo)
-values('2026-2-20', 12 , 9000 ,  '電気ガス');
+insert into kakeibo(trade_date, category_id, amount, memo, homeru)
+values('2026-2-20', 12 , 9000 ,  '電気ガス', 1);
 
-insert into kakeibo(trade_date, category_id, amount, memo)
-values('2026-2-27',  11,  2000,  '食費');
+insert into kakeibo(trade_date, category_id, amount, memo, homeru)
+values('2026-2-27',  11,  2000,  '食費', 1);
 
 -----------------------------2026年3月
 insert into kakeibo(trade_date, category_id, amount, memo)

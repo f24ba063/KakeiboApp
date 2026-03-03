@@ -3,15 +3,16 @@
 }
 
 /*カード全体の装飾*/
-#trade-card{
+#trade-card {
     margin: 10px;
     padding: 5px;
     border-radius: 5px;
     width: 200px;
     height: 250px;
     background-color: #DDEEFF;
-    border:solid 1px black;
+    border: solid 1px black;
     list-style-type: none;
+    position: relative;
 }
 
 /*カードの配置パターン*/
@@ -20,66 +21,33 @@
     grid-template-columns: repeat(3, 1fr);
 }
 
-/*カードの日付文字列*/
-#date-figure-character {
-    position:relative;
-    top: 0px;
-    z-index:10;
+
+/*文字、金額の背景高さ*/
+.block {
+    height: 50px;
+}
+/*コメント欄の背景高さ*/
+.comment-block {
+    height: 124px;
 }
 
-/*カードの日付背景*/
-#date-figure-background {
-    margin-right: 10px;
-    margin-left: 4px;
-    width: 190px;
-    background-color: #FFFFEE;
-    border: solid 1px #bbbbbb;
-    height: 45px;
-    position:relative;
-    top: -55px;
-    z-index:9;
+/*カードの文字の高さ調整*/
+.block h3,
+.comment-block h3 {
+    margin: 10px;
 }
 
-/*カードのカテゴリ文字列*/
-#category-figure-character {
-    position: relative;
-    top:-53px;
-    z-index: 10;
+/*カードの各入力領域の背景装飾*/
+.block,
+.comment-block {
+    background-color: #ffe;
+    border: 1px solid grey;
+    border-radius: 4px;
+    margin: 4px;
+    margin-bottom: 6px;
+    align-items: flex-start;
 }
 
-/*カードのカテゴリ背景*/
-#category-figure-background {
-    margin-right: 10px;
-    margin-left: 4px;
-    width: 190px;
-    background-color: #FFFFEE;
-    border: solid 1px #bbbbbb;
-    height: 45px;
-    position: relative;
-    top: -107px;
-    z-index: 9;
-}
-
-/*カードの詳細文字列*/
-#memo-figure-character {
-    position: relative;
-    z-index: 10;
-    top:-110px;
-}
-
-/*カードの詳細背景*/
-#memo-figure-background {
-    margin-right: 10px;
-    margin-left: 4px;
-    width: 190px;
-    background-color: #FFFFEE;
-    border: solid 1px #bbbbbb;
-    height: 115px;
-    position: relative;
-    top: -160px;
-    z-index: 9;
-}
-    
 /*収支パラメータ装飾*/
 .top-lines{
     background-color:#ddffef;
@@ -110,6 +78,50 @@
     cursor:pointer;
 }
 
+/*画面全体の最大幅を750に縛る*/
 #outbounds{
     max-width: 750px;
+}
+
+/*二行目ラインの位置を整える*/
+#second-line{
+    display:flex;
+}
+
+/*頑張ったハートの大きさ調整*/
+.ganbatta {
+width: 25px;
+margin: 0;
+padding:0;
+}
+
+/*ハート同士の重ね合わせ調整*/
+#ganbatta + #ganbatta {
+    margin-left: -10px;
+    align-items:center;
+    padding-top:6px;
+}
+
+/*カードについてるハートのサイズ*/
+.card-heart {
+    width: 25px;
+    position: absolute;
+    top: 10px; /* 上からの微調整 */
+    right: 10px; /* 右からの微調整 */
+    width: 28px;
+    cursor: pointer;
+}
+
+/*がんばったのハートを並べる列*/
+#heart-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap; /* ← 折り返す */
+    max-width: 220px;
+}
+
+/*がんばった数のタイトルを改行しないよう調整*/
+#ganbatta-title{
+    display: inline;
+    margin:0;
 }

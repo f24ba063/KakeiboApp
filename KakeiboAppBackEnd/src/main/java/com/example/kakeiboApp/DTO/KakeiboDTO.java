@@ -20,9 +20,11 @@ public class KakeiboDTO {
 	
 	Integer amount;
 	
+	String inOut = "IN";
+	
 	Integer homeru = 0;
 	
-	String memo;
+	String memo = " ";
 	
 	LocalDateTime createdAt;
 	

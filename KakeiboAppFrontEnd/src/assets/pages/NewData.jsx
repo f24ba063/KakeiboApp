@@ -1,4 +1,4 @@
-
+﻿
 import { useState, useEffect } from 'react'
 import { useNavigate } from "react-router-dom";
 import '../../css/newData.css'
@@ -8,11 +8,10 @@ export default function NewData() {
 	//雑記メモ(memo)を入力する
 
     const [categories, setCategories] = useState([]);
-    const [selectedId, setSelectedId] = useState(1);
     const [inOut, setInOut] = useState(true);
     const today = new Date().toISOString().split("T")[0];
     const [kakeibo, setKakeibo] = useState({
-        category: "",
+        categoryId: 1,
         tradeDate: today,
         amount: 0,
         homeru: 0,
@@ -28,7 +27,7 @@ export default function NewData() {
 
     const handleSubmit = async e => {
         e.preventDefault();
-
+        
         await fetch("http://localhost:8080/index/save", {
             method: "POST",
             headers: {
@@ -36,6 +35,7 @@ export default function NewData() {
             },
             body: JSON.stringify(kakeibo)
         });
+        navigate("/index");
     };
 
     //戻るボタンでホームに移動
@@ -47,7 +47,7 @@ export default function NewData() {
     return (
         <>
             <h2>新しい情報</h2>
-            <div>
+            <div id="new-data">
             {/*入力を「収入」に切り替えるボタン*/}
                 <button
                     className="in-out-button" onClick={() => setInOut(true)}>収入</button>
@@ -57,18 +57,22 @@ export default function NewData() {
                     className="in-out-button" onClick={() => setInOut(false)}>支出</button>
 
             {/*入力フォーム*/}
-                <form action="@{/save}" onSubmit={handleSubmit} method="post">
+                <form onSubmit={handleSubmit} >
                     <label className="lbl">入出区分：{inOut ? "収入" : "支出"}</label>
                     {/*カテゴリ*/}
                     <select
-                        value={kakeibo.category}
-                        onChange={e => setSelectedId(e.target.value)}
+                        value={kakeibo.categoryId}
+                        onChange={e =>
+                            setKakeibo({
+                                ...kakeibo,
+                                categoryId: Number(e.target.value)
+                            })
+                        }
                     >  
                         {categories
                             .filter(e => (e.id <= 10) == inOut)
                             .map(cat => (
-                                <option key={cat.id} value={cat.id}
-                                    onChnge={ }>
+                                <option key={cat.id} value={cat.id}>
                                 {cat.category}
                             </option>
                         )) }
@@ -117,7 +121,7 @@ export default function NewData() {
                     {/*誉めるフラグ*/}
                     <img
                         className="homeru-icon"
-                        src={kakeibo.homeru === 1 ? "img/heart.png" : "img/heart_gray.png"}
+                        src={kakeibo.homeru === 1 ? "/img/heart.png" : "/img/heart_gray.png"}
                         onClick={() => setKakeibo({
                             ...kakeibo,
                             homeru: kakeibo.homeru === 1 ? 0 : 1
@@ -125,12 +129,14 @@ export default function NewData() {
                     />
                     <br></br>
 
-                    <button type="submit" onClick={handleSubmit }>送信</button>
+                    <button type="submit"
+                    id="sender-button">送信</button>
                     
                 </form>
                 <br></br>
 
-                <button onClick={moveHome}>戻る</button>
+                <button onClick={moveHome}
+                id="back-button">戻る</button>
             </div>
         </>
     )

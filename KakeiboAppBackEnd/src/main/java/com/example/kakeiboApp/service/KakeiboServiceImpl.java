@@ -3,6 +3,7 @@ package com.example.kakeiboApp.service;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 import com.example.kakeiboApp.DTO.DataRangeDTO;
@@ -25,6 +26,11 @@ public class KakeiboServiceImpl implements KakeiboService {
 	//全データを取得する
 	public List<KakeiboDTO> getAllService(){
 		return mapper.getAll();
+	};
+	
+	//更新時に特定idのデータを取得する
+	public KakeiboDTO getByIdService(@Param("id") Integer id) {
+		return mapper.getById(id);
 	};
 	
 	//もし最古・最新の外側を探索していたら、エラー文を返して
@@ -112,12 +118,28 @@ public class KakeiboServiceImpl implements KakeiboService {
 	}
 	
 	//カテゴリー選択肢情報を返す
+	@Override
 	public List<Category> getAllCategoryService() {
 		return mapper.getAllCategory();
 	};
 	
 	//新規データ登録作業
+	@Override
 	public void save(Kakeibo kakeibo) {
+		if(kakeibo.getMemo()== null ||kakeibo.getMemo().equals("")) {
+			kakeibo.setMemo(" ");
+		}
 		mapper.saveNewFile(kakeibo);
+	};
+	
+	//カードのハートを押下で、homeruをトグル、更新
+	@Override
+	public void updateHomeru(Integer id, Integer homeru) {
+	    mapper.updateHomeru(id, homeru);
+	}
+
+	//ID指定して削除するサービス
+	public void deleteService(Integer id, Integer delete) {
+		mapper.deleteData(id, delete);
 	};
 }

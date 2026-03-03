@@ -1,10 +1,37 @@
+﻿
 .in-out-button{
     padding: 8px;
     margin: 12px;
     width: 80px;
+    font-size:30px;
 }
 
 .homeru-icon{
     cursor:pointer;
     width:45px;
+}
+
+#new-data{
+    font-size:1.5em;
+}
+
+input{
+    width:250px;
+    height:25px;
+    font-size: 25px;
+}
+
+#sender-button {
+    padding: 8px;
+    margin: 1px;
+    width: 90px;
+    font-size: 30px;
+    background-color: #99ffdd;
+    border: solid 1px;
+    border-radius: 8px;
+}
+
+#back-button {
+    width: 90px;
+    font-size: 25px;
 }

@@ -20,7 +20,7 @@ public interface KakeiboMapper {
 			@Param("year")Integer year, @Param("month")Integer month, @Param("day") Integer day);
 	
 	//特定のidの取引だけを取得する
-	public Kakeibo getById();
+	public KakeiboDTO getById(Integer id);
 	
 	//一か月分の収入トータル
 	public Integer getMonthlyTotalIncome(
@@ -40,6 +40,11 @@ public interface KakeiboMapper {
 	public List<Category> getAllCategory();
 	
 	//新規作成データをkakeiboテーブルへinsert、indexページへ移動
-	public String saveNewFile(Kakeibo kakeibo);
+	public void saveNewFile(Kakeibo kakeibo);
 	
+	//homeruをクリックして褒めたり外したりする
+	public void updateHomeru(@Param("id")Integer id, @Param("homeru")Integer homeru);
+	
+	//削除キー
+	public void deleteData(Integer id, Integer delete);
 }
