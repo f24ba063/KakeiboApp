@@ -1,12 +1,7 @@
 {
   "ExpandedNodes": [
     "",
-    "\\public",
-    "\\public\\img",
-    "\\src",
-    "\\src\\assets",
-    "\\src\\css"
+    "\\src"
   ],
-  "SelectedNode": "\\src\\css\\showData.css",
   "PreviewInSolutionExplorer": false
 }

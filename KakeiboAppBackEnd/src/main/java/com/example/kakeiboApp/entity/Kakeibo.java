@@ -1,7 +1,7 @@
 package com.example.kakeiboApp.entity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class Kakeibo{
 	Integer id;
 	
-	Date tradeDate;
+	LocalDate tradeDate;
 	
 	Integer categoryId;
 	
@@ -33,5 +33,5 @@ public class Kakeibo{
 	
 	LocalDateTime updatedAt;
 	
-	Integer softDelete = 0;
+	Integer softDelete = 1;
 }

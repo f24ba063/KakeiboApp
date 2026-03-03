@@ -6,27 +6,28 @@ import '../../css/showData.css'
 export default function ShowData() {
     const { id } = useParams();
 
-    const [kakeibo, setKakeibo] = useState({
+    const [kakeiboDto, setKakeiboDto] = useState({
         id: 0,
         category: "",
+        tradeDate: "",
         amount: 0,
+        inOut: "IN",
         homeru: 0,
         memo: "",
-        inOut: "",
         createdAt: "",
         updatedAt: "",
         softDelete: 0
     });
-    //当該idのデータを呼び込む
+    //当該idのデータをjavaから吸い出す
     useEffect(() => {
         fetch(`http://localhost:8080/index/showdata/${id}`)
             .then(res => res.json())
-            .then(data => setKakeibo(data))
+            .then(data => setKakeiboDto(data))
     }, [id]);
 
     //日付のフォーマット
-    const datestr = kakeibo.createdAt.split('T')[0];
-    const updstr = kakeibo.updatedAt.split('T')[0];
+    const datestr = kakeiboDto.createdAt ? kakeiboDto.createdAt.split('T')[0] : "";
+    const updstr = kakeiboDto.updatedAt ? kakeiboDto.updatedAt.split('T')[0] : "";
 
     const dtg = (s) => {
         const [y, m, d] = s.split('-');
@@ -34,20 +35,23 @@ export default function ShowData() {
     };
     
     //削除ボタン設定(softDeleteを9にすると削除扱い)
-    const handleDelete = (id) => {
-        if (confirm("本当に削除しますか？")) {
-            setKakeibo({
-                ...kakeibo,
-                softDelete: 9
-            });
+    const handleDelete = async (id) => {
+        if (!confirm("本当に削除しますか？")) return;
 
-            fetch(`http://localhost:8080/index/delete/${id}`, {
+        try {
+            //DBにsoftDelete=9を反映
+            const res = await fetch(`http://localhost:8080/index/delete/${id}`, {
                 method: "PUT",
-                headers: {
-                    "Content-Type": "application/json"
-                },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ softDelete: 9 })
             });
+
+            if (!res.ok) throw new Error("削除失敗");
+
+            //indexに戻る
+            navigate("/index");
+        } catch (err) {
+            alert("削除できませんでした：" + err.message);
         }
     };
 
@@ -59,26 +63,26 @@ export default function ShowData() {
 
     return (
         <>
-            <div class="area">
+            <div className="area">
                 <h2>id: {id}</h2>
-                <h2>カテゴリー: {kakeibo.category}</h2>
+                <h2>カテゴリー: {kakeiboDto.category}</h2>
 
                 <h2>
-                    {kakeibo.inOut === "IN" ? "収入" : "支出"}：{kakeibo.amount }
+                    {kakeiboDto.inOut === "IN" ? "収入" : "支出"}：{kakeiboDto.amount }
                 </h2>
-                <h2>メモ：{kakeibo.memo}</h2>
+                <h2>メモ：{kakeiboDto.memo}</h2>
                 <h2>データ作成日：{dtg(datestr)}</h2>
                 <h2>最終更新日：{dtg(updstr)}</h2>
                 <h2>すごい！
                 <img
                     className="homeru-icon"
-                    src={kakeibo.homeru === 1 ? "/img/heart.png" : "/img/heart_gray.png"}
-                    onClick={() => setKakeibo({
-                        ...kakeibo,
-                        homeru: kakeibo.homeru === 1 ? 0 : 1
+                    src={kakeiboDto.homeru === 1 ? "/img/heart.png" : "/img/heart_gray.png"}
+                    onClick={() => setKakeiboDto({
+                        ...kakeiboDto,
+                        homeru: kakeiboDto.homeru === 1 ? 0 : 1
                     })}
                     /></h2>
-                <button onClick={() =>handleDelete(kakeibo.id)}>削除</button>
+                <button onClick={() =>handleDelete(kakeiboDto.id)}>削除</button>
             </div>
             <button type="button" onClick={moveHome }>ホームに戻る</button>
         </>

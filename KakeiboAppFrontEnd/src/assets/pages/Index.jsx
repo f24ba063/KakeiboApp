@@ -35,7 +35,7 @@ export default function Index() {
                 } else {
                     setWarning("");
                 };
-
+                console.log("fetch結果:", data.data); // ← ここで確認
                 setKakeiboDto(data.data);
             });
     
