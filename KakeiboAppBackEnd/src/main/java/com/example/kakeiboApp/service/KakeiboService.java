@@ -17,14 +17,9 @@ public interface KakeiboService {
 	//更新時に特定idのデータを取得する
 	public KakeiboDTO getByIdService(@Param("id") Integer id);
 	
-	//一つ気分の要素を取得する
+	//一月分の要素を取得する
 	public MonthlyResponseDTO getMonthlyDataService(Integer year, Integer month, Integer day);
 		
-	//今から一か月前までの間の総収入を取得する
-	public Integer getMonthlyTotalIncomeService(Integer year, Integer month, Integer day);
-	
-	//今から一か月前までの間の総支出を取得する
-	public Integer getMonthlyTotalOutgoService(Integer year, Integer month, Integer day);
 	
 	//データに何月のものが存在するかを解析する
 	public List<String> getExistingMonthService();

@@ -40,8 +40,8 @@ public class KakeiboServiceImpl implements KakeiboService {
 		
 		//本データでは11日を給料日として制定している
 		Integer salaryDate = 11;
-		//給料日を締めとした一か月を調べている。つまり11～翌10日なので
-		//問い合わせた日の日付しだいで調べる範囲が1月分ずれこむ
+		//給料日を締めとした一か月を調べている。1～10日に問い合わせたときは
+		//先月のデータも問い合わせる必要がある
 		month = day < salaryDate ? month - 1 : month;
 		year = month == 0 ? year -1 : year;
 		month = month == 0 ? 12 : month;
@@ -50,7 +50,7 @@ public class KakeiboServiceImpl implements KakeiboService {
 		//全データを探査して、最新・最古のデータの日付を納めている
 		var dateRange = mapper.getDataRange();
 		
-//		LocalDate target = LocalDate.of(year, month, day);
+		//LocalDate target = LocalDate.of(year, month, day);
 		MonthlyResponseDTO res = new MonthlyResponseDTO();
 		LocalDate start = LocalDate.of(year, month, 11);
 		LocalDate end   = start.plusMonths(1).minusDays(1);
@@ -73,31 +73,6 @@ public class KakeiboServiceImpl implements KakeiboService {
 		return res;
 	}
 
-	//直前の11日から翌月の10日までの総収入を取得する
-	@Override
-	public Integer getMonthlyTotalIncomeService(Integer year, Integer month, Integer day) {
-		//引き受けた日取りを直前の給料日（11日)に変換する
-		Integer salaryDate = 11;
-		month = day < salaryDate ? month - 1 : month;
-		year = month == 0 ? year -1 : year;
-		month = month == 0 ? 12 : month;
-		day = 11;
-		
-		return mapper.getMonthlyTotalIncome(year, month, day);
-	}
-	
-	//直前の11日から翌月10日までの総支出を取得する
-	@Override
-	public Integer getMonthlyTotalOutgoService(Integer year, Integer month, Integer day) {
-		//引き受けた日取りを直前の給料日（11日)に変換する
-		Integer salaryDate = 11;
-		month = day < salaryDate ? month - 1 : month;
-		year = month == 0 ? year -1 : year;
-		month = month == 0 ? 12 : month;
-		day = 11;
-		
-		return mapper.getMonthlyTotalOutgo(year, month, day);
-	}
 	
 	//データに何月のものが存在するかを解析する
 	@Override

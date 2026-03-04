@@ -37,20 +37,7 @@ public class KakeiboController{
 		
 		return service.getMonthlyDataService(year, month, day);
 	}
-	
-	//家計簿のページをめくるたび、いま確認している月の収入を獲得する
-	@GetMapping("/monthlyIncome/{year}/{month}/{day}")
-	public Integer returnMonthlyIncome(@PathVariable Integer year, 
-			@PathVariable Integer month, @PathVariable Integer day) {
-		return service.getMonthlyTotalIncomeService(year, month, day);
-	}
-	
-	//家計簿のページをめくるたび、いま確認している月の支出を確認する
-	@GetMapping("/monthlyOutgo/{year}/{month}/{day}")
-	public Integer returnMonthlyOutgo(@PathVariable Integer year, 
-			@PathVariable Integer month, @PathVariable Integer day) {
-		return service.getMonthlyTotalOutgoService(year,month, day);
-	}
+
 
 	//カテゴリーパラメータ一覧を渡し、新規データ作成に利用する
 	@GetMapping("/categoryParameter")

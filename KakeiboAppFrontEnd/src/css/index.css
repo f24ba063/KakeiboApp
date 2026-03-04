@@ -1,9 +1,9 @@
 ﻿body{
-    background-color:#fee
+    background-color:#fff
 }
 
 /*カード全体の装飾*/
-#trade-card {
+.trade-card {
     margin: 10px;
     padding: 5px;
     border-radius: 5px;

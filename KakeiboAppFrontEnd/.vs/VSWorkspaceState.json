@@ -1,7 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\src"
+    "\\src",
+    "\\src\\feature"
   ],
+  "SelectedNode": "\\src\\feature\\ToggleHeart.jsx",
   "PreviewInSolutionExplorer": false
 }

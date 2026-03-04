@@ -2,10 +2,12 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
 import getNextSalaryDay from '../../feature/getNextSalaryDay';
+import toggleHeart from '../../feature/ToggleHeart';
 import pageMonth from '../../feature/pageMonth'
 import { Link, useNavigate } from 'react-router-dom'
 import '../../css/index.css';
-
+import '../../css/incomeCard.css';
+import '../../css/outgoCard.css';
 export default function Index() {
     const now = new Date();
     const [KakeiboDto, setKakeiboDto] = useState([]);//家計簿全データ
@@ -35,25 +37,26 @@ export default function Index() {
                 } else {
                     setWarning("");
                 };
-                console.log("fetch結果:", data.data); // ← ここで確認
-                setKakeiboDto(data.data);
+
+                //取得情報から一か月分の収支を計算
+                const kdto = data.data;
+                setKakeiboDto(kdto);
+                //収入
+                const MonthIn = kdto.filter(k => k.inOut === "IN");
+                let sm = 0;
+                MonthIn.forEach(e => {
+                    sm += e.amount;
+                });
+                setMonthlyIncome(sm);
+                //支出
+                const Monthout = kdto.filter(k => k.inOut === "OUT");
+                let su = 0;
+                Monthout.forEach(e => {
+                    su += e.amount;
+                });
+                setMonthlyOutgo(su);
             });
-    
-    //今月の収入を取得
-        fetch(`http://localhost:8080/index/monthlyIncome/${year}/${month}/${date}`,
-            { cache: "no-store" })
-            .then(res => res.json())
-            .then(data => {
-                setMonthlyIncome(data)
-            }
-            );
-    //今月の支出を取得
-    fetch(`http://localhost:8080/index/monthlyOutgo/${year}/${month}/${date}`,
-        { cache: "no-store" })
-        .then(res => res.json())
-            .then(data => { setMonthlyOutgo(data) }
-            );
-    }, [year, month, date]);
+     }, [year, month, date]);
 
     //「今月収入・支出」の表現に使うための年・月を取得
     function formatDate2(year, month) {
@@ -68,27 +71,6 @@ export default function Index() {
         const day = y.getDate();
         return `${year}/${month}/${day}`;
     }
-
-    //カード上のハートマークをクリックすると、homeruフラグが変遷する
-    const toggleHomeru = async (id, current) => {
-        await fetch(`http://localhost:8080/index/homeru/${id}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                homeru: current === 1 ? 0 : 1
-            })
-        });
-
-        setKakeiboDto(prev =>
-            prev.map(item =>
-                item.id === id
-                    ? { ...item, homeru: current === 1 ? 0 : 1 }
-                    : item
-            )
-        );
-    };
 
     //頑張った数を計上して♡付与に参考する
     const heartCount = KakeiboDto.filter(m => m.homeru == 1).length;
@@ -146,12 +128,14 @@ export default function Index() {
                     <p id="warning">{warning}</p>
                 </div>
 
+                {/*収支カードの表示*/}
                 <div id="card-base">
                     {KakeiboDto
                         .filter(e => e.softDelete != 9)
                         .map(e => (
                             //カード形式にした各種入出金データ
-                            <ul key={e.id} id="trade-card"
+                            <ul key={e.id}
+                                className={`trade-card ${e.inOut === "IN" ? "incomeCard" : "outgoCard"}`}
                                 onClick={() => {
                                     moveDetail(e.id)
                                 }}
@@ -162,7 +146,10 @@ export default function Index() {
                                     src={e.homeru === 1 ? "/img/heart.png" : "/img/heart_gray.png"}
                                     alt="heart"
                                     className="card-heart"
-                                    onClick={() => toggleHomeru(e.id, e.homeru) }
+                                    onClick={(event) => {
+                                        event.stopPropagation();
+                                        toggleHeart(e.id, e.homeru, setKakeiboDto)
+                                    }}
                                 />
                                 {/*日付文字列*/}
                                 <li className="block">

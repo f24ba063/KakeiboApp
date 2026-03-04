@@ -22,14 +22,6 @@ public interface KakeiboMapper {
 	//特定のidの取引だけを取得する
 	public KakeiboDTO getById(Integer id);
 	
-	//一か月分の収入トータル
-	public Integer getMonthlyTotalIncome(
-			@Param("year")Integer year, @Param("month")Integer month, @Param("day") Integer day);
-	
-	//一か月分の支出トータル計上
-	public Integer getMonthlyTotalOutgo(
-			@Param("year")Integer year, @Param("month")Integer month, @Param("day") Integer day); 
-
 	//DBに存在するデータか、存在する月一覧を取得する
 	public List<String> getExistingMonth();
 	
