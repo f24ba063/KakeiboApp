@@ -5,6 +5,7 @@ import '../../css/showData.css'
 
 export default function ShowData() {
     const { id } = useParams();
+    const [isEditing, setIsEditing] = useState(false);//編集モードボタン
 
     const [kakeiboDto, setKakeiboDto] = useState({
         id: 0,
@@ -61,29 +62,50 @@ export default function ShowData() {
         navigate("/index");
     }
 
+    const handleSubmit = () => {
+
+    }
+
     return (
         <>
-            <div className="area">
-                <h2>id: {id}</h2>
+            <form onSubmit={handleSubmit} className="area">
+                {/*IDは隠蔽している*/}
+                <h2 id="id-hidden">id: {id}</h2>
+                {/*カテゴリー*/}
+                {isEditing ? 
+                    <select>
+                        
+                    </select>
+                    :
                 <h2>カテゴリー: {kakeiboDto.category}</h2>
+                }
 
-                <h2>
-                    {kakeiboDto.inOut === "IN" ? "収入" : "支出"}：{kakeiboDto.amount }
-                </h2>
+                {isEditing ? <p></p> : 
+            <h2>
+                {kakeiboDto.inOut === "IN" ? "収入" : "支出"}：{kakeiboDto.amount}
+            </h2>}
+
                 <h2>メモ：{kakeiboDto.memo}</h2>
                 <h2>データ作成日：{dtg(datestr)}</h2>
                 <h2>最終更新日：{dtg(updstr)}</h2>
                 <h2>すごい！
                 <img
-                    className="homeru-icon"
-                    src={kakeiboDto.homeru === 1 ? "/img/heart.png" : "/img/heart_gray.png"}
-                    onClick={() => setKakeiboDto({
-                        ...kakeiboDto,
-                        homeru: kakeiboDto.homeru === 1 ? 0 : 1
-                    })}
+                        className="homeru-icon"
+                        src={kakeiboDto.homeru === 1 ? "/img/heart.png" : "/img/heart_gray.png"}
+                        onClick={(e) => {
+                            setKakeiboDto({
+                                ...kakeiboDto,
+                                homeru: kakeiboDto.homeru === 1 ? 0 : 1
+                            });
+                            
+                        } }
                     /></h2>
-                <button onClick={() =>handleDelete(kakeiboDto.id)}>削除</button>
-            </div>
+                <button onClick={() => handleDelete(kakeiboDto.id)}>削除</button>
+                {isEditing ?
+                    <button type="submit">保存</button> : 
+                    <button type="submit">編集</button>
+                }
+            </form>
             <button type="button" onClick={moveHome }>ホームに戻る</button>
         </>
     )

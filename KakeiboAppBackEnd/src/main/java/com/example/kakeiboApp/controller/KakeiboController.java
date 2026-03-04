@@ -67,6 +67,7 @@ public class KakeiboController{
 		return service.getByIdService(id);
 	}
 	
+	//削除コマンド
 	@PutMapping("delete/{id}")
 	@Transactional
 	public void deleteData(@PathVariable Integer id,
