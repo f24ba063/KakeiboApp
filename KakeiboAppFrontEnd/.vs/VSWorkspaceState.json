@@ -2,9 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\src",
-    "\\src\\css",
-    "\\src\\feature"
+    "\\src\\assets",
+    "\\src\\assets\\pages"
   ],
-  "SelectedNode": "\\src\\css\\showData.css",
+  "SelectedNode": "\\src\\assets\\pages\\NewData.jsx",
   "PreviewInSolutionExplorer": false
 }

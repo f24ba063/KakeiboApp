@@ -74,4 +74,11 @@ public class KakeiboController{
 							@RequestBody Kakeibo kakeibo) {
 		service.deleteService(id, 9);
 	}
+	
+	//既存データの更新コマンド
+	@PutMapping("/update/{id}")
+	public void updateKakeibo(@PathVariable Integer id, 
+			@RequestBody KakeiboDTO dto) {
+		service.updateService(id, dto);
+	}
 }

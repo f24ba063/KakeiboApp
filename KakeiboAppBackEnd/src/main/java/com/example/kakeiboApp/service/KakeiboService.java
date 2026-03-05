@@ -38,4 +38,7 @@ public interface KakeiboService {
 	
 	//ID指定して削除する
 	public void deleteService(Integer id, Integer delete);
+	
+	//ID指定でデータを更新する
+	public void updateService(Integer Id, KakeiboDTO dto);
 }

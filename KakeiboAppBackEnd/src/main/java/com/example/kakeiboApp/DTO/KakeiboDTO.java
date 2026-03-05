@@ -14,6 +14,8 @@ public class KakeiboDTO {
 	//家計簿DTOはカテゴリのIDとカテゴリ名を両方所有している
 	Integer id;
 	
+	Integer categoryId;
+	
 	String category;
 	
 	LocalDate tradeDate;

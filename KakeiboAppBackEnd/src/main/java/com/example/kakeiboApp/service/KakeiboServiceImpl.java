@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.example.kakeiboApp.DTO.DataRangeDTO;
 import com.example.kakeiboApp.DTO.KakeiboDTO;
 import com.example.kakeiboApp.DTO.MonthlyResponseDTO;
+import com.example.kakeiboApp.converter.DtoConverter;
 import com.example.kakeiboApp.entity.Category;
 import com.example.kakeiboApp.entity.Kakeibo;
 import com.example.kakeiboApp.repository.KakeiboMapper;
@@ -116,5 +117,10 @@ public class KakeiboServiceImpl implements KakeiboService {
 	//ID指定して削除するサービス
 	public void deleteService(Integer id, Integer delete) {
 		mapper.deleteData(id, delete);
+	};
+	
+	public void updateService(Integer Id, KakeiboDTO dto) {
+		Kakeibo kakeibo = DtoConverter.convertToKakeibo(dto);
+		mapper.update(Id, kakeibo);
 	};
 }

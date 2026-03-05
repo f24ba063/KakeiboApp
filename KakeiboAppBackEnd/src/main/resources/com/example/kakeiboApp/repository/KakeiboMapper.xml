@@ -21,6 +21,7 @@
 <select id="getById"  resultType="com.example.kakeiboApp.DTO.KakeiboDTO">
 	select
 		K.id,
+		K.category_id as categoryId,
 		C.category,
 		K.trade_date as tradeDate,
 		K.amount,
@@ -86,5 +87,18 @@
 <update id="deleteData">
 	update kakeibo set soft_delete = #{delete}
 	where id = #{id}
+</update>
+
+<update id="update">
+	update Kakeibo 
+		set 
+			trade_date = #{kakeibo.tradeDate},
+			category_id = #{kakeibo.categoryId},
+			amount = #{kakeibo.amount},
+			memo = #{kakeibo.memo},
+			homeru = #{kakeibo.homeru},
+			updated_at = current_timestamp
+	where
+		id = #{id}
 </update>
 </mapper>

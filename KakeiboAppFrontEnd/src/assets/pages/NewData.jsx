@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from "react-router-dom";
 import '../../css/newData.css'
+import showCategory from '../../feature/showCategory';
 export default function NewData() {
        //カテゴリー(category)、日付(tradeDate)、
 	    //入出金額(amount)、数値型の誉めるフラグ( homeru =0)、
@@ -21,8 +22,9 @@ export default function NewData() {
     //ドロップリストにカテゴリー一覧を設定
     useEffect(() => {
         fetch("http://localhost:8080/index/categoryParameter")
-            .then((res => res.json()))
-            .then(data => setCategories(data));
+            .then(res => res.json())
+            .then(data => setCategories(data))
+            .then(data => console.log(data));
     }, [])
 
     const handleSubmit = async e => {
@@ -69,13 +71,7 @@ export default function NewData() {
                             })
                         }
                     >  
-                        {categories
-                            .filter(e => (e.id <= 10) == inOut)
-                            .map(cat => (
-                                <option key={cat.id} value={cat.id}>
-                                {cat.category}
-                            </option>
-                        )) }
+                        {showCategory(categories, inOut)}
                     </select>
 
                     <br />

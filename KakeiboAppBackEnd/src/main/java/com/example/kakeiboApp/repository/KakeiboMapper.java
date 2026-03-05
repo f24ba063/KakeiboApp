@@ -37,6 +37,9 @@ public interface KakeiboMapper {
 	//homeruをクリックして褒めたり外したりする
 	public void updateHomeru(@Param("id")Integer id, @Param("homeru")Integer homeru);
 	
+	//既存データの更新
+	public void update(@Param("id")Integer id, Kakeibo kakeibo);
+	
 	//削除キー
 	public void deleteData(Integer id, Integer delete);
 }
