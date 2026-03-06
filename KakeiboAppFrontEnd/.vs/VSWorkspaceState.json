@@ -3,8 +3,8 @@
     "",
     "\\src",
     "\\src\\assets",
-    "\\src\\assets\\pages"
+    "\\src\\feature"
   ],
-  "SelectedNode": "\\src\\assets\\pages\\NewData.jsx",
+  "SelectedNode": "\\src\\feature\\pageMonth.jsx",
   "PreviewInSolutionExplorer": false
 }

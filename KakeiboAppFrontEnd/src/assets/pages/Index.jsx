@@ -28,12 +28,12 @@ export default function Index() {
             { cache: "no-store" })
             .then(res => res.json())
             .then(data => {
-                if (data.status === "BEFORE_OLDEST") {
-                    setWarning("最古のデータ以前の月は閲覧できません！");
+                if (data.status === "EMPTY") {
+                    setWarning("この月にはデータが存在しません");
                 } else if (data.status === "AFTER_NEWEST") {
                     setWarning("これより後のデータはありません");
-                } else if (data.status === "EMPTY") {
-                    setWarning("この月にはデータが存在しません");
+                } else if (data.status === "BEFORE_OLDEST") {
+                    setWarning("最古のデータ以前の月は閲覧できません！");
                 } else {
                     setWarning("");
                 };
