@@ -33,8 +33,7 @@ public class KakeiboController{
 	//11日に入力した場合、「先月の11日から」ではなく、「当月の11日から」である
 	@GetMapping("/{year}/{month}/{day}")
 	public MonthlyResponseDTO indexController(@PathVariable Integer year, 
-			@PathVariable Integer month, @PathVariable Integer day, 
-			@PathVariable Integer salaryDate) {
+			@PathVariable Integer month, @PathVariable Integer day) {
 		
 		return service.getMonthlyDataService(year, month, day);
 	}

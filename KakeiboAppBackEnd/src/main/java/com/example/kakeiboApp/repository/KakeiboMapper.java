@@ -42,4 +42,5 @@ public interface KakeiboMapper {
 	
 	//削除キー
 	public void deleteData(Integer id, Integer delete);
+	
 }
