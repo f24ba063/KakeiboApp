@@ -9,7 +9,7 @@ export default function NewData() {
 	//雑記メモ(memo)を入力する
 
     const [categories, setCategories] = useState([]);
-    const [inOut, setInOut] = useState(true);
+    const [inOut, setInOut] = useState("IN");
     const today = new Date().toISOString().split("T")[0];
     const [kakeibo, setKakeibo] = useState({
         categoryId: 1,
@@ -49,20 +49,22 @@ export default function NewData() {
     return (
         <>
             <h2>新しい情報</h2>
-            <div id="new-data">
+            <div className={inOut === "IN" ? "income-background" :"outgo-background" }>
             {/*入力を「収入」に切り替えるボタン*/}
                 <button
-                    className="in-out-button" onClick={() => setInOut(true)}>収入</button>
+                    className="in-out-button" onClick={() => setInOut("IN")}>収入</button>
                 
             {/*入力を「支出」に切り替えるボタン*/}
                 <button
-                    className="in-out-button" onClick={() => setInOut(false)}>支出</button>
+                    className="in-out-button" onClick={() => setInOut("OUT")}>支出</button>
 
             {/*入力フォーム*/}
                 <form onSubmit={handleSubmit} >
-                    <label className="lbl">入出区分：{inOut ? "収入" : "支出"}</label>
+                    <label className="lbl">入出区分：{inOut === "IN" ? "収入" : "支出"}</label>
+                    <br />
                     {/*カテゴリ*/}
                     <select
+                        className="select-category"
                         value={kakeibo.categoryId}
                         onChange={e =>
                             setKakeibo({

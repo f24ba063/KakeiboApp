@@ -11,14 +11,40 @@
     width:45px;
 }
 
-#new-data{
-    font-size:1.5em;
+.income-background {
+    background-color: #ffff66;
+    display: block;
+    margin: auto;
+    border: 1px solid;
+    border-radius: 40px;
+    width: 60%;
+    font-size: 1.5em;
+    padding: 20px;
 }
 
-input{
-    width:250px;
-    height:25px;
+.outgo-background {
+    background-color: #bbddff;
+    display: block;
+    margin: auto;
+    border: 1px solid;
+    border-radius: 40px;
+    width: 60%;
+    font-size: 1.5em;
+    padding: 20px;
+}
+
+.select-category{
+    font-size: 24px;
+    padding:5px;
+    margin:5px;
+}
+
+input {
+    width: 250px;
+    height: 25px;
     font-size: 25px;
+    padding: 5px;
+    margin: 5px;
 }
 
 #sender-button {

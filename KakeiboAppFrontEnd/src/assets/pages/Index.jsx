@@ -6,8 +6,7 @@ import toggleHeart from '../../feature/ToggleHeart';
 import pageMonth from '../../feature/pageMonth'
 import { Link, useNavigate } from 'react-router-dom'
 import '../../css/index.css';
-import '../../css/incomeCard.css';
-import '../../css/outgoCard.css';
+
 export default function Index() {
     const now = new Date();
     const [KakeiboDto, setKakeiboDto] = useState([]);//家計簿全データ
@@ -16,8 +15,10 @@ export default function Index() {
     const [year, setYear] = useState(now.getFullYear());//年を取得
     const [month, setMonth] = useState(now.getMonth() + 1);//月を取得
     const [date, setDate] = useState(now.getDate());//日を取得
+    const [salaryGetDay,setSalaryGetDay] = useState(11);//給料日の設定
+    const [salaryDateEditToggle, setSalaryDateEditToggle] = useState(false);
     const [warning, setWarning] = useState("");
-    const nextSalaryDay = getNextSalaryDay();
+    const nextSalaryDay = getNextSalaryDay(salaryGetDay);
     const navigate = useNavigate();
 
     //家計簿の当該月のデータを引き入れている
@@ -78,6 +79,22 @@ export default function Index() {
     //詳細情報ページへ遷移
     const moveDetail = (id) => { navigate(`/showdata/${id}`) }
 
+    //給料日設定
+    const setSala = (e) =>{
+        if(e > 28){
+            setSalaryGetDay(28);
+            setWarning("29日以降は給料日として設定できません");
+        }
+       else  if(e < 1){
+            setSalaryGetDay(1);
+            setWarning("1日以前は給料日として設定できません");
+        }
+        else{
+            setSalaryGetDay(e);
+        }
+
+    }
+
     return (
         <>
             <div id="outbounds">
@@ -85,7 +102,20 @@ export default function Index() {
                 <h3>
                     <span className="top-lines">{formatDate2(year, month)}収入：{monthlyIncome}</span>
                     <span className="top-lines">{formatDate2(year, month)}支出：{monthlyOutgo}</span>
-                    <span className="top-lines">次の給料日：{nextSalaryDay }</span>
+                    <span className="top-lines">給料日の設定：{
+                        salaryDateEditToggle ?
+                        <input type="number"
+                        value={salaryGetDay}
+                        onChange={e=>setSala(e)}
+                        onBlur={()=>{setSalaryDateEditToggle(false)}}
+                        />
+                        :
+                        <p
+                        onClick={()=>setSalaryDateEditToggle(true)}>
+                            {salaryGetDay}
+                        </p>
+                            }
+                    </span>
                 </h3>
                 <div id="second-line">
                     <h3>
@@ -135,7 +165,7 @@ export default function Index() {
                         .map(e => (
                             //カード形式にした各種入出金データ
                             <ul key={e.id}
-                                className={`trade-card ${e.inOut === "IN" ? "incomeCard" : "outgoCard"}`}
+                                className={`${e.inOut === "IN" ? "income-card" : "outgo-card"}`}
                                 onClick={() => {
                                     moveDetail(e.id)
                                 }}

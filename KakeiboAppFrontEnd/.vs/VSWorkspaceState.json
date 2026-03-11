@@ -2,9 +2,8 @@
   "ExpandedNodes": [
     "",
     "\\src",
-    "\\src\\assets",
-    "\\src\\feature"
+    "\\src\\assets"
   ],
-  "SelectedNode": "\\src\\feature\\pageMonth.jsx",
+  "SelectedNode": "\\src\\feature",
   "PreviewInSolutionExplorer": false
 }

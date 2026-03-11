@@ -1,6 +1,6 @@
 ﻿.area{
     border:solid 1px grey;
-    border-radius:15px;
+    border-radius:100px;
     background-color: #edfeff;
 }
 
@@ -19,4 +19,14 @@
     text-align: center;
     justify-content: center;
     align-items:center;
+}
+
+button {
+    padding: 5px;
+    margin: 15px;
+    width: 120px;
+    height: 45px; 
+    font-size: 14px;
+    border: solid 1px;
+    border-radius: 8px;
 }

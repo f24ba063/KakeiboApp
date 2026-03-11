@@ -2,17 +2,30 @@
     background-color:#fff
 }
 
-/*カード全体の装飾*/
-.trade-card {
+/*収入カード全体の装飾*/
+.income-card {
     margin: 10px;
     padding: 5px;
     border-radius: 5px;
     width: 200px;
     height: 250px;
-    background-color: #DDEEFF;
     border: solid 1px black;
     list-style-type: none;
     position: relative;
+    background-color: #ffff66;
+}
+
+/*支出カード全体の装飾*/
+.outgo-card {
+    margin: 10px;
+    padding: 5px;
+    border-radius: 5px;
+    width: 200px;
+    height: 250px;
+    border: solid 1px black;
+    list-style-type: none;
+    position: relative;
+    background-color: #ddeeff;
 }
 
 /*カードの配置パターン*/

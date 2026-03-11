@@ -2,7 +2,13 @@ drop table if exists balance_history;
 drop table if exists kakeibo;
 drop table if exists category;
 drop table if exists in_out;
+drop table if exists payday;
 
+--操作者の給料日
+create table payday(
+	id serial primary key,
+	payday integer
+);
 
 --入出テーブル
 create table in_out(

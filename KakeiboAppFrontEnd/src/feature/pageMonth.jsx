@@ -1,4 +1,4 @@
-﻿export default function pageMonth(step, year, month,setMonth,setYear) {
+﻿export default function pageMonth(step, year, month, setMonth, setYear) {
     let newYear = year;
     let newMonth = month;
 
@@ -12,4 +12,5 @@
 
     setYear(newYear);
     setMonth(newMonth);
+    
 }

@@ -2,9 +2,9 @@
     return (
         
         categories
-            .filter(e => (inOut
-            ?   e.id <= 10
-            :   e.id > 10   
+            .filter(e => (inOut === "IN"
+            ?   e.inOut === "IN"
+            :   e.inOut ==="OUT" 
             ))
             .map(cat => (
                 <option key={cat.id} value={cat.id}>

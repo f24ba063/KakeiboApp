@@ -515,3 +515,7 @@ values
 	category_id between 11 and 20
 	)
 );
+
+
+insert into payday(payday)
+values(11);

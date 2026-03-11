@@ -41,7 +41,7 @@ public class KakeiboServiceImpl implements KakeiboService {
 		
 		//本データでは11日を給料日として制定している
 		Integer salaryDate = 11;
-		//給料日を締めとした一か月を調べている。1～10日に問い合わせたときは
+		//給料日を締めとした一か月を調べている。その月の給料日より早い日に問い合わせたときは
 		//先月のデータも問い合わせる必要がある
 		month = day < salaryDate ? month - 1 : month;
 		year = month == 0 ? year -1 : year;
@@ -102,6 +102,7 @@ public class KakeiboServiceImpl implements KakeiboService {
 	//新規データ登録作業
 	@Override
 	public void save(Kakeibo kakeibo) {
+		//メモ欄が空っぽだとスタイルが崩れるので、スペースを入れています
 		if(kakeibo.getMemo()== null ||kakeibo.getMemo().equals("")) {
 			kakeibo.setMemo(" ");
 		}
