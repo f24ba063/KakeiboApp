@@ -1,0 +1,61 @@
+＃＃自分の現在いるブランチ名を表示
+git branch
+
+＃＃既存ブランチの削除
+git branch -d ブランチ名
+
+＃＃新しいブランチを作るとき
+git switch -c ブランチ名
+
+##既存ブランチに移動するとき
+git switch ブランチ名（-cクリエイトがない）
+
+
+個人開発ルーチン
+
+1:mainを最新にする
+git switch main →git pull
+
+2:git switch -c 新規作成向けブランチ
+
+3:そこで開発
+git add . →git commit 'なんた'
+
+4:納得出来たらmainに取り込む
+git switch main → git merge 新規作成したブランチ
+
+5:mainをgitに送って確定
+git push
+
+
+家と外で作業を共有したいとき
+
+
+##新しいブランチをgithubにプッシュ
+git push -u origin ブランチ名
+
+##で先のPCでfetch
+git fetch
+
+##家で作ったブランチに切り替える
+git switch ブランチ名
+
+
+
+作りかけのブランチを完全にやり直したいとき
+##消したいブランチの上で
+git reset --hard main
+これでmainの内容を上書きして、変更内容を完全に消せる
+
+あるいはmainに戻り、ブランチを消して同名の物を作り直してもよい
+git switch main
+git branch -D ブランチ名(-Dは強制削除)
+git switch -c ブランチ名
+
+＃＃ローカルとgitでコンフリクトが起きて、リモート(git）側を採用したいとき
+①競合ファイルをすべてリモート側で上書き
+git checkout --theirs .
+②解決済みとしてステージ
+git add .
+③マージ完了コミット
+git gommit -m 'resolve conflict'so
