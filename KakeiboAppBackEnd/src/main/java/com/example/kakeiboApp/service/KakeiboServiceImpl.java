@@ -37,11 +37,13 @@ public class KakeiboServiceImpl implements KakeiboService {
 	//もし最古・最新の外側を探索していたら、エラー文を返して
 	//一月分の要素を取得する
 	@Override
-	public MonthlyResponseDTO getMonthlyDataService(Integer year, Integer month, Integer day) {
+	public MonthlyResponseDTO getMonthlyDataService(Integer year, 
+			Integer month, Integer day) {
 		
 		//本データでは11日を給料日として制定している
 		Integer salaryDate = 11;
-		//給料日を締めとした一か月を調べている。その月の給料日より早い日に問い合わせたときは
+		//給料日を締めとした一か月を調べている。その月の給料日より
+		//早い日に問い合わせたときは
 		//先月のデータも問い合わせる必要がある
 		month = day < salaryDate ? month - 1 : month;
 		year = month == 0 ? year -1 : year;
