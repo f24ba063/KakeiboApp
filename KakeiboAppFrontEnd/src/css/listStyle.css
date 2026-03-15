@@ -1,0 +1,35 @@
+.card-heart2 {
+    width: 25px;
+    top: 10px; /* 上からの微調整 */
+    right: 10px; /* 右からの微調整 */
+    cursor: pointer;
+    width: 50px;
+}
+
+table, th,tbody,tr,td{
+    border-collapse: collapse;
+    border: 1px solid;
+    margin:0
+}
+
+#date-width {
+    width: 120px;
+}
+
+#category-width {
+    width: 140px;
+}
+
+#amount-width {
+    width: 130px;
+}
+
+
+#memo-width {
+    width: 450px;
+    max-height:2rem;
+}
+
+.table-homeru-size {
+    height: 30px;
+}

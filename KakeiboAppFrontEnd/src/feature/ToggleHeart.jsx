@@ -1,4 +1,4 @@
-﻿export default async function toggleHeart(id, current, setKakeiboDto){
+﻿export default async function ToggleHeart(id, current, setKakeiboDto){
     try {
         await fetch(`http://localhost:8080/index/homeru/${id}`, {
             method: "PUT",

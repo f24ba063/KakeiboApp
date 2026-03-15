@@ -2,8 +2,10 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
 import getNextSalaryDay from '../../feature/getNextSalaryDay';
-import toggleHeart from '../../feature/ToggleHeart';
+import ToggleHeart from '../../feature/ToggleHeart';
 import pageMonth from '../../feature/pageMonth'
+import CardStyle from '../../feature/CardStyle'
+import ListStyle from '../../feature/ListStyle'
 import { Link, useNavigate } from 'react-router-dom'
 import '../../css/index.css';
 
@@ -20,6 +22,7 @@ export default function Index() {
     const [warning, setWarning] = useState("");
     const nextSalaryDay = getNextSalaryDay(salaryGetDay);
     const navigate = useNavigate();
+    const [expressionStyle, setExpressionStyle] = useState("card");
 
     //家計簿の当該月のデータを引き入れている
     //日付まで取得しているのは、日付と給料日の兼ね合いで
@@ -137,6 +140,11 @@ export default function Index() {
 
                 <div id="paging">
                     <span>
+                        {/*表示形式をカード・リストで切り替えるスイッチ*/}
+                        <button type="button"
+                            onClick={() => setExpressionStyle(expressionStyle === "card" ? "list" : "card")}>
+                            {expressionStyle === "card" ? "カード形式表示" : "リスト形式表示"}
+                        </button>
                         {/*前の月への移動リンク*/}
                         <button type="button" className="paging-button" onClick={() =>
                             pageMonth("back", year, month, setMonth, setYear)}
@@ -158,46 +166,23 @@ export default function Index() {
                 </div>
 
                 {/*収支カードの表示*/}
-                <div id="card-base">
-                    {KakeiboDto
-                        .filter(e => e.softDelete != 9)
-                        .map(e => (
-                            //カード形式にした各種入出金データ
-                            <ul key={e.id}
-                                className={`${e.inOut === "IN" ? "income-card" : "outgo-card"}`}
-                                onClick={() => {
-                                    moveDetail(e.id)
-                                }}
-                                >
+                {expressionStyle==="card" && 
+                <CardStyle
+                    KakeiboDto={KakeiboDto}
+                    moveDetail={moveDetail}
+                    ToggleHeart={ToggleHeart}
+                    setKakeiboDto={setKakeiboDto}
+                        dateGet={dateGet} />
+                }
 
-                                {/*褒めるハートマークイメージ*/}
-                                <img
-                                    src={e.homeru === 1 ? "/img/heart.png" : "/img/heart_gray.png"}
-                                    alt="heart"
-                                    className="card-heart"
-                                    onClick={(event) => {
-                                        event.stopPropagation();
-                                        toggleHeart(e.id, e.homeru, setKakeiboDto)
-                                    }}
-                                />
-                                {/*日付文字列*/}
-                                <li className="block">
-                                    <h3>{dateGet(e.tradeDate)}</h3>
-                                </li>
-
-                                {/*入出金カテゴリー文字列*/}
-                                <li className="block">
-                                    <h3>{e.category} : {e.amount}</h3>
-                                </li>
-
-                                {/*詳細メモ文字列*/}
-
-                                <li className="comment-block" >
-                                    <h3>{e.memo}</h3>
-                                </li>
-                            </ul>
-                    ))}
-                </div>
+                {expressionStyle === "list" &&
+                    <ListStyle
+                        KakeiboDto={KakeiboDto}
+                        moveDetail={moveDetail}
+                        ToggleHeart={ToggleHeart}
+                        setKakeiboDto={setKakeiboDto}
+                        dateGet={dateGet} />
+                }
             </div>
         </>
     );

@@ -1,11 +1,10 @@
 {
   "ExpandedNodes": [
     "",
-    "\\src",
-    "\\src\\assets",
-    "\\src\\assets\\pages",
+    "\\public",
+    "\\public\\img",
     "\\src\\feature"
   ],
-  "SelectedNode": "\\src\\feature\\pageMonth.jsx",
+  "SelectedNode": "\\public\\img\\heart_gray.png",
   "PreviewInSolutionExplorer": false
 }
