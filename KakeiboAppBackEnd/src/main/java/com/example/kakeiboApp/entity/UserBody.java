@@ -12,8 +12,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserBody {
-	Integer userId;
-	
 	@NotNull
 	String userName;
 	

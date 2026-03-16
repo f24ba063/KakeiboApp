@@ -1,10 +1,13 @@
 package com.example.kakeiboApp.service;
 
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import com.example.kakeiboApp.DTO.LoginDTO;
 import com.example.kakeiboApp.DTO.ResisterDTO;
 import com.example.kakeiboApp.DTO.UserCreateDTO;
+import com.example.kakeiboApp.entity.UserBody;
 import com.example.kakeiboApp.repository.UserMapper;
 
 import lombok.Data;
@@ -12,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 
 @Data
 @RequiredArgsConstructor
+@Service
 public class UserServiceImpl implements UserService {
 	private final UserMapper mapper;
 	private final BCryptPasswordEncoder passwordEncoder = new
@@ -21,7 +25,12 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public ResisterDTO userCreateService(UserCreateDTO dto) {
 		// TODO 自動生成されたメソッド・スタブ
-
+		String hashed = new BCryptPasswordEncoder().encode(dto.getPassword());
+		UserBody user = new UserBody();
+		user.setUserName(dto.getUsername());
+		user.setPassword(hashed);
+		user.setPayday(dto.getPayday());
+		return mapper.resisterUser(user);
 	}
 
 	//ログイン処理
