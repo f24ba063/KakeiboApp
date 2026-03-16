@@ -2,11 +2,13 @@ drop table if exists balance_history;
 drop table if exists kakeibo;
 drop table if exists category;
 drop table if exists in_out;
-drop table if exists payday;
+drop table if exists users;
 
 --操作者の給料日
-create table payday(
+create table users(
 	id serial primary key,
+	username varchar(20) unique,
+	password varchar(20),
 	payday integer
 );
 
@@ -29,6 +31,8 @@ CREATE TABLE category(
 CREATE TABLE kakeibo(
 	--入力ID
 	id serial PRIMARY KEY,
+	--入力ユーザーid
+	username varchar(20),
 	--日付
 	trade_date date,
 	--どんな分野の入出金か
@@ -45,7 +49,8 @@ CREATE TABLE kakeibo(
 	
 	created_at timestamp without time zone default current_timestamp,
 	updated_at timestamp without time zone default current_timestamp,
-	foreign key(category_id) references category(id)
+	foreign key(category_id) references category(id),
+	foreign key(username) references users(username)
 );
 
 create table balance_history(

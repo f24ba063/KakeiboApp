@@ -1,0 +1,68 @@
+﻿/*収入カード全体の装飾*/
+.income-card {
+    margin: 10px;
+    padding: 5px;
+    border-radius: 5px;
+    width: 200px;
+    height: 250px;
+    border: solid 1px black;
+    list-style-type: none;
+    position: relative;
+    background-color: #ffff66;
+}
+
+/*支出カード全体の装飾*/
+.outgo-card {
+    margin: 10px;
+    padding: 5px;
+    border-radius: 5px;
+    width: 200px;
+    height: 250px;
+    border: solid 1px black;
+    list-style-type: none;
+    position: relative;
+    background-color: #ddeeff;
+}
+
+/*カードの配置パターン*/
+#card-base {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+
+/*文字、金額の背景高さ*/
+.block {
+    height: 50px;
+}
+/*コメント欄の背景高さ*/
+.comment-block {
+    height: 124px;
+}
+
+/*カードの文字の高さ調整*/
+.block h3,
+.comment-block h3 {
+    margin: 10px;
+}
+
+/*カードの各入力領域の背景装飾*/
+.block,
+.comment-block {
+    background-color: #ffe;
+    border: 1px solid grey;
+    border-radius: 4px;
+    margin: 4px;
+    margin-bottom: 6px;
+    align-items: flex-start;
+}
+
+/*カードについてるハートのサイズ*/
+.card-heart {
+    width: 25px;
+    position: absolute;
+    top: 10px; /* 上からの微調整 */
+    right: 10px; /* 右からの微調整 */
+    width: 28px;
+    cursor: pointer;
+}

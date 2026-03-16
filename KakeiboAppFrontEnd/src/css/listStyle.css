@@ -1,4 +1,4 @@
-.card-heart2 {
+﻿.card-heart2 {
     width: 25px;
     top: 10px; /* 上からの微調整 */
     right: 10px; /* 右からの微調整 */
@@ -32,4 +32,12 @@ table, th,tbody,tr,td{
 
 .table-homeru-size {
     height: 30px;
+}
+
+.yellow-back {
+    background-color :#ffff66;
+}
+
+.cyan-back {
+    background-color: #ddeeff;
 }

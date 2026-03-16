@@ -1,3 +1,4 @@
+﻿import '../css/cardStyle.css'
 
 export default function CardStyle({ KakeiboDto, moveDetail, ToggleHeart, setKakeiboDto, dateGet }) {
 return(
@@ -36,7 +37,9 @@ return(
                 {/*詳細メモ文字列*/}
 
                 <li className="comment-block" >
-                    <h3>{e.memo}</h3>
+                    <h3>{e.memo.length < 30
+                        ? e.memo
+                        :e.memo.slice(0,29) + "..."}</h3>
                 </li>
             </ul>
         ))}

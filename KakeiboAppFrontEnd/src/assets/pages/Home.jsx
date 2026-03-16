@@ -7,9 +7,12 @@ import pageMonth from '../../feature/pageMonth'
 import CardStyle from '../../feature/CardStyle'
 import ListStyle from '../../feature/ListStyle'
 import { Link, useNavigate } from 'react-router-dom'
-import '../../css/index.css';
+import useExpressionStyle from "../../feature/useExpressionStyle";
 
-export default function Index() {
+import '../../css/index.css';
+import '../../css/mordal-overlay.css';
+
+export default function Home() {
     const now = new Date();
     const [KakeiboDto, setKakeiboDto] = useState([]);//家計簿全データ
     const [monthlyIncome, setMonthlyIncome] = useState(0);//月収
@@ -18,11 +21,15 @@ export default function Index() {
     const [month, setMonth] = useState(now.getMonth() + 1);//月を取得
     const [date, setDate] = useState(now.getDate());//日を取得
     const [salaryGetDay,setSalaryGetDay] = useState(11);//給料日の設定
-    const [salaryDateEditToggle, setSalaryDateEditToggle] = useState(false);
+    //const [salaryDateEditToggle, setSalaryDateEditToggle] = useState(false);
     const [warning, setWarning] = useState("");
     const nextSalaryDay = getNextSalaryDay(salaryGetDay);
     const navigate = useNavigate();
-    const [expressionStyle, setExpressionStyle] = useState("card");
+    const { expressionStyle, changeStyle } = useExpressionStyle();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [payDay, setPayDay] = useState(11);
+    const [editPayDay, setEditPayDay] = useState(1);
+
 
     //家計簿の当該月のデータを引き入れている
     //日付まで取得しているのは、日付と給料日の兼ね合いで
@@ -76,7 +83,7 @@ export default function Index() {
         return `${year}/${month}/${day}`;
     }
 
-    //頑張った数を計上して♡付与に参考する
+    //頑張った数を計上してハート付与の参考にする
     const heartCount = KakeiboDto.filter(m => m.homeru == 1).length;
 
     //詳細情報ページへ遷移
@@ -101,24 +108,41 @@ export default function Index() {
         <>
             <div id="outbounds">
                 <h1>家計簿アプリ練習</h1> 
-                <h3>
-                    <span className="top-lines">{formatDate2(year, month)}収入：{monthlyIncome}</span>
-                    <span className="top-lines">{formatDate2(year, month)}支出：{monthlyOutgo}</span>
-                    <span className="top-lines">給料日の設定：{
-                        salaryDateEditToggle ?
-                        <input type="number"
-                        value={salaryGetDay}
-                        onChange={e=>setSala(e)}
-                        onBlur={()=>{setSalaryDateEditToggle(false)}}
-                        />
-                        :
-                        <p
-                        onClick={()=>setSalaryDateEditToggle(true)}>
-                            {salaryGetDay}
-                        </p>
-                            }
-                    </span>
-                </h3>
+                <div id="first-line">
+                    <h3>
+                        <span className="top-lines">{formatDate2(year, month)}収入：{monthlyIncome}</span>
+                        <span className="top-lines">{formatDate2(year, month)}支出：{monthlyOutgo}</span>
+                        <span className="top-lines">
+                            給料日：
+                            <span onClick={() => setIsModalOpen(true)}>
+                                {payDay}
+                            </span>
+                            日
+                        </span>
+                    </h3>
+                    {isModalOpen && (
+                        <div className="modal-overlay">
+                            <div className="modal">
+                                <h3>給料日を入力</h3>
+
+                                <input
+                                    type="number"
+                                    value={payDay}
+                                    onChange={(e) => setEditPayDay(e.target.value)}
+                                />
+
+                                <button onClick={() => {
+                                    setPayDay(editPayDay);
+                                    setEditPayDay(1);
+                                    setIsModalOpen(false)
+                                }
+                                }>
+                                    保存
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                </div>
                 <div id="second-line">
                     <h3>
                         <span className="top-lines">今月収入/支出：{monthlyIncome > monthlyOutgo ? "+" : ""}{monthlyIncome - monthlyOutgo }</span>
@@ -141,9 +165,11 @@ export default function Index() {
                 <div id="paging">
                     <span>
                         {/*表示形式をカード・リストで切り替えるスイッチ*/}
-                        <button type="button"
-                            onClick={() => setExpressionStyle(expressionStyle === "card" ? "list" : "card")}>
-                            {expressionStyle === "card" ? "カード形式表示" : "リスト形式表示"}
+                        <button
+                            type="button"
+                            id="expression-style-button"
+                            onClick={changeStyle}>
+                            {expressionStyle === "card" ? "リスト形式表示" : "カード形式表示"}
                         </button>
                         {/*前の月への移動リンク*/}
                         <button type="button" className="paging-button" onClick={() =>
@@ -158,7 +184,7 @@ export default function Index() {
                             後の月</button>
 
                         {/*新規データ登録ページへ*/}
-                        <Link className="paging-button" to="/newdata">追加</Link>
+                        <Link id="new-information-button" to="/newdata">追加</Link>
                     </span>
 
                     {/*表示ページをめくったとき、データが無かった時の各種警告文*/}
@@ -166,16 +192,14 @@ export default function Index() {
                 </div>
 
                 {/*収支カードの表示*/}
-                {expressionStyle==="card" && 
-                <CardStyle
-                    KakeiboDto={KakeiboDto}
-                    moveDetail={moveDetail}
-                    ToggleHeart={ToggleHeart}
-                    setKakeiboDto={setKakeiboDto}
+                {expressionStyle==="card" ? 
+                    <CardStyle
+                        KakeiboDto={KakeiboDto}
+                        moveDetail={moveDetail}
+                        ToggleHeart={ToggleHeart}
+                        setKakeiboDto={setKakeiboDto}
                         dateGet={dateGet} />
-                }
-
-                {expressionStyle === "list" &&
+                    :
                     <ListStyle
                         KakeiboDto={KakeiboDto}
                         moveDetail={moveDetail}
