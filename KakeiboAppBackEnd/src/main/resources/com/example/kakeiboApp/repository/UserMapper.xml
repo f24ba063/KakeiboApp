@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.kakeiboApp.repository.UserMapper">
-	<insert id="resisterUser">
-		insert into user(username, password, payday)
-		values(#{userName}, #{password}, #{payday})
-	</insert>
-	
+
 	<select id="getUser">
 		select
 			username as userName,
@@ -14,4 +10,10 @@
 		from kakeibo
 			where username = #{username}
 	</select>
+	
+	<insert id="resisterUser">
+		insert into user(username, password, payday)
+		values(#{userName}, #{password}, #{payday})
+	</insert>
+	
 </mapper>

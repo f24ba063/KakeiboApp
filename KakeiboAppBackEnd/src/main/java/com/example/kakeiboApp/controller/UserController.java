@@ -25,7 +25,7 @@ public class UserController {
 	private final UserService service;
 	
 	//新規ユーザー登録
-	@PostMapping("/newUser")
+	@PostMapping("/resisterUser")
 	public ResisterDTO resisterNewUser(@RequestBody UserCreateDTO dto) {
 		return service.userCreateService(dto);
 		

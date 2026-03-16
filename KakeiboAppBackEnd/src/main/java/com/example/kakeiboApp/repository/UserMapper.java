@@ -3,7 +3,6 @@ package com.example.kakeiboApp.repository;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.example.kakeiboApp.DTO.LoginDTO;
-import com.example.kakeiboApp.DTO.ResisterDTO;
 import com.example.kakeiboApp.entity.UserBody;
 
 @Mapper
@@ -12,5 +11,5 @@ public interface UserMapper {
 	public LoginDTO getUser(String username);
 	
 	//新規ユーザー登録処理
-	public ResisterDTO resisterUser(UserBody userBody);
+	public int resisterUser(UserBody userBody);
 }

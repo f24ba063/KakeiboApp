@@ -25,12 +25,22 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public ResisterDTO userCreateService(UserCreateDTO dto) {
 		// TODO 自動生成されたメソッド・スタブ
+		ResisterDTO rd = new ResisterDTO();
 		String hashed = new BCryptPasswordEncoder().encode(dto.getPassword());
-		UserBody user = new UserBody();
-		user.setUserName(dto.getUsername());
-		user.setPassword(hashed);
-		user.setPayday(dto.getPayday());
-		return mapper.resisterUser(user);
+		int rtn ;
+		try{
+			UserBody user = new UserBody();
+			
+			user.setUserName(dto.getUsername());
+			user.setPassword(hashed);
+			user.setPayday(dto.getPayday());
+			rtn = mapper.resisterUser(user);
+			rd.setResistered(rtn == 1);
+		}catch(Exception e) {
+		    rd.setResistered(false);
+		    rd.setMessage(e.getMessage());
+		}
+		return rd;
 	}
 
 	//ログイン処理
@@ -40,7 +50,7 @@ public class UserServiceImpl implements UserService {
 		var result = mapper.getUser(dto.getUsername());
 		try {
 		if(result == null || result.getUsername() == null){
-			return new ResisterDTO(false, "データ取得に失敗しました");
+			return new LoginDTO(false, "データ取得に失敗しました");
 		}else if(!passwordEncoder.matches(dto.getPassword(), result.getPassword())) {
 			return new ResisterDTO(false, "パスワードかユーザー名が間違っています");
 		}
