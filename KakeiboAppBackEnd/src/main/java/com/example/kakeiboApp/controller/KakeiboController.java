@@ -23,7 +23,6 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
-@Transactional
 @RequiredArgsConstructor
 @RequestMapping("/index")
 public class KakeiboController{

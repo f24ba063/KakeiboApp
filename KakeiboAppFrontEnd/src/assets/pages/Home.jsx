@@ -1,12 +1,11 @@
 ﻿
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import getNextSalaryDay from '../../feature/getNextSalaryDay';
 import ToggleHeart from '../../feature/ToggleHeart';
 import pageMonth from '../../feature/pageMonth'
 import CardStyle from '../../feature/CardStyle'
 import ListStyle from '../../feature/ListStyle'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import useExpressionStyle from "../../feature/useExpressionStyle";
 
 import '../../css/index.css';
@@ -29,7 +28,8 @@ export default function Home() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [payDay, setPayDay] = useState(11);
     const [editPayDay, setEditPayDay] = useState(1);
-
+    const location = useLocation();
+    const message = location.state?.message || "";
 
     //家計簿の当該月のデータを引き入れている
     //日付まで取得しているのは、日付と給料日の兼ね合いで
@@ -108,6 +108,7 @@ export default function Home() {
         <>
             <div id="outbounds">
                 <h1>家計簿アプリ練習</h1> 
+                {/*上の段・収支個別表示＋給料日表示*/}
                 <div id="first-line">
                     <h3>
                         <span className="top-lines">{formatDate2(year, month)}収入：{monthlyIncome}</span>
@@ -143,6 +144,7 @@ export default function Home() {
                         </div>
                     )}
                 </div>
+                {/*下の団・収支総計、次の給料日、頑張った総数表示*/}
                 <div id="second-line">
                     <h3>
                         <span className="top-lines">今月収入/支出：{monthlyIncome > monthlyOutgo ? "+" : ""}{monthlyIncome - monthlyOutgo }</span>
@@ -160,7 +162,14 @@ export default function Home() {
                     ))}
                     </span>
                 </div>
-                
+
+                {/*他画面から遷移したとき、メッセージを表示する共用スペース*/}
+                {message && (
+                    <div className="system-message">
+                        {message}
+                    </div>
+                ) }
+
 
                 <div id="paging">
                     <span>
@@ -190,6 +199,8 @@ export default function Home() {
                     {/*表示ページをめくったとき、データが無かった時の各種警告文*/}
                     <p id="warning">{warning}</p>
                 </div>
+
+                {/*-------------------------------------------------------------*/}
 
                 {/*収支カードの表示*/}
                 {expressionStyle==="card" ? 

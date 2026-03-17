@@ -1,36 +1,63 @@
 ﻿import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function CreateUser() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [payday, setPayday] = useState(25);
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
+    
         try {
-            const res = await fetch("http://localhost:8080/resisterUser", {
+            if (!username.trim() || !password.trim()) {
+                alert("ユーザー名とパスワードを入力してください");
+                setLoading(false);
+                return;
+            }
+            // payday の正規化
+            const normalizedPayday = Math.min(Math.max(Math.round(payday), 1), 28);
+
+            const res = await fetch("http://localhost:8080/register/registerUser", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    username,
-                    password,
-                    payday
+                    username: username.trim(),
+                    password: password.trim(),
+                    payday  :normalizedPayday
                 })
             });
-            const data = await res.json();
-            if (data.resistered) {
+            let data = null;
+
+            const contentType = res.headers.get("content-type");
+
+            if (contentType && contentType.includes("application/json")) {
+                data = await res.json();
+            }
+
+            if (!res.ok) {
+                throw new Error(data.message || "server error");
+            }
+
+            if (data && data.resistered === true) {
                 console.log("登録成功");
                 // 登録成功
+                navigate("/home", {
+                    state: { message: "ユーザー登録に成功しました" },
+                    replace: true
+                });
+
             } else {
                 // 失敗
-                alert(data.message);
+                alert(data?.message || "登録に失敗しました");
             }
         } catch (error) {
-            alert("通信エラー:", error);
+            alert("通信エラー:" + error.message);
         } finally {
             setLoading(false);
         }
@@ -41,22 +68,30 @@ export default function CreateUser() {
                 ユーザー名
                 <input
                     type="text"
+                    name="username"
+                    autoComplete="username"
                     value={username}
+                    required
                     onChange={e => setUsername(e.target.value)} />
                 <br />
                 パスワード
                 <input
                     type="password"
+                    name="password"
+                    autoComplete="new-password"
                     value={password}
+                    required
                     onChange={e =>setPassword(e.target.value)} />
                 <br />
                 給料日
                 <input
                     type="number"
+                    name="payday"
                     min="1"
                     max="28"
                     step="1"
                     value={payday}
+                    required
                     onChange={(e) => setPayday(Number(e.target.value) || 1)}
                 />
 

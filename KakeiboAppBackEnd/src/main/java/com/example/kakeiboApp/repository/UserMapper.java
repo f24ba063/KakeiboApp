@@ -11,5 +11,5 @@ public interface UserMapper {
 	public LoginDTO getUser(String username);
 	
 	//新規ユーザー登録処理
-	public int resisterUser(UserBody userBody);
+	public int registerUser(UserBody userBody);
 }

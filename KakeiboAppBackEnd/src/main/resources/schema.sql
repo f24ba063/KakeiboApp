@@ -8,7 +8,7 @@ drop table if exists users;
 create table users(
 	id serial primary key,
 	username varchar(20) unique,
-	password varchar(20),
+	password varchar(60),
 	payday integer
 );
 

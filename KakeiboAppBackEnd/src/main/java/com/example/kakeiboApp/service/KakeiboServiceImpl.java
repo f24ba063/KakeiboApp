@@ -3,7 +3,6 @@ package com.example.kakeiboApp.service;
 import java.time.LocalDate;
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 import com.example.kakeiboApp.DTO.DataRangeDTO;
@@ -30,7 +29,7 @@ public class KakeiboServiceImpl implements KakeiboService {
 	};
 	
 	//更新時に特定idのデータを取得する
-	public KakeiboDTO getByIdService(@Param("id") Integer id) {
+	public KakeiboDTO getByIdService(Integer id) {
 		return mapper.getById(id);
 	};
 	
@@ -86,6 +85,7 @@ public class KakeiboServiceImpl implements KakeiboService {
 	//最新、最古のデータの日付を調べる
 	@Override
 	public DataRangeDTO getDataRangeService() {
+		DataRangeDTO dataRangeDto = new DataRangeDTO();
 		var allData = mapper.getAll();
 		LocalDate first = allData.get(0).getTradeDate();
 		LocalDate last = allData.get(allData.size() -1).getTradeDate();

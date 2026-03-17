@@ -2,17 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.kakeiboApp.repository.UserMapper">
 
-	<select id="getUser">
-		select
-			username as userName,
-			password,
-			payday
-		from kakeibo
-			where username = #{username}
-	</select>
-	
-	<insert id="resisterUser">
-		insert into user(username, password, payday)
+	<insert id="registerUser">
+		insert into users(username, password, payday)
 		values(#{userName}, #{password}, #{payday})
 	</insert>
 	
