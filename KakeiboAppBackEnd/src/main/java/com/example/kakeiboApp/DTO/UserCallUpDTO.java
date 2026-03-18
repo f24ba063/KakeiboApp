@@ -5,7 +5,14 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class LoginDTO {
+public class UserCallUpDTO {
+	Long id;
+	
 	String username;
-	String password;
+	
+	int payday;
+	
+	String roles;
+	
+	String message = "";
 }

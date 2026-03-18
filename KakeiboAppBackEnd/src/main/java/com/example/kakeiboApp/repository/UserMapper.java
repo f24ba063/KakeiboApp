@@ -1,15 +1,21 @@
 package com.example.kakeiboApp.repository;
 
-import org.apache.ibatis.annotations.Mapper;
+import java.util.Optional;
 
-import com.example.kakeiboApp.DTO.LoginDTO;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
 import com.example.kakeiboApp.entity.UserBody;
 
 @Mapper
 public interface UserMapper {
 	//ログイン処理。名前をもとにユーザーの名前とパスを取得
-	public LoginDTO getUser(String username);
+	public Optional<UserBody> findByName(String username);
 	
 	//新規ユーザー登録処理
+	//intで返すのは追加されたら１，失敗したら0を返すから
 	public int registerUser(UserBody userBody);
+	
+	//給料日変更
+	public int updatePayday(@Param("id") Long id, @Param("payday") int payday);
 }

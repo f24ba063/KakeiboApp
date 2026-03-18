@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserBody {
+	Long id;
+	
 	@NotNull
 	String username;
 	
@@ -19,5 +21,7 @@ public class UserBody {
 	String password;
 	
 	@Range(max=28, min=1, message= "{min}日～{max}日の間しか指定できません")
-	Integer payday;
+	int payday;
+	
+	String roles = "ROLES_USER";
 }

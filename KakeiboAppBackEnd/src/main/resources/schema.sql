@@ -9,7 +9,8 @@ create table users(
 	id serial primary key,
 	username varchar(20) unique,
 	password varchar(60),
-	payday integer
+	payday integer,
+	roles varchar(20)
 );
 
 --入出テーブル

@@ -1,10 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.kakeiboApp.repository.UserMapper">
+	<select id="findByName">
+		select
+			id,
+			username,
+			password,
+			payday,
+			roles
+		from
+			users
+		where username = #{username}
+	</select>
 
 	<insert id="registerUser">
 		insert into users(username, password, payday)
 		values(#{userName}, #{password}, #{payday})
 	</insert>
 	
+	<update id="updatePayday">
+		update users set payday = #{payday}
+		where username = #{username}
+	</update>
 </mapper>
