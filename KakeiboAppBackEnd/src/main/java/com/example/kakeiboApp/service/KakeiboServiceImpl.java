@@ -37,39 +37,39 @@ public class KakeiboServiceImpl implements KakeiboService {
 	//一月分の要素を取得する
 	@Override
 	public MonthlyResponseDTO getMonthlyDataService(Integer year, 
-			Integer month, Integer day) {
+			Integer month, Integer day, String username) {
 		
 		//本データでは11日を給料日として制定している
-		Integer salaryDate = 11;
+		Integer payday = mapper.getPayday(username);
 		//給料日を締めとした一か月を調べている。その月の給料日より
 		//早い日に問い合わせたときは
 		//先月のデータも問い合わせる必要がある
-		month = day < salaryDate ? month - 1 : month;
+		month = day < payday ? month - 1 : month;
 		year = month == 0 ? year -1 : year;
 		month = month == 0 ? 12 : month;
-		day = salaryDate;
+		day = payday;
 		
 		//全データを探査して、最新・最古のデータの日付を納めている
 		var dateRange = mapper.getDataRange();
 		
 		//LocalDate target = LocalDate.of(year, month, day);
 		MonthlyResponseDTO res = new MonthlyResponseDTO();
-		LocalDate start = LocalDate.of(year, month, 11);
+		LocalDate start = LocalDate.of(year, month, payday);
 		LocalDate end   = start.plusMonths(1).minusDays(1);
 		
 		//最新、最古よりも外側の範囲を調べようとしたら、元ページに差し戻される
 		if(end.isBefore(dateRange.getOldestData())) {
 			res.setStatus("BEFORE_OLDEST");
-			res.setData(mapper.getMonthly(year, ++month, day));
+			res.setData(mapper.getMonthly(year, ++month, day, username));
 			return res;
 			
 		}else if(start.isAfter(dateRange.getNewestData())) {
 			res.setStatus("AFTER_NEWEST");
-			res.setData(mapper.getMonthly(year, --month, day));
+			res.setData(mapper.getMonthly(year, --month, day, username));
 			return res;
 		}
 		
-		List<KakeiboDTO> monthlyData = mapper.getMonthly(year, month, day);
+		List<KakeiboDTO> monthlyData = mapper.getMonthly(year, month, day, username);
 		res.setStatus(monthlyData.isEmpty() ? "EMPTY" : "OK");
 		res.setData(monthlyData);
 		return res;

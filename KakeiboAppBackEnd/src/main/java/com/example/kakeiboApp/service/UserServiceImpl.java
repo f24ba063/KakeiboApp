@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.kakeiboApp.DTO.PaydaySetDTO;
 import com.example.kakeiboApp.DTO.RegisterDTO;
 import com.example.kakeiboApp.DTO.UserCallUpDTO;
 import com.example.kakeiboApp.DTO.UserCreateDTO;
@@ -71,7 +72,7 @@ public class UserServiceImpl implements UserService {
 
 	//ユーザー給料日情報更新
 	@Override
-	public RegisterDTO paydayUpdateService(UserCreateDTO dto) {
+	public RegisterDTO updatePaydayService(PaydaySetDTO dto) {
 		// TODO 自動生成されたメソッド・スタブ
 		return null;
 	}

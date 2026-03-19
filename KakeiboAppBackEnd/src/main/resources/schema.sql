@@ -32,7 +32,7 @@ CREATE TABLE category(
 CREATE TABLE kakeibo(
 	--入力ID
 	id serial PRIMARY KEY,
-	--入力ユーザーid
+	--入力ユーザー名
 	username varchar(20),
 	--日付
 	trade_date date,

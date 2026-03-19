@@ -1,5 +1,6 @@
 package com.example.kakeiboApp.service;
 
+import com.example.kakeiboApp.DTO.PaydaySetDTO;
 import com.example.kakeiboApp.DTO.RegisterDTO;
 import com.example.kakeiboApp.DTO.UserCallUpDTO;
 import com.example.kakeiboApp.DTO.UserCreateDTO;
@@ -12,5 +13,5 @@ public interface UserService {
 	RegisterDTO userCreateService(UserCreateDTO dto) ;
 	
 	//ユーザー給料日情報更新
-	RegisterDTO paydayUpdateService(UserCreateDTO dto);
+	RegisterDTO updatePaydayService(PaydaySetDTO dto);
 }

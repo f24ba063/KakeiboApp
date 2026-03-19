@@ -1,0 +1,20 @@
+﻿
+/*ログイン画面全体の幅*/
+#login-outline{
+    max-width: 400px;
+    margin: 50px auto;
+}
+
+/*ユーザー欄、パスワード欄の間隔制御*/
+#password{
+margin-top: 10px;
+}   
+
+#error-message{
+    color:red;
+    margin-top: 10px;
+}
+
+#submit-button{
+    margin-top: 20px;
+}

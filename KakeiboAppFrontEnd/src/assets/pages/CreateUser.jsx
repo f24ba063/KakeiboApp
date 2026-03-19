@@ -1,5 +1,6 @@
 ﻿import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+//import { useAuth } from ',/AuthProvider'; 
 
 export default function CreateUser() {
     const [username, setUsername] = useState("");
@@ -7,6 +8,7 @@ export default function CreateUser() {
     const [payday, setPayday] = useState(25);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    //const { login } = useAuth();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -18,9 +20,11 @@ export default function CreateUser() {
                 setLoading(false);
                 return;
             }
+
             // payday の正規化
             const normalizedPayday = Math.min(Math.max(Math.round(payday), 1), 28);
 
+            //dbへのデータ転送
             const res = await fetch("http://localhost:8080/register/registerUser", {
                 method: "POST",
                 headers: {
@@ -41,17 +45,14 @@ export default function CreateUser() {
             }
 
             if (!res.ok) {
-                throw new Error(data.message || "server error");
+                throw new Error(data.message || "サーバーエラー");
             }
 
             if (data && data.resistered === true) {
-                console.log("登録成功");
-                // 登録成功
-                navigate("/home", {
-                    state: { message: "ユーザー登録に成功しました" },
-                    replace: true
-                });
-
+                //login(data.token);
+                navigate("./login", { replace: true });
+                // 登録成功。ただちに家計簿ホーム画面へ
+                
             } else {
                 // 失敗
                 alert(data?.message || "登録に失敗しました");

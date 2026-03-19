@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -21,6 +23,7 @@ import com.example.kakeiboApp.security.CustomUserDetailService;
 @Configuration
 public class SecurityConfig {
 
+	//SpringSecurityを設定した上でのCorsの設定
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http,
     		CustomUserDetailService userDetailsService,
@@ -29,14 +32,14 @@ public class SecurityConfig {
 			.cors(cors -> cors.configurationSource(corsConfigurationSource()))
 			.csrf(csrf->csrf.disable())
 			.authorizeHttpRequests(auth -> auth
-					.requestMatchers("/**").permitAll()
-					.anyRequest().permitAll()
-				)
-			.authenticationProvider(authenticationProvider(userDetailsService, encoder));;
-		
+					
+			.requestMatchers("/auth/login").permitAll()
+			.requestMatchers("/index/**").permitAll()
+			.anyRequest().authenticated());
 		return http.build();
 	}
 
+    //Cors設定の中身
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration config = new CorsConfiguration();
@@ -50,8 +53,10 @@ public class SecurityConfig {
 		return source;
 	}
     
+    //DBからユーザ名、ハッシュ化パス、ハッシュに使ったエンコーダを
+    //セットにしている
     @Bean
-    public AuthenticationProvider authenticationProvider(
+    AuthenticationProvider authenticationProvider(
     		CustomUserDetailService userDetailsService,
     		PasswordEncoder encoder) {
     	DaoAuthenticationProvider provider =
@@ -60,5 +65,11 @@ public class SecurityConfig {
     	provider.setPasswordEncoder(encoder);
     	
     	return provider;
+    }
+    
+    @Bean
+    AuthenticationManager authenticationManager(
+    		AuthenticationConfiguration config)throws Exception {
+    	return config.getAuthenticationManager();
     }
 }

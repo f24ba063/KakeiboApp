@@ -56,7 +56,17 @@
 		and
 			make_date(#{year},#{month}, #{day}) + interval '1 month' 
 			- interval '1 day'
+		and
+			K.username = #{username}
 	order by K.trade_date desc
+</select>
+
+<!--ユーザーの給料日を取得する-->
+<select id="getPayday">
+	select payday 
+		from users
+	where
+		username = #{username}
 </select>
 
 <!--最新、最古のデータ日付をチェックして、ページめくりを禁止する基準にする-->

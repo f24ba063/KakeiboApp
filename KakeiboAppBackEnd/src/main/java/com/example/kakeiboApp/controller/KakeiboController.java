@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.kakeiboApp.DTO.KakeiboDTO;
@@ -30,11 +31,10 @@ public class KakeiboController{
 	//11日に入力した場合、「先月の11日から」ではなく、「当月の11日から」である
 	@GetMapping("/{year}/{month}/{day}")
 	public MonthlyResponseDTO indexController(@PathVariable Integer year, 
-			@PathVariable Integer month, @PathVariable Integer day) {
+			@PathVariable Integer month, @PathVariable Integer day, @RequestParam String username) {
 		
-		return service.getMonthlyDataService(year, month, day);
+		return service.getMonthlyDataService(year, month, day, username);
 	}
-
 
 	//カテゴリーパラメータ一覧を渡し、新規データ作成に利用する
 	@GetMapping("/categoryParameter")

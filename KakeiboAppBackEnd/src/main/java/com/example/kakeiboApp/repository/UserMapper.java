@@ -3,8 +3,8 @@ package com.example.kakeiboApp.repository;
 import java.util.Optional;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
+import com.example.kakeiboApp.DTO.PaydaySetDTO;
 import com.example.kakeiboApp.entity.UserBody;
 
 @Mapper
@@ -17,5 +17,5 @@ public interface UserMapper {
 	public int registerUser(UserBody userBody);
 	
 	//給料日変更
-	public int updatePayday(@Param("id") Long id, @Param("payday") int payday);
+	public int updatePayday(PaydaySetDTO dto);
 }

@@ -1,5 +1,5 @@
 ﻿
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import getNextSalaryDay from '../../feature/getNextSalaryDay';
 import ToggleHeart from '../../feature/ToggleHeart';
 import pageMonth from '../../feature/pageMonth'
@@ -7,7 +7,7 @@ import CardStyle from '../../feature/CardStyle'
 import ListStyle from '../../feature/ListStyle'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import useExpressionStyle from "../../feature/useExpressionStyle";
-
+import { UserContext } from '../../context/UserContext';
 import '../../css/index.css';
 import '../../css/mordal-overlay.css';
 
@@ -19,23 +19,25 @@ export default function Home() {
     const [year, setYear] = useState(now.getFullYear());//年を取得
     const [month, setMonth] = useState(now.getMonth() + 1);//月を取得
     const [date, setDate] = useState(now.getDate());//日を取得
-    const [salaryGetDay,setSalaryGetDay] = useState(11);//給料日の設定
-    //const [salaryDateEditToggle, setSalaryDateEditToggle] = useState(false);
+    const [salaryGetDay, setSalaryGetDay] = useState(11);//給料日の設定
     const [warning, setWarning] = useState("");
     const nextSalaryDay = getNextSalaryDay(salaryGetDay);
     const navigate = useNavigate();
     const { expressionStyle, changeStyle } = useExpressionStyle();
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [payDay, setPayDay] = useState(11);
+    const [isModalOpen, setIsModalOpen] = useState(false);//給料日入力モーダルのスイッチ
+    const [payDay, setPayDay] = useState(11);//給料日入力を受け付ける
     const [editPayDay, setEditPayDay] = useState(1);
     const location = useLocation();
     const message = location.state?.message || "";
+    const { userName } = useContext(UserContext);//ログインしているユーザー名を格納
 
     //家計簿の当該月のデータを引き入れている
     //日付まで取得しているのは、日付と給料日の兼ね合いで
     //出力される家計簿の月が違うから
     useEffect(() => {
-        fetch(`http://localhost:8080/index/${year}/${month}/${date}`,
+        if(!userName) return;//ログインしていなければ何もしない
+
+        fetch(`http://localhost:8080/index/${year}/${month}/${date}?username=${userName}`,
             { cache: "no-store" })
             .then(res => res.json())
             .then(data => {
@@ -67,7 +69,7 @@ export default function Home() {
                 });
                 setMonthlyOutgo(su);
             });
-     }, [year, month, date]);
+     }, [year, month, date, userName]);
 
     //「今月収入・支出」の表現に使うための年・月を取得
     function formatDate2(year, month) {

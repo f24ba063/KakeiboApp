@@ -17,7 +17,8 @@ public interface KakeiboMapper {
 	
 	//一か月分すべての要素を取得する
 	public List<KakeiboDTO> getMonthly(
-			@Param("year")Integer year, @Param("month")Integer month, @Param("day") Integer day);
+			@Param("year")Integer year, @Param("month")Integer month, 
+			@Param("day") Integer day, @Param("username") String username);
 	
 	//特定のidの取引だけを取得する
 	public KakeiboDTO getById(Integer id);
@@ -42,5 +43,8 @@ public interface KakeiboMapper {
 	
 	//削除キー
 	public void deleteData(Integer id, Integer delete);
+	
+	//ユーザーごとのpaydayを取得する
+	public int getPayday(String username);
 	
 }
