@@ -21,7 +21,7 @@ export default function NewData() {
 
     //ドロップリストにカテゴリー一覧を設定
     useEffect(() => {
-        fetch("http://localhost:8080/index/categoryParameter")
+        fetch("http://localhost:8080/kakeibo/categoryParameter")
             .then(res => res.json())
             .then(data => setCategories(data))
             .then(data => console.log(data));
@@ -30,20 +30,20 @@ export default function NewData() {
     const handleSubmit = async e => {
         e.preventDefault();
         
-        await fetch("http://localhost:8080/index/save", {
+        await fetch("http://localhost:8080/kakeibo/save", {
             method: "POST",
             headers: {
                 "Content-Type":"application/json"
             },
             body: JSON.stringify(kakeibo)
         });
-        navigate("/index");
+        navigate("/kakeibo");
     };
 
     //戻るボタンでホームに移動
     const navigate = useNavigate();
     const moveHome = () => {
-        navigate("/index");
+        navigate("/kakeibo");
     }
 
     return (

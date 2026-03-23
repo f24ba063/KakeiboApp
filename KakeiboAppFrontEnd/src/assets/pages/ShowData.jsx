@@ -24,14 +24,14 @@ export default function ShowData() {
     });
     //当該idのデータを取得する
     useEffect(() => {
-        fetch(`http://localhost:8080/index/showdata/${id}`)
+        fetch(`http://localhost:8080/kakeibo/showdata/${id}`)
             .then(res => res.json())
             .then(data => setKakeiboDto(data))
     }, [id]);
 
     //カテゴリー一覧を取得する
     useEffect(() => {
-        fetch("http://localhost:8080/index/categoryParameter")
+        fetch("http://localhost:8080/kakeibo/categoryParameter")
             .then((res => res.json()))
             .then(data => setCategories(data));
     }, [])
@@ -51,7 +51,7 @@ export default function ShowData() {
 
         try {
             //DBにsoftDelete=9を反映
-            const res = await fetch(`http://localhost:8080/index/delete/${id}`, {
+            const res = await fetch(`http://localhost:8080/kakeibo/delete/${id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ softDelete: 9 })
@@ -60,7 +60,7 @@ export default function ShowData() {
             if (!res.ok) throw new Error("削除失敗");
 
             //indexに戻る
-            navigate("/index");
+            navigate("/kakeibo");
         } catch (err) {
             alert("削除できませんでした：" + err.message);
         }
@@ -69,18 +69,18 @@ export default function ShowData() {
     //戻るボタンでホームに移動
     const navigate = useNavigate();
     const moveHome = () => {
-        navigate("/index");
+        navigate("/kakeibo");
     }
 
     const handleSubmit = async () => {
-            await fetch(`http://localhost:8080/index/update/${id}`, {
+            await fetch(`http://localhost:8080/kakeibo/update/${id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify(kakeiboDto)
             });
-            navigate("/index");
+            navigate("/kakeibo");
     }
 
     return (

@@ -1,7 +1,7 @@
 ﻿import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './AuthProvider';
 import PrivateRoute from'./PrivateRoute';
-import Login from './assets/pages/Login.jsx';
+import LoginForm from './assets/pages/LoginForm.jsx';
 import Home from './assets/pages/Home.jsx';
 import CreateUser from './assets/pages/CreateUser.jsx';
 import NewData from './assets/pages/NewData.jsx';
@@ -17,7 +17,7 @@ function App() {
             <Header />
 
             <Routes>
-                <Route path="/login" element={<Login />} />
+                <Route path="/login" element={<LoginForm />} />
                 <Route path="/createUser" element={<CreateUser />} />
                 <Route path="/home" element={<PrivateRoute><Home /></PrivateRoute>} />
                 <Route path="/newdata" element={<PrivateRoute><NewData /></PrivateRoute> } />

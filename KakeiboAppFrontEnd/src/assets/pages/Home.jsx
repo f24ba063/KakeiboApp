@@ -8,6 +8,7 @@ import ListStyle from '../../feature/ListStyle'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import useExpressionStyle from "../../feature/useExpressionStyle";
 import { UserContext } from '../../context/UserContext';
+import { useAuthFetch } from '../../hooks/useAuthFetch';
 import '../../css/index.css';
 import '../../css/mordal-overlay.css';
 
@@ -29,15 +30,16 @@ export default function Home() {
     const [editPayDay, setEditPayDay] = useState(1);
     const location = useLocation();
     const message = location.state?.message || "";
-    const { userName } = useContext(UserContext);//ログインしているユーザー名を格納
+    const { username } = useContext(UserContext);//ログインしているユーザー名を格納
+    const authFetch = useAuthFetch();
 
     //家計簿の当該月のデータを引き入れている
     //日付まで取得しているのは、日付と給料日の兼ね合いで
     //出力される家計簿の月が違うから
     useEffect(() => {
-        if(!userName) return;//ログインしていなければ何もしない
+        if(!username) return;//ログインしていなければ何もしない
 
-        fetch(`http://localhost:8080/index/${year}/${month}/${date}?username=${userName}`,
+        authFetch(`http://localhost:8080/kakeibo/${year}/${month}/${date}`,
             { cache: "no-store" })
             .then(res => res.json())
             .then(data => {
@@ -69,7 +71,7 @@ export default function Home() {
                 });
                 setMonthlyOutgo(su);
             });
-     }, [year, month, date, userName]);
+     }, [year, month, date, username]);
 
     //「今月収入・支出」の表現に使うための年・月を取得
     function formatDate2(year, month) {
@@ -79,7 +81,7 @@ export default function Home() {
     //家計簿カードに表示される日付をデータベースから設定するのに使う
     function dateGet(ry) {
         const y = new Date(ry);
-        const year = y.getYear() % 100;
+        const year = y.getYear();
         const month = y.getMonth() + 1;
         const day = y.getDate();
         return `${year}/${month}/${day}`;

@@ -4,13 +4,14 @@ import java.util.List;
 
 import jakarta.transaction.Transactional;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.kakeiboApp.DTO.KakeiboDTO;
@@ -23,16 +24,20 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/index")
+@RequestMapping("/kakeibo")
 public class KakeiboController{
 	private final KakeiboService service;
 	
 	//指定した日の直前の11日から一か月の間（翌10日まで）の全データ取得
 	//11日に入力した場合、「先月の11日から」ではなく、「当月の11日から」である
 	@GetMapping("/{year}/{month}/{day}")
-	public MonthlyResponseDTO indexController(@PathVariable Integer year, 
-			@PathVariable Integer month, @PathVariable Integer day, @RequestParam String username) {
+	public MonthlyResponseDTO kakeiboController(
+			@PathVariable Integer year, 
+			@PathVariable Integer month, 
+			@PathVariable Integer day, 
+			@AuthenticationPrincipal UserDetails details) {
 		
+		String username = details.getUsername();
 		return service.getMonthlyDataService(year, month, day, username);
 	}
 

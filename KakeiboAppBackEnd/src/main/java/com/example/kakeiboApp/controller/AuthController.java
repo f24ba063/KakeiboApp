@@ -1,9 +1,5 @@
 package com.example.kakeiboApp.controller;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -13,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.kakeiboApp.DTO.LoginRequest;
+import com.example.kakeiboApp.DTO.LoginResponse;
+import com.example.kakeiboApp.jwt.JwtUtil;
 
 import lombok.AllArgsConstructor;
 
@@ -22,27 +20,14 @@ import lombok.AllArgsConstructor;
 public class AuthController {
 	
 	private final AuthenticationManager authenticationManager;
+	private final JwtUtil jwtUtil;
 	
 	@PostMapping("/login")
-	public ResponseEntity<?> login(@RequestBody LoginRequest request){
-		try{
-			Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(
-						request.getUsername(),
-						request.getPassword()
-				)
-			);
-			
-			Map<String,String> result = new HashMap<>();
-			result.put("message", "ログイン完了しました");
-			result.put("username",  request.getUsername());
-			
-			return ResponseEntity.ok(result);
-		}catch(Exception e) {
-			Map<String,String> error = new HashMap<>();
-			error.put("message","ログインに失敗しました");
-			
-			return ResponseEntity.status(401).body(error);
-		}
+	public LoginResponse login(@RequestBody LoginRequest request) {
+		Authentication auth = authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
+				);
+		String token = jwtUtil.generateToken(auth.getName());
+		return new LoginResponse(token);
 	}
 }
