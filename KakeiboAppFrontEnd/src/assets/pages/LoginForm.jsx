@@ -1,10 +1,12 @@
-﻿import { useState } from 'react';
+﻿import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../../context/UserContext';
 
 export default function LoginForm() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const { setUserName } = useContext(UserContext);
     const navigate = useNavigate();
 
     const handleLogin = async (e) => {
@@ -27,7 +29,7 @@ export default function LoginForm() {
             sessionStorage.setItem("jws", data.token);
             setUserName(username);
 
-            navigate(`/home`);
+            navigate("/home");
         } catch (error) {
             setError("通信エラー:" + error);
         }

@@ -1,5 +1,6 @@
 ﻿
 import { useState, useEffect, useContext } from 'react';
+import { UserContext } from '../../context/UserContext';
 import getNextSalaryDay from '../../feature/getNextSalaryDay';
 import ToggleHeart from '../../feature/ToggleHeart';
 import pageMonth from '../../feature/pageMonth'
@@ -30,14 +31,14 @@ export default function Home() {
     const [editPayDay, setEditPayDay] = useState(1);
     const location = useLocation();
     const message = location.state?.message || "";
-    const { username } = useContext(UserContext);//ログインしているユーザー名を格納
+    const { userName } = useContext(UserContext);//ログインしているユーザー名を格納
     const authFetch = useAuthFetch();
 
     //家計簿の当該月のデータを引き入れている
     //日付まで取得しているのは、日付と給料日の兼ね合いで
     //出力される家計簿の月が違うから
     useEffect(() => {
-        if(!username) return;//ログインしていなければ何もしない
+        if(!userName) return;//ログインしていなければ何もしない
 
         authFetch(`http://localhost:8080/kakeibo/${year}/${month}/${date}`,
             { cache: "no-store" })
@@ -71,7 +72,7 @@ export default function Home() {
                 });
                 setMonthlyOutgo(su);
             });
-     }, [year, month, date, username]);
+     }, [year, month, date, userName]);
 
     //「今月収入・支出」の表現に使うための年・月を取得
     function formatDate2(year, month) {
