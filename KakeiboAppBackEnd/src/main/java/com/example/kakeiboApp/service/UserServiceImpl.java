@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.kakeiboApp.DTO.PaydaySetDTO;
+import com.example.kakeiboApp.DTO.PaydayDTO;
 import com.example.kakeiboApp.DTO.RegisterDTO;
 import com.example.kakeiboApp.DTO.UserCallUpDTO;
 import com.example.kakeiboApp.DTO.UserCreateDTO;
@@ -54,27 +54,45 @@ public class UserServiceImpl implements UserService {
 		// TODO 自動生成されたメソッド・スタブ
 		RegisterDTO rd = new RegisterDTO();
 		String hashed = encoder.encode(dto.getPassword());
-		int rtn ;
 		try{
 			UserBody user = new UserBody();
 			
 			user.setUsername(dto.getUsername());
 			user.setPassword(hashed);
 			user.setPayday(dto.getPayday());
-			rtn = mapper.registerUser(user);
+			
+			int rtn = mapper.registerUser(user);
 			rd.setResistered(rtn == 1);
+			rd.setMessage(rtn == 1 ? "ユーザー登録成功" : "登録に失敗しました");
 		}catch(Exception e) {
 		    rd.setResistered(false);
 		    rd.setMessage(e.getMessage());
 		}
 		return rd;
 	}
+	
+	//ユーザー給料日情報取得
+	public int getPaydayService(String username) {
+		return mapper.getPayday(username);
+	}
 
 	//ユーザー給料日情報更新
 	@Override
-	public RegisterDTO updatePaydayService(PaydaySetDTO dto) {
-		// TODO 自動生成されたメソッド・スタブ
-		return null;
+	public PaydayDTO updatePaydayService(PaydayDTO dto) {
+		
+		String username = dto.getUsername();
+		int payday = dto.getPayday();
+		var returnDto = new PaydayDTO();
+		try {
+			mapper.updatePayday(username, payday);
+			returnDto.setPayday(payday);
+			returnDto.setMessage("給料日を更新しました");
+		}catch(Exception e) {
+			returnDto.setPayday(dto.getPayday());
+			returnDto.setMessage("給料日の更新に失敗しました");
+		}
+		
+		return returnDto;
 	}
 
 }

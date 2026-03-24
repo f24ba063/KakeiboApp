@@ -3,10 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../context/UserContext';
 
 export default function LoginForm() {
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
+    const [username, setUsername] = useState("user1");
+    const [password, setPassword] = useState("1234");
     const [error, setError] = useState("");
-    const { setUserName } = useContext(UserContext);
+    const { loggingUsername, setLoggingUsername } = useContext(UserContext);
     const navigate = useNavigate();
 
     const handleLogin = async (e) => {
@@ -25,9 +25,11 @@ export default function LoginForm() {
                 return;
             }
 
+            //console.log("resのステータス："+res.status);
             const data = await res.json();
             sessionStorage.setItem("jws", data.token);
-            setUserName(username);
+            setLoggingUsername(username);
+            //console.log("loggingusername:" + loggingUsername);
 
             navigate("/home");
         } catch (error) {

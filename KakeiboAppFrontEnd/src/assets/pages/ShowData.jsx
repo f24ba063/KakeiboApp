@@ -1,15 +1,22 @@
 ﻿import { useState, useEffect } from 'react';
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { useContext } from 'react'
+import { UserContext } from '../../context/UserContext'
+import { useAuthFetch } from '../../hooks/useAuthFetch';
 import '../../css/showData.css'
 import showCategory from '../../feature/showCategory';
+
 
 export default function ShowData() {
     const { id } = useParams();
     const [isEditing, setIsEditing] = useState(false);//編集モードボタン
     const [categories, setCategories] = useState([]);
+    const { loggingUsername } = useContext(UserContext);
+    const authFetch = useAuthFetch();
 
     const [kakeiboDto, setKakeiboDto] = useState({
+        username:loggingUsername,
         id: 0,
         categoryId: 0,
         category: "",
@@ -24,14 +31,14 @@ export default function ShowData() {
     });
     //当該idのデータを取得する
     useEffect(() => {
-        fetch(`http://localhost:8080/kakeibo/showdata/${id}`)
+        authFetch(`http://localhost:8080/kakeibo/showdata/${id}`)
             .then(res => res.json())
             .then(data => setKakeiboDto(data))
     }, [id]);
 
     //カテゴリー一覧を取得する
     useEffect(() => {
-        fetch("http://localhost:8080/kakeibo/categoryParameter")
+        authFetch("http://localhost:8080/kakeibo/categoryParameter")
             .then((res => res.json()))
             .then(data => setCategories(data));
     }, [])
@@ -51,7 +58,7 @@ export default function ShowData() {
 
         try {
             //DBにsoftDelete=9を反映
-            const res = await fetch(`http://localhost:8080/kakeibo/delete/${id}`, {
+            const res = await authFetch(`http://localhost:8080/kakeibo/delete/${id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ softDelete: 9 })
@@ -60,7 +67,7 @@ export default function ShowData() {
             if (!res.ok) throw new Error("削除失敗");
 
             //indexに戻る
-            navigate("/kakeibo");
+            navigate("/home");
         } catch (err) {
             alert("削除できませんでした：" + err.message);
         }
@@ -69,18 +76,18 @@ export default function ShowData() {
     //戻るボタンでホームに移動
     const navigate = useNavigate();
     const moveHome = () => {
-        navigate("/kakeibo");
+        navigate("/home");
     }
 
     const handleSubmit = async () => {
-            await fetch(`http://localhost:8080/kakeibo/update/${id}`, {
+        await authFetch(`http://localhost:8080/kakeibo/update/${id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify(kakeiboDto)
             });
-            navigate("/kakeibo");
+            navigate("/home");
     }
 
     return (
@@ -88,6 +95,7 @@ export default function ShowData() {
             <form className="area">
                 {/*IDは隠蔽している*/}
                 <h2 id="id-hidden">id: {id}</h2>
+                <h2 id="username-hidden">ユーザ名：{loggingUsername}</h2>
 
                 {/*日付*/}
                 {isEditing ?

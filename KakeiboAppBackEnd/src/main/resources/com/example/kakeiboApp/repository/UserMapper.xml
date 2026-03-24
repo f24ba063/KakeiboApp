@@ -12,6 +12,11 @@
 			users
 		where username = #{username}
 	</select>
+	
+	<select id="getPayday">
+		select payday from users
+		where username=#{username}
+	</select>
 
 	<insert id="registerUser">
 		insert into users(username, password, payday)

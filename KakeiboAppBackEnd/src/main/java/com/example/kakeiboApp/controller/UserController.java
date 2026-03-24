@@ -1,12 +1,14 @@
 package com.example.kakeiboApp.controller;
 
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.kakeiboApp.DTO.PaydaySetDTO;
+import com.example.kakeiboApp.DTO.PaydayDTO;
 import com.example.kakeiboApp.DTO.RegisterDTO;
 import com.example.kakeiboApp.DTO.UserCreateDTO;
 import com.example.kakeiboApp.service.UserService;
@@ -25,9 +27,15 @@ public class UserController {
 		return service.userCreateService(dto);
 	}
 	
+	//ユーザー給料日取得
+	@GetMapping("/getPayday/{username}")
+	public int getUsersPayday(@PathVariable String username) {
+		return service.getPaydayService(username);
+	}
+	
 	//ユーザー給料日更新
 	@PutMapping("/setPayday")
-	public RegisterDTO updatePayday(@RequestBody PaydaySetDTO dto) {
+	public PaydayDTO updatePayday(@RequestBody PaydayDTO dto) {
 		return service.updatePaydayService(dto);
 	}
 }

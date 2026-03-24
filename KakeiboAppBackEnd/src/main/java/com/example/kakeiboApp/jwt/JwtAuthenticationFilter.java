@@ -8,9 +8,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+
+import com.example.kakeiboApp.security.CustomUserDetailsService;
 
 import io.jsonwebtoken.io.IOException;
 import lombok.AllArgsConstructor;
@@ -22,6 +25,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	@Autowired
 	private final JwtUtil jwtUtil;
 	
+	@Autowired
+	CustomUserDetailsService userDetailsService; 
+	
 	@Override
 	protected void doFilterInternal(HttpServletRequest request,
 							HttpServletResponse response,
@@ -32,8 +38,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			String token = authHeader.substring(7);
 			if(jwtUtil.validateToken(token)) {
 				String username = jwtUtil.getUsername(token);
-				UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
-						username, null, null);
+				UserDetails userDetails = userDetailsService
+						.loadUserByUsername(username);
+				
+				UsernamePasswordAuthenticationToken auth = 
+						new UsernamePasswordAuthenticationToken(
+						userDetails, null, userDetails.getAuthorities());
 				auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));;
 				SecurityContextHolder.getContext().setAuthentication(auth);
 			}

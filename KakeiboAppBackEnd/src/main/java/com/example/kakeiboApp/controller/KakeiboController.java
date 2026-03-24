@@ -36,6 +36,7 @@ public class KakeiboController{
 			@PathVariable Integer month, 
 			@PathVariable Integer day, 
 			@AuthenticationPrincipal UserDetails details) {
+		System.out.println("userDetail:" +details);
 		
 		String username = details.getUsername();
 		return service.getMonthlyDataService(year, month, day, username);

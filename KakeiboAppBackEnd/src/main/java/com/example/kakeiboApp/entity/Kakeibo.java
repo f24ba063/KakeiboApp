@@ -16,6 +16,8 @@ import lombok.NoArgsConstructor;
 public class Kakeibo{
 	Integer id;
 	
+	String username;
+	
 	LocalDate tradeDate;
 	
 	Integer categoryId;

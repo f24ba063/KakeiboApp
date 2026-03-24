@@ -1,15 +1,16 @@
 ﻿
 import { useState, useEffect, useContext } from 'react';
-import { UserContext } from '../../context/UserContext';
-import getNextSalaryDay from '../../feature/getNextSalaryDay';
-import ToggleHeart from '../../feature/ToggleHeart';
-import pageMonth from '../../feature/pageMonth'
-import CardStyle from '../../feature/CardStyle'
-import ListStyle from '../../feature/ListStyle'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
-import useExpressionStyle from "../../feature/useExpressionStyle";
 import { UserContext } from '../../context/UserContext';
 import { useAuthFetch } from '../../hooks/useAuthFetch';
+import CardStyle from '../../feature/CardStyle'
+import getNextPayday from '../../feature/getNextPayday';
+import updateUserPayday from '../../feature/updateUserPayday';
+import ListStyle from '../../feature/ListStyle'
+import pageMonth from '../../feature/pageMonth'
+import monthlyInOut from '../../feature/monthlyInOut'
+import ToggleHeart from '../../feature/ToggleHeart';
+import useExpressionStyle from "../../feature/useExpressionStyle";
 import '../../css/index.css';
 import '../../css/mordal-overlay.css';
 
@@ -21,58 +22,40 @@ export default function Home() {
     const [year, setYear] = useState(now.getFullYear());//年を取得
     const [month, setMonth] = useState(now.getMonth() + 1);//月を取得
     const [date, setDate] = useState(now.getDate());//日を取得
-    const [salaryGetDay, setSalaryGetDay] = useState(11);//給料日の設定
+    const [currentPayday, setCurrentPayday] = useState(11);//毎月の給料日の設定
+    const nextPayday = getNextPayday(currentPayday);//毎月の給料日をもとに、次の給料日の年月日を取得
+    const [editPayday, setEditPayday] = useState(1);//給料日変更入力時、現在入力中の数値を受け取る
     const [warning, setWarning] = useState("");
-    const nextSalaryDay = getNextSalaryDay(salaryGetDay);
     const navigate = useNavigate();
     const { expressionStyle, changeStyle } = useExpressionStyle();
     const [isModalOpen, setIsModalOpen] = useState(false);//給料日入力モーダルのスイッチ
-    const [payDay, setPayDay] = useState(11);//給料日入力を受け付ける
-    const [editPayDay, setEditPayDay] = useState(1);
     const location = useLocation();
     const message = location.state?.message || "";
-    const { userName } = useContext(UserContext);//ログインしているユーザー名を格納
-    const authFetch = useAuthFetch();
+    const { loggingUsername } = useContext(UserContext);//ログインしているユーザー名を格納
+    const authFetch = useAuthFetch();//jwt認証つきfetch
 
+    //ページを開いたとき＋先月・来月に表示領域をずらすたびに
     //家計簿の当該月のデータを引き入れている
     //日付まで取得しているのは、日付と給料日の兼ね合いで
     //出力される家計簿の月が違うから
     useEffect(() => {
-        if(!userName) return;//ログインしていなければ何もしない
 
-        authFetch(`http://localhost:8080/kakeibo/${year}/${month}/${date}`,
-            { cache: "no-store" })
+        if (!loggingUsername) return;//ログインしていなければ何もしない
+
+        monthlyInOut(year, month, date,
+            setWarning, setKakeiboDto, setMonthlyIncome, setMonthlyOutgo,
+            authFetch);
+
+    }, [year, month, date, loggingUsername, location.state?.refresh]);
+
+    //給料日と次の給料日を、ユーザーデータをもとに獲得している
+    useEffect(() => {
+        authFetch(`http://localhost:8080/register/getPayday/${loggingUsername}`)
             .then(res => res.json())
             .then(data => {
-                if (data.status === "EMPTY") {
-                    setWarning("この月にはデータが存在しません");
-                } else if (data.status === "AFTER_NEWEST") {
-                    setWarning("これより後のデータはありません");
-                } else if (data.status === "BEFORE_OLDEST") {
-                    setWarning("最古のデータ以前の月は閲覧できません！");
-                } else {
-                    setWarning("");
-                };
-
-                //取得情報から一か月分の収支を計算
-                const kdto = data.data;
-                setKakeiboDto(kdto);
-                //収入
-                const MonthIn = kdto.filter(k => k.inOut === "IN");
-                let sm = 0;
-                MonthIn.forEach(e => {
-                    sm += e.amount;
-                });
-                setMonthlyIncome(sm);
-                //支出
-                const Monthout = kdto.filter(k => k.inOut === "OUT");
-                let su = 0;
-                Monthout.forEach(e => {
-                    su += e.amount;
-                });
-                setMonthlyOutgo(su);
+                setCurrentPayday(Number(data));
             });
-     }, [year, month, date, userName]);
+    }, [currentPayday])
 
     //「今月収入・支出」の表現に使うための年・月を取得
     function formatDate2(year, month) {
@@ -95,17 +78,18 @@ export default function Home() {
     const moveDetail = (id) => { navigate(`/showdata/${id}`) }
 
     //給料日設定
-    const setSala = (e) =>{
+    const updatePayday = (e) =>{
         if(e > 28){
-            setSalaryGetDay(28);
+            setEditPayday(28);
             setWarning("29日以降は給料日として設定できません");
         }
        else  if(e < 1){
-            setSalaryGetDay(1);
+            setEditPayday(1);
             setWarning("1日以前は給料日として設定できません");
         }
         else{
-            setSalaryGetDay(e);
+            setEditPayday(e);
+            setWarning("");
         }
     }
 
@@ -118,12 +102,13 @@ export default function Home() {
                     <h3>
                         <span className="top-lines">{formatDate2(year, month)}収入：{monthlyIncome}</span>
                         <span className="top-lines">{formatDate2(year, month)}支出：{monthlyOutgo}</span>
-                        <span className="top-lines">
-                            給料日：
-                            <span onClick={() => setIsModalOpen(true)}>
-                                {payDay}
-                            </span>
-                            日
+                        <span className="top-lines">給料日：{currentPayday}日</span>
+                        <span>
+                            <button
+                                type="button"
+                                onClick={() => setIsModalOpen(true)}>
+                                給料日変更
+                            </button>
                         </span>
                     </h3>
                     {isModalOpen && (
@@ -133,17 +118,32 @@ export default function Home() {
 
                                 <input
                                     type="number"
-                                    value={payDay}
-                                    onChange={(e) => setEditPayDay(e.target.value)}
+                                    value={editPayday}
+                                    onChange={(e) => updatePayday(e.target.value)}
                                 />
 
-                                <button onClick={() => {
-                                    setPayDay(editPayDay);
-                                    setEditPayDay(1);
-                                    setIsModalOpen(false)
-                                }
-                                }>
+                                <button type="button"
+                                    onClick={() => {
+                                        updateUserPayday(authFetch, loggingUsername, editPayday)
+                                            .then(updatedDay => {
+                                                setCurrentPayday(updatedDay.payday);
+                                                setWarning(updatedDay.message);
+                                                setEditPayday(1);
+                                                setIsModalOpen(false);
+                                            })
+                                            .catch(err => {
+                                                console.error(err);
+                                                setWarning("給料日の更新に失敗しました");
+                                            });
+                                    }}>
                                     保存
+                                </button>
+                                <button type="button"
+                                    onClick={() => {
+                                        setEditPayday(1)
+                                        setIsModalOpen(false)
+                                    }}>
+                                    キャンセル
                                 </button>
                             </div>
                         </div>
@@ -153,7 +153,7 @@ export default function Home() {
                 <div id="second-line">
                     <h3>
                         <span className="top-lines">今月収入/支出：{monthlyIncome > monthlyOutgo ? "+" : ""}{monthlyIncome - monthlyOutgo }</span>
-                        <span className="top-lines">次の給料日： {nextSalaryDay}</span>
+                        <span className="top-lines">次の給料日： {nextPayday}</span>
                     </h3>
                     <span className="top-lines" id="heart-row">
                         <h3 className="ganbatta-title">がんばった：</h3>

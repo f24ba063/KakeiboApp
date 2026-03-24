@@ -15,6 +15,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.example.kakeiboApp.jwt.JwtAuthenticationFilter;
 import com.example.kakeiboApp.jwt.JwtUtil;
+import com.example.kakeiboApp.security.CustomUserDetailsService;
 
 import lombok.AllArgsConstructor;
 
@@ -25,6 +26,8 @@ import lombok.AllArgsConstructor;
 public class SecurityConfig {
 
 	private final JwtUtil jwtUtil;
+	
+	private final CustomUserDetailsService userDetailsService;
 	//SpringSecurityを設定した上でのCorsの設定
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http)
@@ -36,7 +39,7 @@ public class SecurityConfig {
 			.requestMatchers("/auth/login").permitAll()
 			.requestMatchers("/index/**").permitAll()
 			.anyRequest().authenticated())
-			.addFilterBefore(new JwtAuthenticationFilter(jwtUtil),
+			.addFilterBefore(new JwtAuthenticationFilter(jwtUtil, userDetailsService),
 					 UsernamePasswordAuthenticationFilter.class);
 		return http.build();
 	}

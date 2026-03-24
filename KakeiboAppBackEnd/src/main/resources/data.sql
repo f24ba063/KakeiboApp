@@ -3,7 +3,7 @@ insert into users(username, password, payday)
 values('user1','$2a$10$GUE17t8HDZap/Z0AU0IR8uozJRaxzUK.1MO1M2KsbEh43d2.niOLm', 12);
 
 insert into users(username, password, payday)
-values('user2','1234', 24);
+values('user2','$2a$10$GUE17t8HDZap/Z0AU0IR8uozJRaxzUK.1MO1M2KsbEh43d2.niOLm', 24);
 
 --IN-OUTテーブルにin、outの挿入
 
@@ -17,6 +17,7 @@ values(2, 'OUT');
 --給料（収入）
 insert into category(id, category, in_out, sort_order)
 values (1, '給料', 'IN', 1);
+
 
 --定期外収入（収入）
 insert into category(id, category, in_out, sort_order)

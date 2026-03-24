@@ -14,7 +14,7 @@ import lombok.Data;
 @Service
 @AllArgsConstructor
 @Data
-public class CustomUserDetailService implements UserDetailsService {
+public class CustomUserDetailsService implements UserDetailsService {
 	private final UserMapper mapper;
 	
 	@Override

@@ -6,20 +6,24 @@ export function useAuthFetch(){
 	const navigate = useNavigate();
 
 	async function authFetch(url, options ={}){
-		const token = sessionStorage.getItem("jwt");
+		const token = sessionStorage.getItem("jws");
 		const headers = {
-			...options.headers,
+			...(options.headers || {}),
 			"Authorization": token ? `Bearer ${token}` :  ""
 		};
 
-		const res = await fetch(url, ...{options, headers});
+		const res = await fetch(url, {
+			...options,
+			headers
+		});
 
 		if(res.status === 401){
-			sessionStorage.removeItem("jwt");
+			sessionStorage.removeItem("jws");
 			navigate("/login");//トークン無効ならログイン画面へ
 			throw new Error("認証失敗");
 		}
-		return res.json();
+
+		return res;
 	}
 
 	return authFetch;

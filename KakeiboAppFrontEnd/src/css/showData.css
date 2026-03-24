@@ -8,6 +8,10 @@
     display:none;
 }
 
+#username-hidden {
+    display: none;
+}
+
 #edit-category{
     display:flex;
     text-align:center;

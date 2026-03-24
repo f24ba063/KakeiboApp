@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.example.kakeiboApp.DTO.PaydaySetDTO;
 import com.example.kakeiboApp.entity.UserBody;
 
 @Mapper
@@ -16,6 +15,9 @@ public interface UserMapper {
 	//intで返すのは追加されたら１，失敗したら0を返すから
 	public int registerUser(UserBody userBody);
 	
+	//給料日取得
+	public int getPayday(String username);
+	
 	//給料日変更
-	public int updatePayday(PaydaySetDTO dto);
+	public void updatePayday(String username, int payday);
 }

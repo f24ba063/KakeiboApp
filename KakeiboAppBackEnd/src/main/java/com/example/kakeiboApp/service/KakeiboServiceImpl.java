@@ -41,7 +41,7 @@ public class KakeiboServiceImpl implements KakeiboService {
 		
 		//ユーザーごとの給料日を取得
 		Integer payday = mapper.getPayday(username);
-		//給料日を締めとした一か月を調べている。その月の給料日より
+		//給料日を月初めとした一か月を調べている。その月の給料日より
 		//早い日に問い合わせたときは
 		//先月のデータも問い合わせる必要がある
 		month = day < payday ? month - 1 : month;

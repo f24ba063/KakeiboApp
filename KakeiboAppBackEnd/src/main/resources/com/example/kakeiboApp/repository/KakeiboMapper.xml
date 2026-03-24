@@ -77,16 +77,18 @@
 	from kakeibo
 </select>
 
+<!--カテゴリー情報を取得する-->
 <select id="getAllCategory" resultType="com.example.kakeiboApp.entity.Category">
 	select
 		id, category, in_out as inOut,sort_order as sortOrder
 	from category
 </select>
 
+<!--新しい収支データを登録する-->
 <insert id="saveNewFile" >
-	insert into kakeibo(category_id, amount, memo, trade_date, homeru)
+	insert into kakeibo(username, category_id, amount, memo, trade_date, homeru)
 	values
-	(#{categoryId}, #{amount}, #{memo}, #{tradeDate}, #{homeru})
+	(#{username}, #{categoryId}, #{amount}, #{memo}, #{tradeDate}, #{homeru})
 </insert>
 
 <update id="updateHomeru">

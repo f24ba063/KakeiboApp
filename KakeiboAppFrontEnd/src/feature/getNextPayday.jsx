@@ -1,13 +1,13 @@
-﻿export default function getNextSalaryDay(salaryGetDay){
+﻿export default function getNextPayday(payday){
 	const today = new Date();
 
 	//今日が給料日よりも後なら、翌月の給料日を出す
-	const addMonth = today.getDate() > salaryGetDay ? 1 : 0;
+	const addMonth = today.getDate() > payday ? 1 : 0;
 
 	const d =  new Date(
 		today.getFullYear(),
 		today.getMonth() + addMonth,
-		salaryGetDay
+		payday
 	);
 
 	const yyyy = d.getFullYear() % 100;

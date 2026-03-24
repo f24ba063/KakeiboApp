@@ -5,10 +5,10 @@ import { UserContext } from './context/UserContext';
 
 export default function PrivateRoute({ children }){
     //const { isLoggedIn } = useAuth();
-    const { userName } = useContext(UserContext);
+    const { loggingUsername } = useContext(UserContext);
 
 
-    if (!userName || userName === "") {
+    if (!loggingUsername || loggingUsername === "") {
         return <Navigate to="/login" replace />
     }
     return children;

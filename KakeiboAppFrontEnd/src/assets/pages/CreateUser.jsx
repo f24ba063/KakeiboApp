@@ -1,5 +1,7 @@
 ﻿import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuthFetch } from '../../hooks/useAuthFetch';
+
 //import { useAuth } from ',/AuthProvider'; 
 
 export default function CreateUser() {
@@ -8,7 +10,7 @@ export default function CreateUser() {
     const [payday, setPayday] = useState(25);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-    //const { login } = useAuth();
+    const authFetch = useAuthFetch();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -25,7 +27,7 @@ export default function CreateUser() {
             const normalizedPayday = Math.min(Math.max(Math.round(payday), 1), 28);
 
             //dbへのデータ転送
-            const res = await fetch("http://localhost:8080/register/registerUser", {
+            const res = await authFetch("http://localhost:8080/register/registerUser", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
