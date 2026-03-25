@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.kakeiboApp.DTO.PaydayDTO;
 import com.example.kakeiboApp.DTO.RegisterDTO;
@@ -50,26 +51,31 @@ public class UserServiceImpl implements UserService {
 	
 	//新規ユーザー登録
 	@Override
+	@Transactional
 	public RegisterDTO userCreateService(UserCreateDTO dto) {
-		// TODO 自動生成されたメソッド・スタブ
 		RegisterDTO rd = new RegisterDTO();
 		String hashed = encoder.encode(dto.getPassword());
-		try{
-			UserBody user = new UserBody();
-			
-			user.setUsername(dto.getUsername());
-			user.setPassword(hashed);
-			user.setPayday(dto.getPayday());
-			
-			int rtn = mapper.registerUser(user);
-			rd.setResistered(rtn == 1);
-			rd.setMessage(rtn == 1 ? "ユーザー登録成功" : "登録に失敗しました");
-		}catch(Exception e) {
-		    rd.setResistered(false);
-		    rd.setMessage(e.getMessage());
-		}
+		
+		UserBody user = new UserBody();
+		
+		user.setUsername(dto.getUsername());
+		user.setPassword(hashed);
+		user.setPayday(dto.getPayday());
+		user.setRoles(dto.getRoles());
+	
+		int rtn = mapper.registerUser(user);
+		rd.setResistered(rtn == 1);
+		rd.setMessage(rtn == 1 ? "ユーザー登録成功" : "登録に失敗しました");
+		
 		return rd;
 	}
+	
+	//ユーザー名重複チェック
+	public void existsByUsernameService(String username) {
+		if(mapper.existsByUsername(username) > 0) {
+			throw new RuntimeException("そのユーザー名はすでに使われています");
+		}
+	};
 	
 	//ユーザー給料日情報取得
 	public int getPaydayService(String username) {

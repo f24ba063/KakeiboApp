@@ -37,7 +37,8 @@ public class SecurityConfig {
 			.csrf(csrf->csrf.disable())
 			.authorizeHttpRequests(auth -> auth
 			.requestMatchers("/auth/login").permitAll()
-			.requestMatchers("/index/**").permitAll()
+			.requestMatchers("/register/**").permitAll()
+			.requestMatchers("/kakeibo/categoryParameter").permitAll()
 			.anyRequest().authenticated())
 			.addFilterBefore(new JwtAuthenticationFilter(jwtUtil, userDetailsService),
 					 UsernamePasswordAuthenticationFilter.class);

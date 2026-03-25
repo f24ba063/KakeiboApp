@@ -13,14 +13,19 @@
 		where username = #{username}
 	</select>
 	
+	<select id="existsByUsername">
+		select count(*) from users
+		where username = #{username}
+	</select>
+	
 	<select id="getPayday">
 		select payday from users
 		where username=#{username}
 	</select>
 
 	<insert id="registerUser">
-		insert into users(username, password, payday)
-		values(#{userName}, #{password}, #{payday})
+		insert into users(username, password, payday, roles)
+		values(#{username}, #{password}, #{payday}, #{roles})
 	</insert>
 	
 	<update id="updatePayday">

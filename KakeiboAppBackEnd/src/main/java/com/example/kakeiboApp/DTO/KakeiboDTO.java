@@ -3,6 +3,9 @@ package com.example.kakeiboApp.DTO;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,6 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class KakeiboDTO {
 	//家計簿DTOはカテゴリのIDとカテゴリ名を両方所有している
 	Integer id;
@@ -22,6 +26,8 @@ public class KakeiboDTO {
 	
 	LocalDate tradeDate;
 	
+	@Max(value = 9_999_999, message="{max + 1}円以上の数値は入力できません")
+	@Min(value = 0, message="マイナス金額は入力できません")
 	Integer amount;
 	
 	String inOut = "IN";

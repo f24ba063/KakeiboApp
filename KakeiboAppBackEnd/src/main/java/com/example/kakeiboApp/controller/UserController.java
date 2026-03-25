@@ -1,5 +1,7 @@
 package com.example.kakeiboApp.controller;
 
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,17 +15,19 @@ import com.example.kakeiboApp.DTO.RegisterDTO;
 import com.example.kakeiboApp.DTO.UserCreateDTO;
 import com.example.kakeiboApp.service.UserService;
 
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/register")
+@Data
 public class UserController {
 	private final UserService service;
 	
 	//新規ユーザー登録
 	@PostMapping("/registerUser")
-	public RegisterDTO resisterNewUser(@RequestBody UserCreateDTO dto) {
+	public RegisterDTO resisterNewUser(@Valid @RequestBody UserCreateDTO dto) {
 		return service.userCreateService(dto);
 	}
 	
@@ -38,4 +42,9 @@ public class UserController {
 	public PaydayDTO updatePayday(@RequestBody PaydayDTO dto) {
 		return service.updatePaydayService(dto);
 	}
+	
+	@GetMapping
+	public void existsByUsername(String username) {
+		service.existsByUsernameService(username);
+	};
 }

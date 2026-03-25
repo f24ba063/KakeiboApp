@@ -1,14 +1,16 @@
 ﻿import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthFetch } from '../../hooks/useAuthFetch';
+import '../../css/registerUser.css';
 
 //import { useAuth } from ',/AuthProvider'; 
 
-export default function CreateUser() {
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const [payday, setPayday] = useState(25);
+export default function RegisterUser() {
+    const [username, setUsername] = useState("");//ユーザー名登録
+    const [password, setPassword] = useState("");//パスワード登録
+    const [payday, setPayday] = useState(25);//給料日登録
     const [loading, setLoading] = useState(false);
+    const [errors, setErrors] = useState({});//入力エラーを受け止めるstate
     const navigate = useNavigate();
     const authFetch = useAuthFetch();
 
@@ -18,7 +20,7 @@ export default function CreateUser() {
     
         try {
             if (!username.trim() || !password.trim()) {
-                alert("ユーザー名とパスワードを入力してください");
+                alert("ユーザー名とパスワードを登録してください");
                 setLoading(false);
                 return;
             }
@@ -47,18 +49,20 @@ export default function CreateUser() {
             }
 
             if (!res.ok) {
-                throw new Error(data.message || "サーバーエラー");
+                setErrors(data || {});
+                setLoading(false);
+                return;
             }
 
             if (data && data.resistered === true) {
-                //login(data.token);
-                navigate("./login", { replace: true });
+                navigate("/home", { replace: true });
                 // 登録成功。ただちに家計簿ホーム画面へ
                 
             } else {
                 // 失敗
                 alert(data?.message || "登録に失敗しました");
             }
+
         } catch (error) {
             alert("通信エラー:" + error.message);
         } finally {
@@ -76,6 +80,9 @@ export default function CreateUser() {
                     value={username}
                     required
                     onChange={e => setUsername(e.target.value)} />
+                {errors.username &&
+                    <div className="warning">{errors.username}</div>
+                }
                 <br />
                 パスワード
                 <input
@@ -84,7 +91,10 @@ export default function CreateUser() {
                     autoComplete="new-password"
                     value={password}
                     required
-                    onChange={e =>setPassword(e.target.value)} />
+                    onChange={e => setPassword(e.target.value)} />
+                {errors.password &&
+                    <div className="warning">{errors.password}</div>
+                }
                 <br />
                 給料日
                 <input
@@ -97,10 +107,15 @@ export default function CreateUser() {
                     required
                     onChange={(e) => setPayday(Number(e.target.value) || 1)}
                 />
-
+                <br />
                 <button type="submit"
-                    disabled={loading}>新規ユーザー登録</button>
+                    disabled={loading}>新規ユーザー登録
+                </button>
             </form>
+            <button type="button"
+                onClick={() => navigate("/login")}>
+                キャンセル
+            </button>
         </>
     )
 }

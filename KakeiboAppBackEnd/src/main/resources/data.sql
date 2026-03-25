@@ -1,9 +1,11 @@
 --usersテーブルにユーザー登録
-insert into users(username, password, payday)
-values('user1','$2a$10$GUE17t8HDZap/Z0AU0IR8uozJRaxzUK.1MO1M2KsbEh43d2.niOLm', 12);
+insert into users(username, password, payday, roles)
+values('user1','$2a$10$GUE17t8HDZap/Z0AU0IR8uozJRaxzUK.1MO1M2KsbEh43d2.niOLm', 
+12, 'ROLE_ADMIN');
 
-insert into users(username, password, payday)
-values('user2','$2a$10$GUE17t8HDZap/Z0AU0IR8uozJRaxzUK.1MO1M2KsbEh43d2.niOLm', 24);
+insert into users(username, password, payday, roles)
+values('user2','$2a$10$GUE17t8HDZap/Z0AU0IR8uozJRaxzUK.1MO1M2KsbEh43d2.niOLm', 
+24, 'ROLE_USER');
 
 --IN-OUTテーブルにin、outの挿入
 

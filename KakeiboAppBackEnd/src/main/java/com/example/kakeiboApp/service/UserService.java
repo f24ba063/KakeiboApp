@@ -12,6 +12,9 @@ public interface UserService {
 	//新規ユーザー登録
 	RegisterDTO userCreateService(UserCreateDTO dto) ;
 	
+	//ユーザー名重複チェック
+	public void existsByUsernameService(String username);
+	
 	//ユーザー給料日取得
 	int getPaydayService(String username);
 	

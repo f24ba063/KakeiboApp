@@ -1,15 +1,10 @@
 ﻿import { useAuth } from '../AuthProvider';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import '../css/header.css';
 
 export default function Header() {
     const { logout } = useAuth();
     const navigate = useNavigate();
-    const location = useLocation();
-
-    if (location.pathname === "/login" || location.pathname === "/createUser") {
-        return null; // Login と CreateUser では Header を非表示
-    }
 
     const handleLogout = () => {
         logout();

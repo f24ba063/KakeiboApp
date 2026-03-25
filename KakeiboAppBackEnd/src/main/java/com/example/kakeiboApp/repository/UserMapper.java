@@ -15,6 +15,9 @@ public interface UserMapper {
 	//intで返すのは追加されたら１，失敗したら0を返すから
 	public int registerUser(UserBody userBody);
 	
+	//ユーザ名重複チェックのための探査
+	public int existsByUsername(String username);
+	
 	//給料日取得
 	public int getPayday(String username);
 	

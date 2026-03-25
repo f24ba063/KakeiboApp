@@ -3,6 +3,7 @@ package com.example.kakeiboApp.controller;
 import java.util.List;
 
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,7 +37,6 @@ public class KakeiboController{
 			@PathVariable Integer month, 
 			@PathVariable Integer day, 
 			@AuthenticationPrincipal UserDetails details) {
-		System.out.println("userDetail:" +details);
 		
 		String username = details.getUsername();
 		return service.getMonthlyDataService(year, month, day, username);
@@ -51,7 +51,7 @@ public class KakeiboController{
 	//新規データセーブ
 	@PostMapping("/save")
 	@Transactional
-	public void save(@RequestBody Kakeibo kakeibo) {
+	public void save(@Valid @RequestBody Kakeibo kakeibo) {
 		service.save(kakeibo);
 	}
 	

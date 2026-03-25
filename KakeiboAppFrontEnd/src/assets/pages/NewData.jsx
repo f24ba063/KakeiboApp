@@ -9,13 +9,15 @@ export default function NewData() {
        //カテゴリー(category)、日付(tradeDate)、
 	    //入出金額(amount)、数値型の誉めるフラグ( homeru =0)、
     //雑記メモ(memo)を入力する
-    const { loggingUsername } = useContext(UserContext);
+    const { loggingUsername } = useContext(UserContext);//ユーザー名を受け取る
     const [categories, setCategories] = useState([]);
     const [inOut, setInOut] = useState("IN");
+    const [errors, setErrors] = useState({});
     const today = new Date().toISOString().split("T")[0];
     const authFetch = useAuthFetch();
     const [kakeibo, setKakeibo] = useState({
         username: loggingUsername,
+        category: "",
         categoryId: 1,
         tradeDate: today,
         amount: 0,
@@ -28,21 +30,25 @@ export default function NewData() {
         authFetch("http://localhost:8080/kakeibo/categoryParameter")
             .then(res => res.json())
             .then(data => setCategories(data))
-            .then(data => console.log(data));
+            .then(() => console.log(categories));
     }, [])
 
     const handleSubmit = async e => {
         e.preventDefault();
-        
-        await authFetch("http://localhost:8080/kakeibo/save", {
-            method: "POST",
-            headers: {
-                "Content-Type":"application/json"
-            },
-            body: JSON.stringify(kakeibo)
-        });
-        console.log("いれたもの：" + JSON.stringify(kakeibo));
-        navigate("/home", { state: {refresh: true}});
+        try {
+            await authFetch("http://localhost:8080/kakeibo/save", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(kakeibo)
+            });
+            console.log("いれたもの：" + JSON.stringify(kakeibo));
+            setErrors({});
+            navigate("/home", { state: { refresh: true } });
+        } catch (err) {
+            console.log("エラー文："+err);
+        }
     };
 
     //戻るボタンでホームに移動
@@ -88,12 +94,14 @@ export default function NewData() {
                     <input
                         type="number"
                         value={kakeibo.amount}
+                        
                         onChange={ (e) => 
                         setKakeibo({
                             ...kakeibo,
                             amount:Number(e.target.value)
                         })}
                     />
+                    {errors.amount && <div>{errors.amount}</div> }
                     <br />
 
                     {/*日付*/}
