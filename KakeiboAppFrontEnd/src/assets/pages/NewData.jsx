@@ -31,7 +31,6 @@ export default function NewData() {
             .then(res => res.json())
             .then(data => {
                 setCategories(data);
-                console.log(data);
             });
     }, [])
 

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.example.kakeiboApp.DTO.DataRangeDTO;
 import com.example.kakeiboApp.DTO.KakeiboDTO;
 import com.example.kakeiboApp.DTO.MonthlyResponseDTO;
+import com.example.kakeiboApp.DTO.MonthlySummaryDTO;
 import com.example.kakeiboApp.converter.DtoConverter;
 import com.example.kakeiboApp.entity.Category;
 import com.example.kakeiboApp.entity.Kakeibo;
@@ -39,6 +40,10 @@ public class KakeiboServiceImpl implements KakeiboService {
 	public MonthlyResponseDTO getMonthlyDataService(Integer year, 
 			Integer month, Integer day, String username) {
 		
+
+		
+		//
+		
 		//ユーザーごとの給料日を取得
 		Integer payday = mapper.getPayday(username);
 		//給料日を月初めとした一か月を調べている。その月の給料日より
@@ -53,9 +58,18 @@ public class KakeiboServiceImpl implements KakeiboService {
 		var dateRange = mapper.getDataRange();
 		
 		//LocalDate target = LocalDate.of(year, month, day);
-		MonthlyResponseDTO res = new MonthlyResponseDTO();
+		
 		LocalDate start = LocalDate.of(year, month, payday);
 		LocalDate end   = start.plusMonths(1).minusDays(1);
+		MonthlyResponseDTO res = new MonthlyResponseDTO();
+		
+		//アクセスした人物がひとつでもデータを登録しているかの確認
+		boolean existsDataOfUser = mapper.countDataByUser(username) > 0;	
+		if(!existsDataOfUser) {
+			res.setStatus("NEW_USER");
+			res.setData(mapper.getMonthly(year, month, day, username));
+			return res;
+		}
 		
 		//最新、最古よりも外側の範囲を調べようとしたら、元ページに差し戻される
 		if(end.isBefore(dateRange.getOldestData())) {
@@ -94,6 +108,14 @@ public class KakeiboServiceImpl implements KakeiboService {
 		
 		return dataRangeDto;
 	}
+	
+	//特定ユーザーの月毎の収支集計を取得する
+		public List<MonthlySummaryDTO> getMonthlySummaryService(String username){
+			int payday = mapper.getPayday(username);
+			
+			return mapper.getMonthlySummary(username,payday);
+		}
+		
 	
 	//カテゴリー選択肢情報を返す
 	@Override

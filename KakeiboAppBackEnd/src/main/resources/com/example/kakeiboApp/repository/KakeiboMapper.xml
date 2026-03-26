@@ -18,6 +18,13 @@
 	order by K.trade_date desc
 </select>
 
+<!--ユーザーが収支データを所有しているかをチェック-->
+<select id="countDataByUser">
+	select count(*) from kakeibo
+	where username = #{username}
+</select>
+
+<!--特定idの収支情報をKakeiboDTOのために取得-->
 <select id="getById"  resultType="com.example.kakeiboApp.DTO.KakeiboDTO">
 	select
 		K.id,
@@ -82,6 +89,40 @@
 	select
 		id, category, in_out as inOut,sort_order as sortOrder
 	from category
+</select>
+
+<!--一か月分の収支を個別に取得-->
+<select id="getMonthlySummary">
+	SELECT 
+	  TO_CHAR(
+	    CASE 
+	      WHEN EXTRACT(DAY FROM k.trade_date) &lt; #{payday}
+	      THEN k.trade_date - INTERVAL '1 month'
+	      ELSE k.trade_date
+	    END,
+	    'YYYY-MM'
+	  ) AS month,
+	  
+	  SUM(CASE WHEN c.in_out = 'IN'  THEN k.amount ELSE 0 END) AS income,
+	  SUM(CASE WHEN c.in_out = 'OUT' THEN k.amount ELSE 0 END) AS expense
+	
+	FROM kakeibo k
+	JOIN category c ON k.category_id = c.id
+	
+	WHERE k.username = #{username}
+	  AND k.soft_delete = 1
+	
+	GROUP BY 
+	  TO_CHAR(
+	    CASE 
+	      WHEN EXTRACT(DAY FROM k.trade_date) &lt; #{payday}
+	      THEN k.trade_date - INTERVAL '1 month'
+	      ELSE k.trade_date
+	    END,
+	    'YYYY-MM'
+	  )
+	
+	ORDER BY month
 </select>
 
 <!--新しい収支データを登録する-->

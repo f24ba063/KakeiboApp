@@ -11,6 +11,7 @@ import pageMonth from '../../feature/pageMonth'
 import monthlyInOut from '../../feature/monthlyInOut'
 import ToggleHeart from '../../feature/ToggleHeart';
 import useExpressionStyle from "../../feature/useExpressionStyle";
+import MonthlyChart from '../../feature/MonthlyChart';
 import '../../css/index.css';
 import '../../css/mordal-overlay.css';
 
@@ -224,6 +225,7 @@ export default function Home() {
                         dateGet={dateGet} />
                 }
             </div>
+            <MonthlyChart />
         </>
     );
 }

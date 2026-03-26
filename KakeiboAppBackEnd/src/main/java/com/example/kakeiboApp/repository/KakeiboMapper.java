@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.example.kakeiboApp.DTO.DataRangeDTO;
 import com.example.kakeiboApp.DTO.KakeiboDTO;
+import com.example.kakeiboApp.DTO.MonthlySummaryDTO;
 import com.example.kakeiboApp.entity.Category;
 import com.example.kakeiboApp.entity.Kakeibo;
 
@@ -15,10 +16,19 @@ public interface KakeiboMapper {
 	//すべてのデータを取得する
 	public List<KakeiboDTO> getAll();
 	
+	//個別ユーザーの登録データ数を取得する
+	public int countDataByUser(String username);
+	
 	//一か月分すべての要素を取得する
 	public List<KakeiboDTO> getMonthly(
 			@Param("year")Integer year, @Param("month")Integer month, 
 			@Param("day") Integer day, @Param("username") String username);
+	
+	//グラフ作成のために、月ごとの収支の集計を取得する
+	public List<MonthlySummaryDTO> getMonthlySummary(
+				@Param("username") String username,
+				@Param("payday") int payday
+			);
 	
 	//特定のidの取引だけを取得する
 	public KakeiboDTO getById(Integer id);
@@ -26,7 +36,7 @@ public interface KakeiboMapper {
 	//DBに存在するデータか、存在する月一覧を取得する
 	public List<String> getExistingMonth();
 	
-	//データがどの期間から過去（未来）には存在しないかを調査する
+	//最新、最古のデータの日取りを調査する
 	public DataRangeDTO getDataRange();
 	
 	//プルダウンメニュー要素として、カテゴリ一覧を取得

@@ -7,7 +7,9 @@
         { cache: "no-store" })
         .then(res => res.json())
         .then(data => {
-            if (data.status === "EMPTY") {
+            if (data.status === "NEW_USER") {
+                setWarning("初めまして！");
+            }else if (data.status === "EMPTY") {
                 setWarning("この月にはデータが存在しません");
             } else if (data.status === "AFTER_NEWEST") {
                 setWarning("これより後のデータはありません");
