@@ -103,8 +103,9 @@ public class KakeiboServiceImpl implements KakeiboService {
 	
 	//新規データ登録作業
 	@Override
-	public void save(Kakeibo kakeibo) {
+	public void save(KakeiboDTO dto) {
 		//メモ欄が空っぽだとスタイルが崩れるので、スペースを入れています
+		Kakeibo kakeibo = DtoConverter.convertToKakeibo(dto);
 		if(kakeibo.getMemo()== null ||kakeibo.getMemo().equals("")) {
 			kakeibo.setMemo(" ");
 		}

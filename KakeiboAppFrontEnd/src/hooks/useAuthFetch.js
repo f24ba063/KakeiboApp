@@ -9,7 +9,7 @@ export function useAuthFetch(){
 		const token = sessionStorage.getItem("jws");
 		const headers = {
 			...(options.headers || {}),
-			"Authorization": token ? `Bearer ${token}` :  ""
+			"Authorization": token ? `Bearer ${token}` : {}
 		};
 
 		const res = await fetch(url, {

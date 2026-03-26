@@ -51,8 +51,8 @@ public class KakeiboController{
 	//新規データセーブ
 	@PostMapping("/save")
 	@Transactional
-	public void save(@Valid @RequestBody Kakeibo kakeibo) {
-		service.save(kakeibo);
+	public void save(@Valid @RequestBody KakeiboDTO dto) {
+		service.save(dto);
 	}
 	
 	//カード上の「褒める」ボタン押下で褒める変化、再計上

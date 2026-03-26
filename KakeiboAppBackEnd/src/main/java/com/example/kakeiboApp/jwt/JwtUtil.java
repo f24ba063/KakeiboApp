@@ -1,20 +1,28 @@
 package com.example.kakeiboApp.jwt;
-
 import java.security.Key;
 import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 
 //JWTトークンの生成、検証を行うクラス
 @Component
 public class JwtUtil {
-	private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-	private final long expirationMs = 1000 * 60 * 60;
+	private final Key key;
+	private final long expirationMs;
+	
+	public JwtUtil(
+			@Value("${jwt.secret}") String secret,
+			@Value("${jwt.expiration}") long expirationMs
+	) {
+		this.key = Keys.hmacShaKeyFor(secret.getBytes());
+		this.expirationMs = expirationMs;
+	}
+	
 	
 	//トークン生成
 	public String generateToken(String username) {

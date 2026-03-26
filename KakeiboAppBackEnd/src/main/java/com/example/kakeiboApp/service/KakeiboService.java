@@ -8,7 +8,6 @@ import com.example.kakeiboApp.DTO.DataRangeDTO;
 import com.example.kakeiboApp.DTO.KakeiboDTO;
 import com.example.kakeiboApp.DTO.MonthlyResponseDTO;
 import com.example.kakeiboApp.entity.Category;
-import com.example.kakeiboApp.entity.Kakeibo;
 
 public interface KakeiboService {
 	//全ての要素を取得する
@@ -32,7 +31,7 @@ public interface KakeiboService {
 	public List<Category> getAllCategoryService();
 	
 	//新規登録画面でデータセーブする
-	public void save(Kakeibo kakeibo);
+	public void save(KakeiboDTO dto);
 	
 	//カード上のハート押下でhomeruを変更、データ更新
 	public void updateHomeru(Integer id, Integer homeru);

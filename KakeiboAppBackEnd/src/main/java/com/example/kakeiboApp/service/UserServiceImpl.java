@@ -3,9 +3,11 @@ package com.example.kakeiboApp.service;
 
 import java.util.Optional;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.kakeiboApp.DTO.PaydayDTO;
 import com.example.kakeiboApp.DTO.RegisterDTO;
@@ -64,7 +66,7 @@ public class UserServiceImpl implements UserService {
 		user.setRoles(dto.getRoles());
 	
 		int rtn = mapper.registerUser(user);
-		rd.setResistered(rtn == 1);
+		rd.setRegistered(rtn == 1);
 		rd.setMessage(rtn == 1 ? "ユーザー登録成功" : "登録に失敗しました");
 		
 		return rd;
@@ -73,7 +75,9 @@ public class UserServiceImpl implements UserService {
 	//ユーザー名重複チェック
 	public void existsByUsernameService(String username) {
 		if(mapper.existsByUsername(username) > 0) {
-			throw new RuntimeException("そのユーザー名はすでに使われています");
+			throw new ResponseStatusException(
+					HttpStatus.BAD_REQUEST,
+					"そのユーザー名はすでに使われています");
 		}
 	};
 	

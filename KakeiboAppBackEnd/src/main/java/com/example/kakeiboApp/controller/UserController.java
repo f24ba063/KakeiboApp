@@ -15,13 +15,11 @@ import com.example.kakeiboApp.DTO.RegisterDTO;
 import com.example.kakeiboApp.DTO.UserCreateDTO;
 import com.example.kakeiboApp.service.UserService;
 
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/register")
-@Data
 public class UserController {
 	private final UserService service;
 	
@@ -43,8 +41,4 @@ public class UserController {
 		return service.updatePaydayService(dto);
 	}
 	
-	@GetMapping
-	public void existsByUsername(String username) {
-		service.existsByUsernameService(username);
-	};
 }

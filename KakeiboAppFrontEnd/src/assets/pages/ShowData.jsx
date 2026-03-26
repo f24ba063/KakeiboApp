@@ -69,7 +69,7 @@ export default function ShowData() {
             //indexに戻る
             navigate("/home");
         } catch (err) {
-            alert("削除できませんでした：" + err.message);
+            alert("削除に失敗しました：" + err.message);
         }
     };
 
@@ -79,23 +79,32 @@ export default function ShowData() {
         navigate("/home");
     }
 
+    //データ更新確定の操作
     const handleSubmit = async () => {
-        await authFetch(`http://localhost:8080/kakeibo/update/${id}`, {
+        try {
+            const res = await authFetch(`http://localhost:8080/kakeibo/update/${id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify(kakeiboDto)
             });
+            if (!res.ok) {
+                const data = res.json();
+                throw data;
+            }
             navigate("/home");
+        } catch (err) {
+            console.log("情報更新に失敗しました：" + err);
+        }
     }
 
     return (
         <>
             <form className="area">
                 {/*IDは隠蔽している*/}
-                <h2 id="id-hidden">id: {id}</h2>
-                <h2 id="username-hidden">ユーザ名：{loggingUsername}</h2>
+                {/*<h2 id="id-hidden">id: {id}</h2>*/}
+                {/*<h2 id="username-hidden">{loggingUsername}</h2>*/}
 
                 {/*日付*/}
                 {isEditing ?

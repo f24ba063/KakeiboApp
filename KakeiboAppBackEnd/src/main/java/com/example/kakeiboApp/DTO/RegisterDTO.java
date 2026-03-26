@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RegisterDTO {
-	private boolean resistered;
+	private boolean registered;
 	private String message = "";
 }

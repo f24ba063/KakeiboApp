@@ -65,7 +65,7 @@ export default function Home() {
     //家計簿カードに表示される日付をデータベースから設定するのに使う
     function dateGet(ry) {
         const y = new Date(ry);
-        const year = y.getYear();
+        const year = y.getYear() % 100;
         const month = y.getMonth() + 1;
         const day = y.getDate();
         return `${year}/${month}/${day}`;

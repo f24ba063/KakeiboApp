@@ -6,17 +6,17 @@ export function AuthProvider({ children }) {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     useEffect(() => {
-        const token = localStorage.getItem("token");
+        const token = sessionStorage.getItem("jws");
         if (token) { setIsLoggedIn(true) };
     }, []);
 
     const login = (token) => {
-        localStorage.setItem("token", token);
+        sessionStorage.setItem("jws", token);
         setIsLoggedIn(true);
     };
 
     const logout = () => {
-        localStorage.removeItem("token");
+        sessionStorage.removeItem("jws");
         sessionStorage.clear();
         setIsLoggedIn(false);
     };

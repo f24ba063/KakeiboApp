@@ -1,6 +1,9 @@
-﻿import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+﻿import { useState, useContext } from 'react';
+import { useNavigate, } from 'react-router-dom';
 import { useAuthFetch } from '../../hooks/useAuthFetch';
+import { UserContext } from '../../context/UserContext';
+import LoginSequence from '../../feature/LoginSequence';
+
 import '../../css/registerUser.css';
 
 //import { useAuth } from ',/AuthProvider'; 
@@ -11,6 +14,7 @@ export default function RegisterUser() {
     const [payday, setPayday] = useState(25);//給料日登録
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState({});//入力エラーを受け止めるstate
+    const { loggingUsername, setLoggingUsername } = useContext(UserContext);//ログインユーザ名を格納
     const navigate = useNavigate();
     const authFetch = useAuthFetch();
 
@@ -20,7 +24,7 @@ export default function RegisterUser() {
     
         try {
             if (!username.trim() || !password.trim()) {
-                alert("ユーザー名とパスワードを登録してください");
+                alert("ユーザー名とパスワードを1文字以上入力してください");
                 setLoading(false);
                 return;
             }
@@ -40,23 +44,43 @@ export default function RegisterUser() {
                     payday  :normalizedPayday
                 })
             });
-            let data = null;
-
+            
             const contentType = res.headers.get("content-type");
 
+            let data = null;
             if (contentType && contentType.includes("application/json")) {
                 data = await res.json();
-            }
+            } console.log(data);
 
+            //通信失敗、あるいはユーザー重複を検知
             if (!res.ok) {
                 setErrors(data || {});
                 setLoading(false);
                 return;
             }
+            //登録成功したら、ただちにログインして収支ホーム画面へ遷移
+            if (data && data.registered === true) {
+                try {
+                    const res = await fetch("http://localhost:8080/auth/login", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ username, password })
+                    });
 
-            if (data && data.resistered === true) {
-                navigate("/home", { replace: true });
-                // 登録成功。ただちに家計簿ホーム画面へ
+                    if (!res.ok) {
+                        setErrors({ general: "ログイン失敗" });
+                        return;
+                    }
+
+                    const logindata = await res.json();
+                    sessionStorage.setItem("jws", logindata.token);
+                    setLoggingUsername(username);
+
+                    navigate("/home");
+                } catch (error) {
+                    setErrors({ general: "通信エラー:" + error });
+                }
+
                 
             } else {
                 // 失敗
@@ -82,6 +106,9 @@ export default function RegisterUser() {
                     onChange={e => setUsername(e.target.value)} />
                 {errors.username &&
                     <div className="warning">{errors.username}</div>
+                }
+                {errors.message &&
+                    <div className="warning">{errors.message}</div>
                 }
                 <br />
                 パスワード

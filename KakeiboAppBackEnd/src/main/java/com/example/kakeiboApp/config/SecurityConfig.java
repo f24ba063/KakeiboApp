@@ -38,7 +38,6 @@ public class SecurityConfig {
 			.authorizeHttpRequests(auth -> auth
 			.requestMatchers("/auth/login").permitAll()
 			.requestMatchers("/register/**").permitAll()
-			.requestMatchers("/kakeibo/categoryParameter").permitAll()
 			.anyRequest().authenticated())
 			.addFilterBefore(new JwtAuthenticationFilter(jwtUtil, userDetailsService),
 					 UsernamePasswordAuthenticationFilter.class);
@@ -52,7 +51,7 @@ public class SecurityConfig {
 		config.setAllowedOriginPatterns(List.of("http://localhost:5173"));
 		config.setAllowedMethods(List.of("GET", "POST", "PUT","DELETE", "OPTIONS"));
 		config.setAllowCredentials(true);
-		config.setAllowedHeaders(List.of("*", "Content-Type"));
+		config.setAllowedHeaders(List.of("*", "Content-Type", "Authorization"));
 		
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", config);

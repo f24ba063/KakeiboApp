@@ -6,6 +6,7 @@ import com.example.kakeiboApp.entity.Kakeibo;
 public class DtoConverter {
 	public static Kakeibo convertToKakeibo(KakeiboDTO dto) {
 		Kakeibo k = new Kakeibo();
+		k.setUsername(dto.getUsername());
 		k.setId(dto.getId());
 		k.setTradeDate(dto.getTradeDate());
 		k.setCategoryId(dto.getCategoryId());

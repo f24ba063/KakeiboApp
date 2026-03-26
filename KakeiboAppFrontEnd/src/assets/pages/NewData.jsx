@@ -15,7 +15,7 @@ export default function NewData() {
     const [errors, setErrors] = useState({});
     const today = new Date().toISOString().split("T")[0];
     const authFetch = useAuthFetch();
-    const [kakeibo, setKakeibo] = useState({
+    const [kakeiboDto, setKakeiboDto] = useState({
         username: loggingUsername,
         category: "",
         categoryId: 1,
@@ -29,32 +29,37 @@ export default function NewData() {
     useEffect(() => {
         authFetch("http://localhost:8080/kakeibo/categoryParameter")
             .then(res => res.json())
-            .then(data => setCategories(data))
-            .then(() => console.log(categories));
+            .then(data => {
+                setCategories(data);
+                console.log(data);
+            });
     }, [])
 
+    //新規データ作成決定時の処理
     const handleSubmit = async e => {
         e.preventDefault();
         try {
-            await authFetch("http://localhost:8080/kakeibo/save", {
+            const res = await authFetch("http://localhost:8080/kakeibo/save", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(kakeibo)
+                body: JSON.stringify(kakeiboDto)
             });
-            console.log("いれたもの：" + JSON.stringify(kakeibo));
+            if (!res.ok) {
+                const data = await res.json();
+                throw data;
+            };
             setErrors({});
             navigate("/home", { state: { refresh: true } });
         } catch (err) {
-            console.log("エラー文："+err);
+            setErrors(err);
         }
     };
 
     //戻るボタンでホームに移動
     const navigate = useNavigate();
     const moveHome = () => {
-        console.log("ユーザー名：" +loggingUsername);
         navigate("/home");
     }
 
@@ -64,23 +69,36 @@ export default function NewData() {
             <div className={inOut === "IN" ? "income-background" :"outgo-background" }>
             {/*入力を「収入」に切り替えるボタン*/}
                 <button
-                    className="in-out-button" onClick={() => setInOut("IN")}>収入</button>
+                    className="in-out-button" onClick={() => {
+                        setInOut("IN")
+                        setKakeiboDto({
+                            ...kakeiboDto,
+                            categoryId:1
+                        })
+                    }}>収入</button>
                 
             {/*入力を「支出」に切り替えるボタン*/}
                 <button
-                    className="in-out-button" onClick={() => setInOut("OUT")}>支出</button>
+                    className="in-out-button" onClick={() => {
+                        setInOut("OUT")
+                        setKakeiboDto({
+                            ...kakeiboDto,
+                            categoryId: 11
+                        })
+                    }}>支出</button>
 
             {/*入力フォーム*/}
                 <form onSubmit={handleSubmit} >
                     <label className="lbl">入出区分：{inOut === "IN" ? "収入" : "支出"}</label>
                     <br />
+
                     {/*カテゴリ*/}
                     <select
                         className="select-category"
-                        value={kakeibo.categoryId}
+                        value={kakeiboDto.categoryId}
                         onChange={e =>
-                            setKakeibo({
-                                ...kakeibo,
+                            setKakeiboDto({
+                                ...kakeiboDto,
                                 categoryId: Number(e.target.value)
                             })
                         }
@@ -93,11 +111,11 @@ export default function NewData() {
                     <label htmlFor="moneyInput">金額:</label>
                     <input
                         type="number"
-                        value={kakeibo.amount}
+                        value={kakeiboDto.amount}
                         
                         onChange={ (e) => 
-                        setKakeibo({
-                            ...kakeibo,
+                            setKakeiboDto({
+                                ...kakeiboDto,
                             amount:Number(e.target.value)
                         })}
                     />
@@ -108,10 +126,10 @@ export default function NewData() {
                     <label htmlFor="day-input">日付</label>
                     <input type="date"
                     id="day-input"
-                        value={kakeibo.tradeDate}
+                        value={kakeiboDto.tradeDate}
                         onChange={e =>
-                            setKakeibo({
-                                ...kakeibo,
+                            setKakeiboDto({
+                                ...kakeiboDto,
                                 tradeDate: e.target.value
                             })}
                     />
@@ -121,22 +139,23 @@ export default function NewData() {
                     <label htmlFor="memo">メモ：</label>
                     <input type="text"
                         id="memo"
-                        value={kakeibo.memo}
+                        value={kakeiboDto.memo}
                         onChange={e => 
-                            setKakeibo({
-                                ...kakeibo,
+                            setKakeiboDto({
+                                ...kakeiboDto,
                                 memo: e.target.value
                         })}
                     />
+                    {errors.memo && <div>{errors.memo}</div>}
                     <br />
 
                     {/*誉めるフラグ*/}
                     <img
                         className="homeru-icon"
-                        src={kakeibo.homeru === 1 ? "/img/heart.png" : "/img/heart_gray.png"}
-                        onClick={() => setKakeibo({
-                            ...kakeibo,
-                            homeru: kakeibo.homeru === 1 ? 0 : 1
+                        src={kakeiboDto.homeru === 1 ? "/img/heart.png" : "/img/heart_gray.png"}
+                        onClick={() => setKakeiboDto({
+                            ...kakeiboDto,
+                            homeru: kakeiboDto.homeru === 1 ? 0 : 1
                         })}
                     />
                     <br></br>

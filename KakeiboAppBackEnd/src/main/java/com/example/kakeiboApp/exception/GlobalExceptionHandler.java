@@ -25,15 +25,6 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.badRequest().body(errors);
 	}
 	
-//	@ExceptionHandler(RuntimeException.class)
-//	public ResponseEntity<?> handleRuntime(RuntimeException ex){
-//		
-//		Map<String, String> error = new HashMap<>();
-//		error.put("message", ex.getMessage());
-//		
-//		return ResponseEntity.badRequest().body(error);
-//	}
-	
 	//DBで発生した重複違反エラー
 	@ExceptionHandler(DataIntegrityViolationException.class)
 	public ResponseEntity<?> handleDuplicate(DataIntegrityViolationException ex) {
@@ -44,11 +35,10 @@ public class GlobalExceptionHandler {
 	    String msg = cause != null ? cause.getMessage() : "";
 
 	    if (msg.contains("duplicate key")) {
-	        error.put("message", "そのユーザー名はすでに使われています");
+	        error.put("username", "そのユーザー名はすでに使われています");
 	    } else {
 	        error.put("message", "DBエラー");
 	    }
-	    ex.printStackTrace(); 
 	    return ResponseEntity.badRequest().body(error);
 	}
 	
