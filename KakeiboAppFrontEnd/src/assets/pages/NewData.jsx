@@ -7,7 +7,7 @@ import '../../css/newData.css'
 import showCategory from '../../feature/showCategory';
 export default function NewData() {
        //カテゴリー(category)、日付(tradeDate)、
-	    //入出金額(amount)、数値型の誉めるフラグ( homeru =0)、
+        //入出金額(amount)、数値型の誉めるフラグ( homeru =0)、
     //雑記メモ(memo)を入力する
     const { loggingUsername } = useContext(UserContext);//ユーザー名を受け取る
     const [categories, setCategories] = useState([]);

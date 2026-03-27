@@ -40,10 +40,6 @@ public class KakeiboServiceImpl implements KakeiboService {
 	public MonthlyResponseDTO getMonthlyDataService(Integer year, 
 			Integer month, Integer day, String username) {
 		
-
-		
-		//
-		
 		//ユーザーごとの給料日を取得
 		Integer payday = mapper.getPayday(username);
 		//給料日を月初めとした一か月を調べている。その月の給料日より

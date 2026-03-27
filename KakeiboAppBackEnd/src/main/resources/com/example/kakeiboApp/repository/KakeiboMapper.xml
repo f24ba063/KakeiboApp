@@ -93,35 +93,32 @@
 
 <!--一か月分の収支を個別に取得-->
 <select id="getMonthlySummary">
-	SELECT 
-	  TO_CHAR(
-	    CASE 
-	      WHEN EXTRACT(DAY FROM k.trade_date) &lt; #{payday}
-	      THEN k.trade_date - INTERVAL '1 month'
-	      ELSE k.trade_date
-	    END,
-	    'YYYY-MM'
-	  ) AS month,
-	  
-	  SUM(CASE WHEN c.in_out = 'IN'  THEN k.amount ELSE 0 END) AS income,
-	  SUM(CASE WHEN c.in_out = 'OUT' THEN k.amount ELSE 0 END) AS expense
+	SELECT
+		month,
+		SUM(income) AS income,
+		SUM(outGo) AS outGo
+	FROM (
+		SELECT
+			TO_CHAR(
+				CASE
+					WHEN EXTRACT(DAY FROM k.trade_date) &lt; #{payday}
+					THEN k.trade_date - INTERVAL '1 month'
+					ELSE k.trade_date
+				END,
+				'YYYY-MM'
+			) AS month,
+			
+			CASE WHEN c.in_out = 'IN'  THEN k.amount ELSE 0 END AS income,
+			CASE WHEN c.in_out = 'OUT' THEN k.amount ELSE 0 END AS outGo
+			
+		FROM kakeibo k
+		JOIN category c ON k.category_id = c.id
+		
+		WHERE k.username = #{username}
+			AND k.soft_delete = 1
+	) sub
 	
-	FROM kakeibo k
-	JOIN category c ON k.category_id = c.id
-	
-	WHERE k.username = #{username}
-	  AND k.soft_delete = 1
-	
-	GROUP BY 
-	  TO_CHAR(
-	    CASE 
-	      WHEN EXTRACT(DAY FROM k.trade_date) &lt; #{payday}
-	      THEN k.trade_date - INTERVAL '1 month'
-	      ELSE k.trade_date
-	    END,
-	    'YYYY-MM'
-	  )
-	
+	GROUP BY month
 	ORDER BY month
 </select>
 
@@ -156,5 +153,55 @@
 		id = #{id}
 </update>
 
+<!-- 以下は集計・グラフ作成のためのSQL -->
 
+<!--円グラフ-->
+<select id="circle_graph">
+	SELECT
+		c.category,
+		SUM(k.amount) as total
+	FROM 
+		kakeibo k
+	LEFT JOIN 
+		category c ON k.category_id = c.id
+	WHERE 
+		k.username = :username
+		AND k.soft_delete != 9
+		AND k.trade_date BETWEEN :start AND :end
+		AND c.in_out = 'out'
+	GROUP BY c.category
+	ORDER BY total DESC
+</select>
+<!--折れ線グラフ-->
+<select id="line_graph">
+	to_char(k.trade_date, 'YYYY-MM') as month,
+	c.category,
+	SUM(k.amount) as total
+	FROM 
+		kakeibo k
+	JOIN
+		category c ON k.category_id = c.id
+	WHERE k.username = :username
+		AND k.soft_delete != 9
+		AND c.in_out = 'out'
+	GROUP BY month, c.category
+	ORDER BY month
+</select>
+<!--棒グラフ-->
+<select id="bar_graph">
+</select>
+SELECT
+	to_char(k.trade_date, 'YYYY-MM') as month,
+	SUM(CASE WHEN c.in_out = 'in'  THEN k.amount ELSE 0 END)) as income,
+	SUM(CASE WHEN c.in_out = 'out' THEN k.amount ELSE 0 END)) as expense
+FROM
+	kakeibo k
+	JOIN category on k.category_id = c.id
+WHERE
+	k.username = :username
+	AND k.soft_delete != 9
+GROUP BY 
+	month
+ORDER BY 
+	month
 </mapper>

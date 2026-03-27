@@ -208,6 +208,8 @@ export default function Home() {
 
                 {/*-------------------------------------------------------------*/}
 
+                <MonthlyChart />
+
                 {/*収支カードの表示*/}
                 {expressionStyle==="card" ? 
                     <CardStyle
@@ -225,7 +227,6 @@ export default function Home() {
                         dateGet={dateGet} />
                 }
             </div>
-            <MonthlyChart />
         </>
     );
 }
