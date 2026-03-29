@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import com.example.kakeiboApp.DTO.DataRangeDTO;
 import com.example.kakeiboApp.DTO.KakeiboDTO;
 import com.example.kakeiboApp.DTO.MonthlyResponseDTO;
-import com.example.kakeiboApp.DTO.MonthlySummaryDTO;
 import com.example.kakeiboApp.converter.DtoConverter;
 import com.example.kakeiboApp.entity.Category;
 import com.example.kakeiboApp.entity.Kakeibo;
@@ -105,13 +104,6 @@ public class KakeiboServiceImpl implements KakeiboService {
 		return dataRangeDto;
 	}
 	
-	//特定ユーザーの月毎の収支集計を取得する
-		public List<MonthlySummaryDTO> getMonthlySummaryService(String username){
-			int payday = mapper.getPayday(username);
-			
-			return mapper.getMonthlySummary(username,payday);
-		}
-		
 	
 	//カテゴリー選択肢情報を返す
 	@Override

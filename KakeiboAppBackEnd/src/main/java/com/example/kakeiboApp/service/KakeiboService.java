@@ -7,7 +7,6 @@ import org.apache.ibatis.annotations.Param;
 import com.example.kakeiboApp.DTO.DataRangeDTO;
 import com.example.kakeiboApp.DTO.KakeiboDTO;
 import com.example.kakeiboApp.DTO.MonthlyResponseDTO;
-import com.example.kakeiboApp.DTO.MonthlySummaryDTO;
 import com.example.kakeiboApp.entity.Category;
 
 public interface KakeiboService {
@@ -30,9 +29,6 @@ public interface KakeiboService {
 	
 	//入力画面で、カテゴリー要素の選択肢を返す
 	public List<Category> getAllCategoryService();
-	
-	//特定ユーザーの月毎の収支集計を取得する
-	public List<MonthlySummaryDTO> getMonthlySummaryService(String username);
 	
 	//新規登録画面でデータセーブする
 	public void save(KakeiboDTO dto);

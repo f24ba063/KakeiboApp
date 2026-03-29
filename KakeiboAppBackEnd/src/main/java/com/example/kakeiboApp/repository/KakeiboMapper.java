@@ -7,7 +7,6 @@ import org.apache.ibatis.annotations.Param;
 
 import com.example.kakeiboApp.DTO.DataRangeDTO;
 import com.example.kakeiboApp.DTO.KakeiboDTO;
-import com.example.kakeiboApp.DTO.MonthlySummaryDTO;
 import com.example.kakeiboApp.entity.Category;
 import com.example.kakeiboApp.entity.Kakeibo;
 
@@ -24,11 +23,7 @@ public interface KakeiboMapper {
 			@Param("year")Integer year, @Param("month")Integer month, 
 			@Param("day") Integer day, @Param("username") String username);
 	
-	//グラフ作成のために、月ごとの収支の集計を取得する
-	public List<MonthlySummaryDTO> getMonthlySummary(
-				@Param("username") String username,
-				@Param("payday") int payday
-			);
+
 	
 	//特定のidの取引だけを取得する
 	public KakeiboDTO getById(Integer id);
