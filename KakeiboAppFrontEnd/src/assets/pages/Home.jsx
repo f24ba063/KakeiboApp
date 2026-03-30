@@ -11,7 +11,6 @@ import pageMonth from '../../feature/pageMonth'
 import monthlyInOut from '../../feature/monthlyInOut'
 import ToggleHeart from '../../feature/ToggleHeart';
 import useExpressionStyle from "../../feature/useExpressionStyle";
-import MonthlyChart from '../../feature/MonthlyChart';
 import '../../css/index.css';
 import '../../css/mordal-overlay.css';
 
@@ -26,9 +25,9 @@ export default function Home() {
     const [currentPayday, setCurrentPayday] = useState(11);//毎月の給料日の設定
     const nextPayday = getNextPayday(currentPayday);//毎月の給料日をもとに、次の給料日の年月日を取得
     const [editPayday, setEditPayday] = useState(1);//給料日変更入力時、現在入力中の数値を受け取る
-    const [warning, setWarning] = useState("");
+    const [warning, setWarning] = useState("");//警告文一般を乗せる
     const navigate = useNavigate();
-    const { expressionStyle, changeStyle } = useExpressionStyle();
+    const { expressionStyle, changeStyle } = useExpressionStyle();//表示をリスト型かカード型かで切り替える
     const [isModalOpen, setIsModalOpen] = useState(false);//給料日入力モーダルのスイッチ
     const location = useLocation();
     const message = location.state?.message || "";
@@ -98,6 +97,9 @@ export default function Home() {
         <>
             <div id="outbounds">
                 <h1>家計簿アプリ練習</h1> 
+
+                <button type="button"
+                    onClick={()=>navigate("/chart") }></button>
                 {/*上の段・収支個別表示＋給料日表示*/}
                 <div id="first-line">
                     <h3>
@@ -207,8 +209,6 @@ export default function Home() {
                 </div>
 
                 {/*-------------------------------------------------------------*/}
-
-                <MonthlyChart />
 
                 {/*収支カードの表示*/}
                 {expressionStyle==="card" ? 

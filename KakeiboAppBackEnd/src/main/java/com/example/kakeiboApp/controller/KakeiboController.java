@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.kakeiboApp.DTO.KakeiboDTO;
 import com.example.kakeiboApp.DTO.MonthlyResponseDTO;
-import com.example.kakeiboApp.DTO.MonthlySummaryDTO;
 import com.example.kakeiboApp.entity.Category;
 import com.example.kakeiboApp.entity.Kakeibo;
 import com.example.kakeiboApp.service.KakeiboService;
@@ -55,12 +54,6 @@ public class KakeiboController{
 		service.save(dto);
 	}
 	
-	//ユーザーの月毎の収支集計を取得して、グラフ表現に使う
-	@GetMapping("monthly-summary/{username}")
-	public List<MonthlySummaryDTO> getMonthlySummary(
-			@PathVariable String username){
-		return service.getMonthlySummaryService(username);
-	}
 	
 	//カード上の「褒める」ボタン押下で褒める変化、再計上
 	@PutMapping("/homeru/{id}")

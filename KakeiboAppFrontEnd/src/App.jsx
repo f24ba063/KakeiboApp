@@ -3,6 +3,7 @@ import { AuthProvider } from './AuthProvider';
 import PrivateRoute from'./PrivateRoute';
 import LoginForm from './assets/pages/LoginForm.jsx';
 import Home from './assets/pages/Home.jsx';
+//import Chart from './assets/pages/Chart.jsx';
 import RegisterUser from './assets/pages/RegisterUser.jsx';
 import NewData from './assets/pages/NewData.jsx';
 import ShowData from './assets/pages/ShowData.jsx';
@@ -28,9 +29,10 @@ function App() {
                 <Route path="/login"        element={<LoginForm />}    />
                 <Route path="/registerUser" element={<RegisterUser/> } />
             
-                <Route element={<PrivateLayout /> } >
-                    <Route path="/home" element={<PrivateRoute><Home /></PrivateRoute>} />
-                    <Route path="/newdata" element={<PrivateRoute><NewData /></PrivateRoute> } />
+                <Route element={<PrivateLayout />} >
+                    {/*<Route path="/chart"        element={<PrivateRoute><Chart    /></PrivateRoute>} />*/}
+                    <Route path="/home"         element={<PrivateRoute><Home     /></PrivateRoute>} />
+                    <Route path="/newdata"      element={<PrivateRoute><NewData  /></PrivateRoute>} />
                     <Route path="/showdata/:id" element={<PrivateRoute><ShowData /></PrivateRoute>} />
                 </Route>
             </Routes>

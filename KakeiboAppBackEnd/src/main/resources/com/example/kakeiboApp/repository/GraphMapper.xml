@@ -3,44 +3,20 @@
 <mapper namespace="com.example.kakeiboApp.repository.GraphMapper">
 
 <!--円グラフ-->
-<select id="selectPie">
-  SELECT 
-    c.category,
-    SUM(k.amount) AS total
-  FROM kakeibo k
-  JOIN category c ON k.category_id = c.id
-  WHERE k.username = #{username}
-    AND k.soft_delete = 1
-    AND k.trade_date BETWEEN #{start} AND #{end}
-    AND c.in_out = 'out'
-  GROUP BY c.category
-  ORDER BY total DESC
+<select id="getPieChart">
+	SELECT
+		c.category,
+		SUM(k.amount) as total
+	FROM
+		kakeibo k
+		LEFT JOIN category c ON k.category_id = c.id
+	WHERE
+		k.username = #{username}
+		AND k.trade_date BETWEEN #{start} AND #{end}
+	GROUP BY
+		c.category
+	ORDER By
+		k.category_id	
 </select>
-<!--折れ線グラフ-->
-<select id="selectLine">
-  SELECT 
-    to_char(k.trade_date, 'YYYY-MM') AS month,
-    c.category,
-    SUM(k.amount) AS total
-  FROM kakeibo k
-  JOIN category c ON k.category_id = c.id
-  WHERE k.username = #{username}
-    AND k.soft_delete = 1
-    AND c.in_out = 'out'
-  GROUP BY month, c.category
-  ORDER BY month
-</select>
-<!--棒グラフ-->
-<select id="selectBar">
-  SELECT 
-    to_char(k.trade_date, 'YYYY-MM') AS month,
-    SUM(CASE WHEN c.in_out = 'in' THEN k.amount ELSE 0 END) AS income,
-    SUM(CASE WHEN c.in_out = 'out' THEN k.amount ELSE 0 END) AS expense
-  FROM kakeibo k
-  JOIN category c ON k.category_id = c.id
-  WHERE k.username = #{username}
-    AND k.soft_delete = 1
-  GROUP BY month
-  ORDER BY month
-</select>
+
 </mapper>

@@ -1,42 +1,34 @@
 package com.example.kakeiboApp.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.kakeiboApp.DTO.BarChartDTO;
 import com.example.kakeiboApp.DTO.PieChartDTO;
-import com.example.kakeiboApp.repository.LineChartDTO;
 import com.example.kakeiboApp.service.GraphService;
 
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 @RestController
-@RequiredArgsConstructor
-@RequestMapping("graph")
+@Data
+@AllArgsConstructor
+@RequestMapping("/graph")
 public class GraphController {
-    private final GraphService service;
-
-
-    @GetMapping("/pie")
-    public List<PieChartDTO> getPie(
-        Authentication auth,
-        @RequestParam String yearMonth
-    ) {
-        return service.getPieData(auth.getName(), yearMonth);
-    }
-
-    @GetMapping("/line")
-    public List<LineChartDTO> getLine(Authentication auth) {
-        return service.getLineData(auth.getName());
-    }
-
-    @GetMapping("/bar")
-    public List<BarChartDTO> getBar(Authentication auth) {
-        return service.getBarData(auth.getName());
-    }
+	private final GraphService graph;
+	
+	@GetMapping("/pie")
+	public List<PieChartDTO> pieChartController(
+				Authentication auth,
+				@RequestBody LocalDate date
+			){
+		String username = auth.getName();
+		return graph.pieChartService(username, date);
+	}
+	
 }

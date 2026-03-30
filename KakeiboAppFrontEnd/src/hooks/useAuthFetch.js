@@ -8,8 +8,8 @@ export function useAuthFetch(){
 	async function authFetch(url, options ={}){
 		const token = sessionStorage.getItem("jws");
 		const headers = {
-			...(options.headers || {}),
-			"Authorization": token ? `Bearer ${token}` : {}
+			...(options.headers || {}), 
+			...(token ? { Authorization: `Bearer ${token}`} : {})
 		};
 
 		const res = await fetch(url, {
