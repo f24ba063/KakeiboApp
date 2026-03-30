@@ -3,7 +3,7 @@
 <mapper namespace="com.example.kakeiboApp.repository.GraphMapper">
 
 <!--円グラフ-->
-<select id="getPieChart">
+<select id="pieChartMapper">
 	SELECT
 		c.category,
 		SUM(k.amount) as total

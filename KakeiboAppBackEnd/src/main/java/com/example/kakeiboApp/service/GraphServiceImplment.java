@@ -21,8 +21,8 @@ public class GraphServiceImplment implements GraphService {
 	@Override
 	public List<PieChartDTO> pieChartService(String username, LocalDate date) {
 		List<PieChartDTO> dtoList = new ArrayList<PieChartDTO>();
-		String start = date.toString().split("T")[0];
-		String end = date.plusMonths(1).minusDays(1).toString().split("T")[0];
+		Date start = date;
+		Date end = date.plusMonths(1).minusDays(1);
 		dtoList.addAll(graph.pieChartMapper(username, start, end));
 		return dtoList;
 	}
