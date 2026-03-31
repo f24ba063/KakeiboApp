@@ -23,18 +23,30 @@ export default function PieChartDrawer() {
             });
             if (res.ok) {
                 const data = await res.json();
-                setPieData(data);
-                console.log(data);
+                //データをまとめないとグラフに両方表示できない
+                const newData = data.map(d => ({
+                    ...d,
+                    label: `${d.category} : ${d.total}`
+                }));
+                setPieData(newData);
+                //console.log(pieData);
             } else {
                 console.error("円グラフデータ取得に失敗しました：" + res.status);
             }
         }
         fetch();
     }, []);
+    useEffect(() => {
+        console.log("pieData: " + pieData);
+        const c = pieData.find(item => item.category === "食費")?.total;
+        console.log("食費:" + c);
+        console.log(pieData[0]);
+
+    },[pieData])
 
     return (
         <>
-            <PieChart width={300} height={300}>
+            <PieChart width={600} height={300}>
                 <Pie
                     data={pieData}
                     dataKey="total"
@@ -48,20 +60,13 @@ export default function PieChartDrawer() {
                 >
                     {pieData.map((p, index) => {
                         return (
-                            <>
-                                <Cell
-                                    key={p.category}
-                                    fill={COLORS[index]}
-                                />
-                               
-                            </>
+                                <Cell key={p.category} fill={COLORS[index]} />
                         );
                     })}
                     <LabelList
-                        dataKey="category"
-                        formatter={(value, name, entry) =>
-                            value + entry.category
-                        }
+                        dataKey="label"
+                        position="outside"
+                        fill="black"
                     />
                 </Pie>
             </PieChart>
