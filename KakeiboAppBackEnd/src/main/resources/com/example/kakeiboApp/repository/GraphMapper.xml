@@ -5,7 +5,7 @@
 <!--円グラフ-->
 <select id="pieChartMapper">
 	SELECT
-		c.category,
+		c.category as category,
 		SUM(k.amount) as total
 	FROM
 		kakeibo k
@@ -13,8 +13,9 @@
 	WHERE
 		k.username = #{username}
 		AND k.trade_date BETWEEN #{start} AND #{end}
+		AND c.in_out = 'OUT'
 	GROUP BY
-		c.category
+		c.category, k.category_id
 	ORDER By
 		k.category_id	
 </select>

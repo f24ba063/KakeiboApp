@@ -8,22 +8,22 @@ import org.springframework.stereotype.Service;
 
 import com.example.kakeiboApp.DTO.PieChartDTO;
 import com.example.kakeiboApp.repository.GraphMapper;
-import com.example.kakeiboApp.repository.KakeiboMapper;
 
 import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
 public class GraphServiceImplment implements GraphService {
-	private final KakeiboMapper kakeibo;
-	private final GraphMapper graph;
+	private final GraphMapper graphMapper;
 	
 	@Override
 	public List<PieChartDTO> pieChartService(String username, LocalDate date) {
 		List<PieChartDTO> dtoList = new ArrayList<PieChartDTO>();
-		Date start = date;
-		Date end = date.plusMonths(1).minusDays(1);
-		dtoList.addAll(graph.pieChartMapper(username, start, end));
+		LocalDate end = date; 
+		LocalDate start = date.minusMonths(1).plusDays(1);
+		
+		dtoList.addAll(graphMapper.pieChartMapper(username, start, end));
+
 		return dtoList;
 	}
 }

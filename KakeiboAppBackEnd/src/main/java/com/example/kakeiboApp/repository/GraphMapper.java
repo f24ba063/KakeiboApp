@@ -1,5 +1,6 @@
 package com.example.kakeiboApp.repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -10,5 +11,5 @@ import com.example.kakeiboApp.DTO.PieChartDTO;
 public interface GraphMapper {
 	
 	public List<PieChartDTO> pieChartMapper(
-			String username, String start, String end);
+			String username, LocalDate start, LocalDate end);
 }

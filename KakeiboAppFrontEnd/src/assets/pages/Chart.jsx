@@ -1,10 +1,10 @@
-﻿import  PieChart  from '../../feature/chart/PieChart';
-
+﻿import  PieChartDrawer  from '../../feature/chart/PieChart';
+import '../../css/chart.css';
 
 export default function Chart() {
     return (
         <>
-            <PieChart />
+            <PieChartDrawer />
         </>
     )
 }

@@ -355,6 +355,27 @@ values('2026-3-14',  12,  15000, '電気ガス', 'user1');
 insert into kakeibo(trade_date, category_id, amount, memo, username)
 values('2026-3-14',  13,  5000, '電話代', 'user1');
 
+insert into kakeibo(trade_date, category_id, amount, memo, username)
+values('2026-3-16', 11 , 550 , '食費', 'user1');
+
+insert into kakeibo(trade_date, category_id, amount, memo, username)
+values('2026-3-17', 11 , 1190 , '食費', 'user1');
+
+insert into kakeibo(trade_date, category_id, amount, memo, username)
+values('2026-3-18', 11 , 820 , '食費', 'user1');
+
+insert into kakeibo(trade_date, category_id, amount, memo, username)
+values('2026-3-19', 11 , 1050 , '食費', 'user1');
+
+insert into kakeibo(trade_date, category_id, amount, memo, username)
+values('2026-3-20', 11 , 920 , '食費', 'user1');
+
+insert into kakeibo(trade_date, category_id, amount, memo, username)
+values('2026-03-21', 11 , 650 , '食費', 'user1');
+
+insert into kakeibo(trade_date, category_id, amount, memo, username)
+values('2026-03-31', 11 , 650 , '食費', 'user1');
+
 
 --8月の収支をバランスシートとして登録
 insert into balance_history(year_month, balance)
