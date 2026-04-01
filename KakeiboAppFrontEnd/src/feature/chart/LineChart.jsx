@@ -7,53 +7,65 @@ import {
 } from 'recharts';
 
 export default function LineChartDrawer({ authFetch, date, token }) {
-    const [lineData, setLineData] = useState([]);
-    const [categories, setCategories] = useState([]);
+    const [lineData, setLineData] = useState([]);//バックエンドからのデータ格納箱
+    const [categories, setCategories] = useState([]);//カテゴリー一覧格納箱
+    //線の色格納箱
     const COLORS = ['#bb0000', '#00bb00', '#0000bb', '#00bbbb', '#bbbb00', '#bb00bb'];
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         async function fetchData() {
-            const res = await authFetch(`http://localhost:8080/graph/line`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                },
-                body: JSON.stringify({ date: date.toISOString().split("T")[0] })
-            });
+            try {
+                setLoading(true);
+                setError(null);
 
-            if (!res.ok) {
-                console.error("折れ線グラフデータ取得に失敗しました：" + res.status);
-                return;
-            }
+                const res = await authFetch(`http://localhost:8080/graph/line`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ date: date.toISOString().split("T")[0] })
+                });
 
-            const data = await res.json();
-
-            // yearMonth ごとにカテゴリをまとめる
-            const map = {};
-            const categorySet = new Set();
-
-            data.forEach(d => {
-                const yearMonth = d.yearMonth.split("-").slice(0, 2).join("-"); // YYYY-MM
-                categorySet.add(d.category);
-
-                if (!map[yearMonth]) {
-                    map[yearMonth] = { date: yearMonth }; // date キーに yearMonth をセット
+                if (!res.ok) {
+                    console.error("折れ線グラフデータ取得に失敗しました：" + res.status);
+                    return;
                 }
 
-                map[yearMonth][d.category] = d.total;
-            });
+                const data = await res.json();
 
-            // 月昇順にソートして配列化
-            const sortedLineData = Object.values(map)
-                .sort((a, b) => a.date.localeCompare(b.date));
+                // yearMonth ごとにカテゴリをまとめる
+                const map = {};
+                const categorySet = new Set();
 
-            setLineData(sortedLineData);
-            setCategories(Array.from(categorySet));
-        }
+                data.forEach(d => {
+                    const yearMonth = d.yearMonth.split("-").slice(0, 2).join("-"); // YYYY-MM
+                    categorySet.add(d.category);
 
-        fetchData();
-    }, [authFetch, date, token]);
+                    if (!map[yearMonth]) {
+                        map[yearMonth] = { date: yearMonth }; // date キーに yearMonth をセット
+                    }
+
+                    map[yearMonth][d.category] = d.total;
+                });
+
+                // 月昇順にソートして配列化
+                const sortedLineData = Object.values(map)
+                    .sort((a, b) => a.date.localeCompare(b.date));
+
+                setLineData(sortedLineData);
+                setCategories(Array.from(categorySet));
+        
+            }catch (err) {
+                setError(err.message || "不明なエラー");
+                console.log(error + "が発生しました");
+            }finally{
+                setLoading(false);
+            }
+            fetchData();
+        }, [authFetch, date, token]);
 
     return (
         <ResponsiveContainer width={600} height={300}>

@@ -7,30 +7,51 @@ import {
 
 export default function BarChartDrawer({ authFetch, date, token }) {
     const [barData, setBarData] = useState([]);
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         async function fetchData() {
-            const res = await authFetch(`http://localhost:8080/graph/bar`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                },
-                body: JSON.stringify({ date: date.toISOString().split("T")[0] })
-            });
+            try {
+                setLoading(true);
+                setError(null);
 
-            if (!res.ok) {
-                console.error("棒グラフデータ取得に失敗しました：" + res.status);
-                return;
+                const res = await authFetch(`http://localhost:8080/graph/bar`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ date: date.toISOString().split("T")[0] })
+                });
+
+                if (!res.ok) {
+                    console.error("棒グラフデータ取得に失敗しました：" + res.status);
+                    return;
+                }
+
+                const data = await res.json();
+
+                if (!Array.isArray(data)) {
+                    throw new Error("取得データが配列ではありません");
+                }
+
+                // 月順ソート（安全策）
+                const sortedData = data.sort((a, b) => a.month.localeCompare(b.month));
+                setBarData(sortedData);
+            } catch (err) {
+                console.error(err);
+                setError(err.message || "不明なエラー");
+            } finally {
+                setLoading(false);
             }
-
-            const data = await res.json();
-            console.log("データ取得成功：" + data[0].month);
-            setBarData(data);
         }
 
         fetchData();
-    }, []);
+    }, [authFetch, date, token]);
+
+    if (loading) return (<div>読み込み中…</div>);
+    if (error) return (<div style={{ color: "red" }}>エラー：{error}</div>)
 
     return (
         <BarChart

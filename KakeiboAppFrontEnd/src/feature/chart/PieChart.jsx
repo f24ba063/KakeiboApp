@@ -5,31 +5,40 @@ export default function PieChartDrawer({ authFetch, date, token }) {
     const [pieData, setPieData] = useState([]);//円グラフに入る数値
     const COLORS = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#6FDFE4'];//円グラフの塗り色
     const TEXT = ['black', 'black', 'black', 'black', 'black', 'black', 'black'];
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
-    useEffect(() => {
-        async function fetch() {
-            const res = await authFetch(`http://localhost:8080/graph/pie`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                },
-                body: JSON.stringify({date: date.toISOString().split("T")[0] })
-            });
-            if (res.ok) {
-                const data = await res.json();
-                //データをまとめないとグラフに両方表示できない
-                const newData = data.map(d => ({
-                    ...d,
-                    label: `${d.category} : ${d.total}`
-                }));
-                setPieData(newData);
-                //console.log(pieData);
-            } else {
-                console.error("円グラフデータ取得に失敗しました：" + res.status);
+    try {
+        useEffect(() => {
+            async function fetch() {
+                const res = await authFetch(`http://localhost:8080/graph/pie`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ date: date.toISOString().split("T")[0] })
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    //データをまとめないとグラフに両方表示できない
+                    const newData = data.map(d => ({
+                        ...d,
+                        label: `${d.category} : ${d.total}`
+                    }));
+                    setPieData(newData);
+                    //console.log(pieData);
+                } else {
+                    console.error("円グラフデータ取得に失敗しました：" + res.status);
+                }
             }
         }
-        fetch();
+    }catch (err) {
+        console.log(err);
+    } finally {
+        setLoading(false);
+    };
+    fetch();
     }, []);
 
     return (
