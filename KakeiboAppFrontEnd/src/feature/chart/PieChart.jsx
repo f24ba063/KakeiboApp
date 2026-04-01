@@ -1,15 +1,10 @@
 ﻿import { useState, useEffect } from 'react';
 import { PieChart, Pie, Cell, LabelList } from 'recharts';
-import { useAuthFetch } from '../../hooks/useAuthFetch';
 
-
-export default function PieChartDrawer() {
-    const authFetch = useAuthFetch();//認証つきのfetch
+export default function PieChartDrawer({ authFetch, date, token }) {
     const [pieData, setPieData] = useState([]);//円グラフに入る数値
     const COLORS = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#6FDFE4'];//円グラフの塗り色
     const TEXT = ['black', 'black', 'black', 'black', 'black', 'black', 'black'];
-    const date = new Date();//アクセスしたときの日取りを取得
-    const token = sessionStorage.getItem("jws");
 
     useEffect(() => {
         async function fetch() {
@@ -36,38 +31,81 @@ export default function PieChartDrawer() {
         }
         fetch();
     }, []);
-    useEffect(() => {
-        console.log("pieData: " + pieData);
-        const c = pieData.find(item => item.category === "食費")?.total;
-        console.log("食費:" + c);
-        console.log(pieData[0]);
-
-    },[pieData])
 
     return (
         <>
-            <PieChart width={600} height={300}>
+            <PieChart width={600} height={300}
+                id="pieChart-background">
                 <Pie
                     data={pieData}
                     dataKey="total"
                     nameKey="category"
                     cx="50%"
                     cy="50%"
-                    outerRadius={90}
+                    outerRadius={120}
                     startAngle={90}
                     endAngle={450}
-                    label={false}
+
+                    label={(props) => {
+                        const { cx, cy, midAngle, outerRadius, index } = props;
+
+                        const RADIAN = Math.PI / 180;
+                        const radius = outerRadius + 20;
+
+                        const x = cx + radius * Math.cos(-midAngle * RADIAN);
+                        const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+                        const label = pieData[index].label;
+
+                        return (
+                            <g>
+                                <rect
+                                    x={x}
+                                    y={y}
+                                    rx={6}
+                                    ry={6}
+                                    width={100}
+                                    height={24}
+                                    fill="#bbb"
+                                    opacity="0.5"
+                                />
+                                <text
+                                    x={x}
+                                    y={y}
+                                    textAnchor="middle"
+                                    dy={4}
+                                    fill="black"
+                                    ref={(el) => {
+                                        if (!el) return;
+
+                                        const box = el.getBBox();
+                                        const rect = el.previousSibling;
+
+                                        rect.setAttribute("x", box.x - 4);
+                                        rect.setAttribute("y", box.y - 4);
+                                        rect.setAttribute("width", box.width + 8);
+                                        rect.setAttribute("height", box.height + 4);
+                                    } }
+                                >
+                                    {label}
+                                </text>
+                            </g>
+                        );
+                    }}
                 >
                     {pieData.map((p, index) => {
                         return (
                                 <Cell key={p.category} fill={COLORS[index]} />
                         );
                     })}
-                    <LabelList
-                        dataKey="label"
-                        position="outside"
-                        fill="black"
-                    />
+                    {/*<LabelList*/}
+                    {/*className="label-list"*/}
+                    {/*    dataKey="label"*/}
+                    {/*    position="outside"*/}
+                    {/*    fill="black"*/}
+                    {/*/>*/}
+
+
                 </Pie>
             </PieChart>
         </>

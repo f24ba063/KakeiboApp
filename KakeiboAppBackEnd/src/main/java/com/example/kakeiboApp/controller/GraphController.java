@@ -9,8 +9,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.kakeiboApp.DTO.PieChartDTO;
-import com.example.kakeiboApp.DTO.PieChartRequestDTO;
+import com.example.kakeiboApp.DTO.AnalysisChartDTO;
+import com.example.kakeiboApp.DTO.BarChartDTO;
+import com.example.kakeiboApp.DTO.ChartRequestDTO;
 import com.example.kakeiboApp.service.GraphService;
 
 import lombok.AllArgsConstructor;
@@ -21,36 +22,39 @@ import lombok.AllArgsConstructor;
 public class GraphController {
 	private final GraphService graph;
 	
-//	@PostMapping("/pie")
-//	public List<PieChartDTO> pieChartController(
-//				Authentication auth,
-//				@RequestBody PieChartRequestDTO dto
-//			){
-//		System.out.println("DTO date: " + dto.getDate());
-//		String username = auth.getName();
-////		System.out.println("Username: " + username);
-//		
-//		var result = graph.pieChartService(username, dto.getDate());
-//		
-////		result.forEach(r -> System.out.println(r.getCategory() + ": " + r.getTotal()));
-//		
-//		return result;
-//	}
-	
+	//円グラフ用のコントローラ
 	@PostMapping("/pie")
-	public ResponseEntity<List<PieChartDTO>> pieChartController(
+	public ResponseEntity<List<AnalysisChartDTO>> pieChartController(
 				Authentication auth,
-				@RequestBody PieChartRequestDTO dto
+				@RequestBody ChartRequestDTO dto
 			){
-		System.out.println("DTO date: " + dto.getDate());
+		
 		String username = auth.getName();
-//		System.out.println("Username: " + username);
-		
 		var result = graph.pieChartService(username, dto.getDate());
+		return ResponseEntity.ok(result);
+	}
+
+	//折れ線グラフ用コントローラ
+	@PostMapping("/line")
+	public ResponseEntity<List<AnalysisChartDTO>> lineChartController(
+				Authentication auth,
+				@RequestBody ChartRequestDTO dto
+			){
 		
-		result.forEach(r -> System.out.println(r.getCategory() + ": " + r.getTotal()));
-		
+		String username = auth.getName();
+		var result = graph.lineChartService(username, dto.getDate());
 		return ResponseEntity.ok(result);
 	}
 	
+	//棒グラフ用コントローラ
+	@PostMapping("/bar")
+	public ResponseEntity<List<BarChartDTO>> barChartController(
+				Authentication auth,
+				@RequestBody ChartRequestDTO dto
+			){
+		
+		String username = auth.getName();
+		var result = graph.barChartService(username, dto.getDate());
+		return ResponseEntity.ok(result);
+	}
 }

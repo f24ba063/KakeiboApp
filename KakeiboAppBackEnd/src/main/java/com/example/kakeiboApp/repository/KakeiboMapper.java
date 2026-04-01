@@ -18,7 +18,7 @@ public interface KakeiboMapper {
 	//個別ユーザーの登録データ数を取得する
 	public int countDataByUser(String username);
 	
-	//一か月分すべての要素を取得する
+	//給料日ベースで一か月分すべての要素を取得する
 	public List<KakeiboDTO> getMonthly(
 			@Param("year")Integer year, @Param("month")Integer month, 
 			@Param("day") Integer day, @Param("username") String username);

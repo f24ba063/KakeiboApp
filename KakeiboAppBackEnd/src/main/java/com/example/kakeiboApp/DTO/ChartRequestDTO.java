@@ -5,6 +5,6 @@ import java.time.LocalDate;
 import lombok.Data;
 
 @Data
-public class PieChartRequestDTO {
+public class ChartRequestDTO {
 	private LocalDate date;
 }

@@ -91,36 +91,6 @@
 	from category
 </select>
 
-<!--一か月分の収支を個別に取得-->
-<select id="getMonthlySummary">
-	SELECT
-		month,
-		SUM(income) AS income,
-		SUM(outGo) AS outGo
-	FROM (
-		SELECT
-			TO_CHAR(
-				CASE
-					WHEN EXTRACT(DAY FROM k.trade_date) &lt; #{payday}
-					THEN k.trade_date - INTERVAL '1 month'
-					ELSE k.trade_date
-				END,
-				'YYYY-MM'
-			) AS month,
-			
-			CASE WHEN c.in_out = 'IN'  THEN k.amount ELSE 0 END AS income,
-			CASE WHEN c.in_out = 'OUT' THEN k.amount ELSE 0 END AS outGo
-			
-		FROM kakeibo k
-		JOIN category c ON k.category_id = c.id
-		
-		WHERE k.username = #{username}
-			AND k.soft_delete = 1
-	) sub
-	
-	GROUP BY month
-	ORDER BY month
-</select>
 
 <!--新しい収支データを登録する-->
 <insert id="saveNewFile" >

@@ -99,7 +99,9 @@ export default function Home() {
                 <h1>家計簿アプリ練習</h1> 
 
                 <button type="button"
-                    onClick={()=>navigate("/chart") }></button>
+                    onClick={() => navigate("/chart")}>
+                    チャート一覧へ
+                </button>
                 {/*上の段・収支個別表示＋給料日表示*/}
                 <div id="first-line">
                     <h3>

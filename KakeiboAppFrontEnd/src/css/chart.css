@@ -1,3 +1,4 @@
-﻿.pieChart{
-    background-color:#dddddd;
+﻿#pieChart-background{
+/*    background-color:#eee;*/
+    border-radius: 30px;
 }

@@ -2,11 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.kakeiboApp.repository.GraphMapper">
 
-<!--円グラフ-->
-<select id="pieChartMapper">
+<!--円グラフ、折れ線グラフ共用-->
+<select id="analysisChartMapper">
 	SELECT
 		c.category as category,
-		SUM(k.amount) as total
+		SUM(k.amount) as total,
+		TO_DATE(TO_CHAR(k.trade_date, 'YYYY-MM') || '-01', 'YYYY-MM-DD') AS yearMonth
 	FROM
 		kakeibo k
 		LEFT JOIN category c ON k.category_id = c.id
@@ -15,9 +16,25 @@
 		AND k.trade_date BETWEEN #{start} AND #{end}
 		AND c.in_out = 'OUT'
 	GROUP BY
-		c.category, k.category_id
-	ORDER By
+		c.category, k.category_id, TO_DATE(TO_CHAR(k.trade_date, 'YYYY-MM') || '-01', 'YYYY-MM-DD')
+	ORDER BY
+		yearMonth ASC,
 		k.category_id	
+</select>
+
+<!--棒チャート専用-->
+<select id="barChartMapper">
+	SELECT
+	    TO_CHAR(k.trade_date, 'YYYY-MM') AS month,
+	    SUM(CASE WHEN c.in_out = 'IN' THEN k.amount ELSE 0 END) AS income,
+	    SUM(CASE WHEN c.in_out = 'OUT' THEN k.amount ELSE 0 END) AS outGo
+	FROM kakeibo k
+	JOIN category c ON k.category_id = c.id
+	WHERE k.username = #{username}
+	  	AND k.soft_delete = 1
+	  	AND k.trade_date BETWEEN #{start} AND #{end}
+	GROUP BY month
+	ORDER BY month ASC
 </select>
 
 </mapper>
