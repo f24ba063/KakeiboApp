@@ -22,7 +22,7 @@ create table in_out(
 --カテゴリー一覧テーブル
 CREATE TABLE category(
 	id serial primary key,
-	category varchar(20),
+	category varchar(20) unique,
 	in_out varchar(3),
 	sort_order integer not null unique,
 	foreign key(in_out) references in_out(in_out)

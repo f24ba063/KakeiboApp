@@ -29,9 +29,8 @@ export default function LineChartDrawer({ authFetch, date, token }) {
                     body: JSON.stringify({ date: date.toISOString().split("T")[0] })
                 });
 
-                if (!res.ok) {
-                    console.error("折れ線グラフデータ取得に失敗しました：" + res.status);
-                    return;
+                if (!res || !res.ok) {
+                    throw new Error("レスポンスエラー");
                 }
 
                 const data = await res.json();
@@ -57,34 +56,42 @@ export default function LineChartDrawer({ authFetch, date, token }) {
 
                 setLineData(sortedLineData);
                 setCategories(Array.from(categorySet));
-        
-            }catch (err) {
-                setError(err.message || "不明なエラー");
-                console.log(error + "が発生しました");
-            }finally{
+
+            } catch (err) {
+                setError("折れ線グラフの作成に失敗しました：" + (err.message || "不明なエラー"));
+                console.log(err + "が発生しました");
+            } finally {
                 setLoading(false);
             }
-            fetchData();
-        }, [authFetch, date, token]);
+        }
+
+        fetchData();
+    }, [authFetch, date, token]);
+
 
     return (
-        <ResponsiveContainer width={600} height={300}>
-            <LineChart data={lineData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                {categories.map((cat, idx) => (
-                    <Line
-                        key={cat}
-                        type="linear"
-                        dataKey={cat}
-                        stroke={COLORS[idx % COLORS.length]}
-                        activeDot={{ r: 6 }}
-                    />
-                ))}
-            </LineChart>
-        </ResponsiveContainer>
+        <>
+            { loading && <h2>Loading....</h2>}
+            { error && <h2 style={{ color: "red" }}>折れ線グラフの表示に失敗しました:{error}</h2> }
+
+            <ResponsiveContainer width={600} height={300}>
+                <LineChart data={lineData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="date" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    {categories.map((cat, idx) => (
+                        <Line
+                            key={cat}
+                            type="linear"
+                            dataKey={cat}
+                            stroke={COLORS[idx % COLORS.length]}
+                            activeDot={{ r: 6 }}
+                        />
+                    ))}
+                </LineChart>
+            </ResponsiveContainer>
+        </>
     );
 }

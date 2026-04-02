@@ -13,6 +13,7 @@ import ToggleHeart from '../../feature/ToggleHeart';
 import useExpressionStyle from "../../feature/useExpressionStyle";
 import '../../css/index.css';
 import '../../css/mordal-overlay.css';
+import HomeModal from './Home/HomeModal';
 
 export default function Home() {
     const now = new Date();
@@ -24,7 +25,6 @@ export default function Home() {
     const [date, setDate] = useState(now.getDate());//日を取得
     const [currentPayday, setCurrentPayday] = useState(11);//毎月の給料日の設定
     const nextPayday = getNextPayday(currentPayday);//毎月の給料日をもとに、次の給料日の年月日を取得
-    const [editPayday, setEditPayday] = useState(1);//給料日変更入力時、現在入力中の数値を受け取る
     const [warning, setWarning] = useState("");//警告文一般を乗せる
     const navigate = useNavigate();
     const { expressionStyle, changeStyle } = useExpressionStyle();//表示をリスト型かカード型かで切り替える
@@ -77,21 +77,17 @@ export default function Home() {
     //詳細情報ページへ遷移
     const moveDetail = (id) => { navigate(`/showdata/${id}`) }
 
-    //給料日設定
-    const updatePayday = (e) =>{
-        if(e > 28){
-            setEditPayday(28);
-            setWarning("29日以降は給料日として設定できません");
-        }
-       else  if(e < 1){
-            setEditPayday(1);
-            setWarning("1日以前は給料日として設定できません");
-        }
-        else{
-            setEditPayday(e);
-            setWarning("");
-        }
-    }
+    //モーダルに渡す、ユーザー給料日更新手続き
+    const UserPaydaySet = (payday => {
+        updateUserPayday(authFetch, loggingUsername, payday)
+            .then(pd => {
+                setCurrentPayday(pd);
+                console.log("給料日は：" + pd);
+                setWarning(null);
+            }).catch(err => {
+                setWarning("通信に失敗しました：" + err);
+            });
+    });
 
     return (
         <>
@@ -116,43 +112,14 @@ export default function Home() {
                             </button>
                         </span>
                     </h3>
-                    {isModalOpen && (
-                        <div className="modal-overlay">
-                            <div className="modal">
-                                <h3>給料日を入力</h3>
-
-                                <input
-                                    type="number"
-                                    value={editPayday}
-                                    onChange={(e) => updatePayday(e.target.value)}
-                                />
-
-                                <button type="button"
-                                    onClick={() => {
-                                        updateUserPayday(authFetch, loggingUsername, editPayday)
-                                            .then(updatedDay => {
-                                                setCurrentPayday(updatedDay.payday);
-                                                setWarning(updatedDay.message);
-                                                setEditPayday(1);
-                                                setIsModalOpen(false);
-                                            })
-                                            .catch(err => {
-                                                console.error(err);
-                                                setWarning("給料日の更新に失敗しました");
-                                            });
-                                    }}>
-                                    保存
-                                </button>
-                                <button type="button"
-                                    onClick={() => {
-                                        setEditPayday(1)
-                                        setIsModalOpen(false)
-                                    }}>
-                                    キャンセル
-                                </button>
-                            </div>
-                        </div>
-                    )}
+                    {isModalOpen &&
+                        <HomeModal
+                            setWarning={setWarning}
+                            UserPaydaySet={UserPaydaySet}
+                            setIsModalOpen={setIsModalOpen}
+                        />
+            
+                    }
                 </div>
                 {/*下の団・収支総計、次の給料日、頑張った総数表示*/}
                 <div id="second-line">

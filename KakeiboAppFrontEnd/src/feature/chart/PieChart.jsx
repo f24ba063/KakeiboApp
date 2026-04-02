@@ -8,9 +8,12 @@ export default function PieChartDrawer({ authFetch, date, token }) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    try {
-        useEffect(() => {
-            async function fetch() {
+    
+    useEffect(() => {
+        async function fetch() {
+            try {
+                setLoading(true);
+                setError(null);
                 const res = await authFetch(`http://localhost:8080/graph/pie`, {
                     method: "POST",
                     headers: {
@@ -31,18 +34,22 @@ export default function PieChartDrawer({ authFetch, date, token }) {
                 } else {
                     console.error("円グラフデータ取得に失敗しました：" + res.status);
                 }
+            } catch (err) {
+                setError(err);
+                console.log(error);
+            } finally {
+                setLoading(false);
             }
         }
-    }catch (err) {
-        console.log(err);
-    } finally {
-        setLoading(false);
-    };
-    fetch();
-    }, []);
+        fetch();
+    },[]);
+
 
     return (
         <>
+            {loading && <h2>Loading....</h2>}
+            {error && <h2>円グラフの表示に失敗しました:{error}</h2>}
+
             <PieChart width={600} height={300}
                 id="pieChart-background">
                 <Pie
@@ -64,7 +71,8 @@ export default function PieChartDrawer({ authFetch, date, token }) {
                         const x = cx + radius * Math.cos(-midAngle * RADIAN);
                         const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
-                        const label = pieData[index].label;
+                        const item = pieData[index];
+                        const label = item? item.label : "";
 
                         return (
                             <g>
@@ -107,13 +115,6 @@ export default function PieChartDrawer({ authFetch, date, token }) {
                                 <Cell key={p.category} fill={COLORS[index]} />
                         );
                     })}
-                    {/*<LabelList*/}
-                    {/*className="label-list"*/}
-                    {/*    dataKey="label"*/}
-                    {/*    position="outside"*/}
-                    {/*    fill="black"*/}
-                    {/*/>*/}
-
 
                 </Pie>
             </PieChart>

@@ -27,11 +27,15 @@ export default function NewData() {
 
     //ドロップリストにカテゴリー一覧を設定
     useEffect(() => {
-        authFetch("http://localhost:8080/kakeibo/categoryParameter")
-            .then(res => res.json())
-            .then(data => {
-                setCategories(data);
-            });
+        try {
+            authFetch("http://localhost:8080/kakeibo/categoryParameter")
+                .then(res => res.json())
+                .then(data => {
+                    setCategories(data);
+                });
+        } catch (err) {
+            setErrors("カテゴリー情報の取得に失敗しました:" + err);
+        }
     }, [])
 
     //新規データ作成決定時の処理
@@ -46,13 +50,22 @@ export default function NewData() {
                 body: JSON.stringify(kakeiboDto)
             });
             if (!res.ok) {
-                const data = await res.json();
+                let data;
+                try {
+                    data = await res.json();
+                } catch {
+                    data = { general: "予期せぬエラーが発生しました" };
+                }
                 throw data;
             };
             setErrors({});
             navigate("/home", { state: { refresh: true } });
         } catch (err) {
-            setErrors(err);
+            if (typeof err === "object" && err !== null) {
+                setErrors(err);
+            } else {
+                setErrors({ general: "サーバーに接続できません" });
+            }
         }
     };
 
@@ -164,7 +177,9 @@ export default function NewData() {
                     
                 </form>
                 <br></br>
-
+                {errors.general && <div className="error">{errors.general}</div>}
+                {errors.amount && <div className="error">{errors.amount}</div>}
+                {errors.memo && <div className="error">{errors.memo}</div>}
                 <button onClick={moveHome}
                 id="back-button">戻る</button>
             </div>

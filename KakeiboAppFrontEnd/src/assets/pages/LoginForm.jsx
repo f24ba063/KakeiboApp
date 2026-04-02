@@ -9,9 +9,24 @@ export default function LoginForm() {
     const [error, setError] = useState("");
     const { loggingUsername, setLoggingUsername } = useContext(UserContext);
     const navigate = useNavigate();
-    const handleLogin = LoginSequence(username,
-        password, setLoggingUsername, setError, navigate);
 
+    const handleLogin = async(e) => {
+        e.preventDefault();
+        try {
+            const result = await LoginSequence(username,
+                password, setLoggingUsername, navigate);
+            setError("");
+
+            if (!result.success) {
+                setError(result.message);
+            } else {
+                navigate("/home");
+            } 
+
+        } catch (err) {
+            setError("ログインに失敗しました：" + err);
+        }
+    }
 
     return (
         <>
@@ -28,7 +43,8 @@ export default function LoginForm() {
                     <button type="submit">ログイン</button>
                 
                 </span>
-                {error && <p>{error}</p> }
+                {/*エラー表示欄*/}
+                {error && <p>{error}</p>}
             </form>
             <button
                 type="button"

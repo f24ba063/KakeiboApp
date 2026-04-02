@@ -25,9 +25,8 @@ export default function BarChartDrawer({ authFetch, date, token }) {
                     body: JSON.stringify({ date: date.toISOString().split("T")[0] })
                 });
 
-                if (!res.ok) {
-                    console.error("棒グラフデータ取得に失敗しました：" + res.status);
-                    return;
+                if (!res ||!res.ok ) {
+                    throw new Error("レスポンスエラー");
                 }
 
                 const data = await res.json();
@@ -37,11 +36,11 @@ export default function BarChartDrawer({ authFetch, date, token }) {
                 }
 
                 // 月順ソート（安全策）
-                const sortedData = data.sort((a, b) => a.month.localeCompare(b.month));
+                const sortedData = [...data].sort((a, b) => a.month.localeCompare(b.month));
                 setBarData(sortedData);
             } catch (err) {
                 console.error(err);
-                setError(err.message || "不明なエラー");
+                setError("棒グラフの表示に失敗しました：" + (err.message || "不明なエラー"));
             } finally {
                 setLoading(false);
             }
@@ -50,23 +49,25 @@ export default function BarChartDrawer({ authFetch, date, token }) {
         fetchData();
     }, [authFetch, date, token]);
 
-    if (loading) return (<div>読み込み中…</div>);
-    if (error) return (<div style={{ color: "red" }}>エラー：{error}</div>)
-
     return (
-        <BarChart
-            width={600}
-            height={300}
-            data={barData}
-            margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-        >
-            <CartesianGrid strokeDasharray="3 3" />  {/* グリッド線 */}
-            <XAxis dataKey="month" />                {/* X軸に month */}
-            <YAxis />                                {/* Y軸は自動スケール */}
-            <Tooltip />                              {/* ホバー時に値表示 */}
-            <Legend />                               {/* 収入・支出の凡例 */}
-            <Bar dataKey="income" fill="#82ca9d" />  {/* 収入の棒 */}
-            <Bar dataKey="outGo" fill="#8884d8" />   {/* 支出の棒 */}
-        </BarChart>
+        <>
+            {loading && <h2>Loading....</h2>}
+            {error && <h2 style={{ color: "red" }}>棒グラフの表示に失敗しました:{error}</h2>}
+
+            <BarChart
+                width={600}
+                height={300}
+                data={barData}
+                margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+            >
+                <CartesianGrid strokeDasharray="3 3" />  {/* グリッド線 */}
+                <XAxis dataKey="month" />                {/* X軸に month */}
+                <YAxis />                                {/* Y軸は自動スケール */}
+                <Tooltip />                              {/* ホバー時に値表示 */}
+                <Legend />                               {/* 収入・支出の凡例 */}
+                <Bar dataKey="income" fill="#82ca9d" />  {/* 収入の棒 */}
+                <Bar dataKey="outGo" fill="#8884d8" />   {/* 支出の棒 */}
+            </BarChart>
+        </>
     );
 }
