@@ -13,6 +13,10 @@ export default function Chart() {
     const date = new Date();
     const token = sessionStorage.getItem("jws");
 
+    const handleAuthFetch = () =>{
+        navigate("/login");
+    }
+
     useEffect(() => {
         if (!token) {
             setTimeout(() => {
@@ -34,9 +38,9 @@ export default function Chart() {
                 onClick={() => navigate("/home")}
             >ホームへ
                 </button>
-            <PieChartDrawer authFetch={authFetch} date={date} token={token} />
-            <LineChartDrawer authFetch={authFetch} date={date} token={token} />
-            <BarChartDrawer authFetch={authFetch} date={date} token={token} />
+            <PieChartDrawer authFetch={authFetch} date={date} token={token} onAuthFetch={handleAuthFetch} />
+            <LineChartDrawer authFetch={authFetch} date={date} token={token} onAuthFetch={handleAuthFetch} />
+            <BarChartDrawer authFetch={authFetch} date={date} token={token} onAuthFetch={handleAuthFetch} />
         </>
     )
 }

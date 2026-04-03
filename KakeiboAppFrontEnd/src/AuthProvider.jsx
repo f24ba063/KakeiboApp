@@ -6,19 +6,31 @@ export function AuthProvider({ children }) {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     useEffect(() => {
-        const token = sessionStorage.getItem("jws");
-        if (token) { setIsLoggedIn(true) };
+        try { 
+            const token = sessionStorage.getItem("jws");
+            if (token) { setIsLoggedIn(true) };
+        }catch (err) {
+            console.log("sessionStorage取得失敗:" + err);
+        }
     }, []);
 
     const login = (token) => {
-        sessionStorage.setItem("jws", token);
-        setIsLoggedIn(true);
+        try {
+            sessionStorage.setItem("jws", token);
+            setIsLoggedIn(true);
+        } catch (err) {
+            console.log("ログインのためのトークンの取得に失敗しました:" + err);
+        }
     };
 
     const logout = () => {
-        sessionStorage.removeItem("jws");
-        sessionStorage.clear();
-        setIsLoggedIn(false);
+        try {
+            sessionStorage.removeItem("jws");
+            sessionStorage.clear();
+            setIsLoggedIn(false);
+        } catch (err) {
+            console.log("ログアウトのためのトークン制御に失敗しました:" + err);
+        }
     };
 
     return (

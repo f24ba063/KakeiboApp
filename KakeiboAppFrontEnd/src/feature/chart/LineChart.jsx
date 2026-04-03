@@ -6,7 +6,7 @@ import {
     ResponsiveContainer
 } from 'recharts';
 
-export default function LineChartDrawer({ authFetch, date, token }) {
+export default function LineChartDrawer({ authFetch, date, token, onAuthFetch }) {
     const [lineData, setLineData] = useState([]);//バックエンドからのデータ格納箱
     const [categories, setCategories] = useState([]);//カテゴリー一覧格納箱
     //線の色格納箱
@@ -29,11 +29,19 @@ export default function LineChartDrawer({ authFetch, date, token }) {
                     body: JSON.stringify({ date: date.toISOString().split("T")[0] })
                 });
 
-                if (!res || !res.ok) {
-                    throw new Error("レスポンスエラー");
+                if (!res.ok) {
+                    if (res.status === 401) {
+                        onAuthFetch();
+                        return;
+                    }
+                    throw new Error("データの取得に失敗しました");
                 }
 
                 const data = await res.json();
+
+                if (!Array.isArray(data)) {
+                    throw new Error("取得データが配列ではありません");
+                }
 
                 // yearMonth ごとにカテゴリをまとめる
                 const map = {};

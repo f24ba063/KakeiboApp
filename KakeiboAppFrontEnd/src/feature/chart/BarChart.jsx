@@ -5,7 +5,7 @@ import {
     Tooltip,  Legend, CartesianGrid
 } from 'recharts';
 
-export default function BarChartDrawer({ authFetch, date, token }) {
+export default function BarChartDrawer({ authFetch, date, token, onAuthFetch }) {
     const [barData, setBarData] = useState([]);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -25,8 +25,12 @@ export default function BarChartDrawer({ authFetch, date, token }) {
                     body: JSON.stringify({ date: date.toISOString().split("T")[0] })
                 });
 
-                if (!res ||!res.ok ) {
-                    throw new Error("レスポンスエラー");
+                if (!res || !res.ok) {
+                    if (res.status === 401) { 
+                        onAuthFetch();
+                        return;
+                    }
+                    throw new Error("データの取得に失敗しました");
                 }
 
                 const data = await res.json();

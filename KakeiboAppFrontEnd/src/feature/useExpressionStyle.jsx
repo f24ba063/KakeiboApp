@@ -11,8 +11,12 @@ export default function useExpressionStyle() {
     const changeStyle = () => {
         const next = expressionStyle === "card" ? "list" : "card";
         setExpressionStyle(next);
-        localStorage.setItem("expressionStyle", next);
-    };
-
-    return { expressionStyle, changeStyle };
+        try {
+            localStorage.setItem("expressionStyle", next);
+        } catch (err) {
+            console.log("収支表示スタイルの保存に失敗しました:", err);
+        };
+    }
+        return { expressionStyle, changeStyle };
+   
 }

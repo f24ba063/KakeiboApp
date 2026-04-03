@@ -12,7 +12,9 @@ export default async function LoginSequence(username,
         if (!res.ok) {
             if (res.status === 401)
                 return { success: false, message: "ユーザー名またはパスワードが間違っています" };
-            return { success: false, message: "予期せぬエラーが発生しました" }
+            if (res.status === 400)
+                return { success: false, message: "サーバーで問題が発生しています" };
+            return { success: false, message: `予期せぬエラーが発生しました:(${res.status})` }
         }
 
         const data = await res.json();

@@ -51,7 +51,7 @@ public class SecurityConfig {
 		config.setAllowedOriginPatterns(List.of("http://localhost:5173"));
 		config.setAllowedMethods(List.of("GET", "POST", "PUT","DELETE", "OPTIONS"));
 		config.setAllowCredentials(true);
-		config.setAllowedHeaders(List.of("*", "Content-Type", "Authorization"));
+		config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Authorization"));
 		
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", config);

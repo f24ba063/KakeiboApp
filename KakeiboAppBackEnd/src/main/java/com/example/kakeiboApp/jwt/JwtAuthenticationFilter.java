@@ -3,7 +3,6 @@ package com.example.kakeiboApp.jwt;
 import java.io.IOException;
 
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -31,31 +30,46 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 							HttpServletResponse response,
 							FilterChain filterChain)throws IOException,
 							jakarta.servlet.ServletException{
+		
 		String authHeader = request.getHeader("Authorization");
-		if(authHeader != null && authHeader.startsWith("Bearer ")) {
-			String token = authHeader.substring(7);
-			if(jwtUtil.validateToken(token)) {
+		
+		try {
+			if(authHeader != null && authHeader.startsWith("Bearer ")) {
+				String token = authHeader.substring(7);
+			
+				if(!jwtUtil.validateToken(token)) {
+					SecurityContextHolder.clearContext();
+					response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+					response.getWriter().write("無効なトークンです");
+					return;
+				}
+				
 				String username = jwtUtil.getUsername(token);
-				UserDetails userDetails = userDetailsService
-						.loadUserByUsername(username);
+				UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+				
+				if(userDetails == null) {
+					SecurityContextHolder.clearContext();
+					response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+					response.getWriter().write("ユーザーが存在しません");
+					return;
+				}
 				
 				UsernamePasswordAuthenticationToken auth = 
 						new UsernamePasswordAuthenticationToken(
 						userDetails, null, userDetails.getAuthorities());
-				auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));;
+				auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 				SecurityContextHolder.getContext().setAuthentication(auth);
 			}
-		}
-	
-		try {
+			
 			filterChain.doFilter(request,  response);
-		} catch (java.io.IOException e) {
-			// TODO 自動生成された catch ブロック
-			e.printStackTrace();
-			System.out.println("ファイルの書き込みに失敗しました");
-		} catch (ServletException e) {
-			e.printStackTrace();
-			System.out.println("リクエストに失敗しました");
+		}catch(Exception e) {
+			SecurityContextHolder.clearContext();
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			response.getWriter().write("サーバーエラーが発生しました");
+			
 		}
 	}
 }
+						
+						
+					

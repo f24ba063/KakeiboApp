@@ -9,9 +9,13 @@ export default function Header() {
     const navigate = useNavigate();
     const { loggingUsername } = useContext(UserContext);
 
-    const handleLogout = () => {
-        logout();
-        navigate("/login");
+    const handleLogout = async () => {
+        try {
+            await logout();
+            navigate("/login");
+        } catch (error) {
+            console.log("ログアウト失敗：" + error);
+        }
     };
 
     return (

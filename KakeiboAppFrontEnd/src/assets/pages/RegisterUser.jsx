@@ -45,34 +45,43 @@ export default function RegisterUser() {
                 })
             });
             
-            const contentType = res.headers.get("content-type");
-
-            let data = null;
-            if (contentType && contentType.includes("application/json")) {
-                data = await res.json();
-            } console.log(data);
+            const data = res.data;
 
             //通信失敗、あるいはユーザー重複を検知
             if (!res.ok) {
-                setErrors(data || {});
-                setLoading(false);
+                let message = "登録に失敗しました";
+
+                if (res.status === 400) {
+                    message = "禁止されている入力文字があります";
+                } else if (res.status === 409) {
+                    message = "このユーザー名はすでに使われています";
+                } else if (res.status === 500) {
+                    message = "サーバー側で問題が発生しています";
+                }
+
+                setErrors({
+                    ...data,
+                    general: `${message} (${res.status})`
+                });
+
                 return;
             }
             //登録成功したら、ただちにログインして収支ホーム画面へ遷移
             if (data && data.registered === true) {
                 try {
-                    const res = await fetch("http://localhost:8080/auth/login", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ username, password })
-                    });
+                    const result = await LoginSequence(
+                        username,
+                        password,
+                        setLoggingUsername
+                    );
 
-                    if (!res.ok) {
-                        setErrors({ general: "ログイン失敗" });
-                        return;
+                    if (result.success) {
+                        navigate("/home");
+                    } else {
+                        setErrors({ general: result.message })
                     }
 
-                    const logindata = await res.json();
+                    const logindata = await result.json();
                     sessionStorage.setItem("jws", logindata.token);
                     setLoggingUsername(username);
 
@@ -80,7 +89,6 @@ export default function RegisterUser() {
                 } catch (error) {
                     setErrors({ general: "通信エラー:" + error });
                 }
-
                 
             } else {
                 // 失敗

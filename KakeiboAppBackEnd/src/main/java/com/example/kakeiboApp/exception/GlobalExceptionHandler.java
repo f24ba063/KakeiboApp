@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -35,11 +36,11 @@ public class GlobalExceptionHandler {
 	    String msg = cause != null ? cause.getMessage() : "";
 
 	    if (msg.contains("duplicate key")) {
-	        error.put("username", "そのユーザー名はすでに使われています");
+	        error.put("username", "そのユーザー名は既に使われています");
 	    } else {
 	        error.put("message", "DBエラー");
 	    }
-	    return ResponseEntity.badRequest().body(error);
+	    return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
 	}
 	
 	@ExceptionHandler(Throwable.class)

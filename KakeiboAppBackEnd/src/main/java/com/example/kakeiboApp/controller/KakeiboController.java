@@ -73,13 +73,14 @@ public class KakeiboController{
 	//削除コマンド
 	@PutMapping("delete/{id}")
 	@Transactional
-	public void deleteData(@PathVariable Integer id,
-							@RequestBody Kakeibo kakeibo) {
-		service.deleteService(id, 9);
+	public void deleteData(@PathVariable Integer id) {
+		int deleteFlagNumber = 9;
+		service.deleteService(id, deleteFlagNumber);
 	}
 	
 	//既存データの更新コマンド
 	@PutMapping("/update/{id}")
+	@Transactional
 	public void updateKakeibo(@PathVariable Integer id, 
 			@RequestBody KakeiboDTO dto) {
 		service.updateService(id, dto);

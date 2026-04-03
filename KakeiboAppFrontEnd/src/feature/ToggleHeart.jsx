@@ -1,6 +1,6 @@
 ﻿export default async function ToggleHeart(id, current, setKakeiboDto){
     try {
-        await fetch(`http://localhost:8080/index/homeru/${id}`, {
+        const res = await fetch(`http://localhost:8080/index/homeru/${id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
@@ -9,6 +9,10 @@
                 homeru: current === 1 ? 0 : 1
             })
         });
+
+        if (!res.ok) {
+            throw new Error("がんばり更新に失敗しました")
+        }
 
         setKakeiboDto(prev =>
             prev.map(item =>

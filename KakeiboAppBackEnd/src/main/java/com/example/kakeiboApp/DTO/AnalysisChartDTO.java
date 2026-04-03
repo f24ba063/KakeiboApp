@@ -8,7 +8,7 @@ import lombok.Data;
 //現状では円グラフにおいてdate欄は冗長となる
 @Data
 public class AnalysisChartDTO {
-	String category;
-	Integer total;
+	String category = "";
+	Integer total = 0;
 	LocalDate yearMonth = LocalDate.now();
 }

@@ -1,35 +1,25 @@
-﻿import {useNavigate} from 'react-router-dom';
+﻿//保護APIに自動でJWTを付与、401は自動処理
 
-//保護APIに自動でJWTを付与、401は自動処理
+export function useAuthFetch() {
 
-export function useAuthFetch(){
-	const navigate = useNavigate();
-
-	async function authFetch(url, options ={}){
+	async function authFetch(url, options = {}) {
 		const token = sessionStorage.getItem("jws");
 		const headers = {
-			...(options.headers || {}), 
-			...(token ? { Authorization: `Bearer ${token}`} : {})
+			"Content-Type": "application/json",
+			...(options.headers || {}),
+			...(token ? { Authorization: `Bearer ${token}` } : {})
+
 		};
+		const res = await fetch(url, { ...options, headers });
+
+		//失敗してもJSONは返す
+		let data;
 		try {
-			const res = await fetch(url, {
-				...options,
-				headers
-			});
-
-			if (res.status === 401) {
-				sessionStorage.removeItem("jws");
-				navigate("/login");//トークン無効ならログイン画面へ
-				throw new Error("認証失敗");
-			}
-
-			return res;
-
-		} catch (err) {
-			console.error("通信エラー：" + err);
-			throw err;
+			data = await res.json();
+		} catch {
+			data = null;
 		}
+		return { status: res.status, ok: res.ok, data };
 	}
-
 	return authFetch;
 }

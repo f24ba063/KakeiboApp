@@ -20,17 +20,20 @@ export default function Home() {
     const [KakeiboDto, setKakeiboDto] = useState([]);//家計簿全データ
     const [monthlyIncome, setMonthlyIncome] = useState(0);//月収
     const [monthlyOutgo, setMonthlyOutgo] = useState(0);//支出
+
     const [year, setYear] = useState(now.getFullYear());//年を取得
     const [month, setMonth] = useState(now.getMonth() + 1);//月を取得
     const [date, setDate] = useState(now.getDate());//日を取得
+
     const [currentPayday, setCurrentPayday] = useState(11);//毎月の給料日の設定
     const nextPayday = getNextPayday(currentPayday);//毎月の給料日をもとに、次の給料日の年月日を取得
+
     const [warning, setWarning] = useState("");//警告文一般を乗せる
     const navigate = useNavigate();
     const { expressionStyle, changeStyle } = useExpressionStyle();//表示をリスト型かカード型かで切り替える
     const [isModalOpen, setIsModalOpen] = useState(false);//給料日入力モーダルのスイッチ
     const location = useLocation();
-    const message = location.state?.message || "";
+    const message = location.state?.message || "";//他ページから遷移してきたとき、メッセージを抱えてくるときがある
     const { loggingUsername } = useContext(UserContext);//ログインしているユーザー名を格納
     const authFetch = useAuthFetch();//jwt認証つきfetch
 
@@ -39,9 +42,9 @@ export default function Home() {
     //日付まで取得しているのは、日付と給料日の兼ね合いで
     //出力される家計簿の月が違うから
     useEffect(() => {
-
+        console.log("年月日：" + year + "年" + month + "月" + date + "日");
+        console.log("ろぎにゅｚ－ねｍ:" + loggingUsername);
         if (!loggingUsername) return;//ログインしていなければ何もしない
-
         monthlyInOut(year, month, date,
             setWarning, setKakeiboDto, setMonthlyIncome, setMonthlyOutgo,
             authFetch);
@@ -50,12 +53,17 @@ export default function Home() {
 
     //給料日と次の給料日を、ユーザーデータをもとに獲得している
     useEffect(() => {
-        authFetch(`http://localhost:8080/register/getPayday/${loggingUsername}`)
-            .then(res => res.json())
-            .then(data => {
+        const fetch = async () => {
+            try {
+                const res = await authFetch(`http://localhost:8080/register/getPayday/${loggingUsername}`);
+                const data = await res.data;
                 setCurrentPayday(Number(data));
-            });
-    }, [currentPayday])
+            } catch (err) {
+                setWarning("給料日の取得に失敗しました：" + err);
+            }
+        }
+        fetch();
+    }            , [currentPayday]);
 
     //「今月収入・支出」の表現に使うための年・月を取得
     function formatDate2(year, month) {
@@ -118,7 +126,6 @@ export default function Home() {
                             UserPaydaySet={UserPaydaySet}
                             setIsModalOpen={setIsModalOpen}
                         />
-            
                     }
                 </div>
                 {/*下の団・収支総計、次の給料日、頑張った総数表示*/}
@@ -159,13 +166,13 @@ export default function Home() {
                         </button>
                         {/*前の月への移動リンク*/}
                         <button type="button" className="paging-button" onClick={() =>
-                            pageMonth("back", year, month, setMonth, setYear)}
+                            pageMonth("back", year, month, setMonth, setYear, setWarning)}
                             disabled={warning === "最古のデータ以前の月は閲覧できません！" }>
                             前の月</button>
 
                         {/*次の月への移動リンク*/}
                         <button type="button" className="paging-button" onClick={() => 
-                            pageMonth("forward", year, month, setMonth, setYear)}
+                            pageMonth("forward", year, month, setMonth, setYear, setWarning)}
                             disabled={warning === "これより後のデータはありません"}>
                             後の月</button>
 

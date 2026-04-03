@@ -19,19 +19,21 @@ export default function CardStyle({ KakeiboDto, moveDetail, ToggleHeart, setKake
                     </tr>
                 </thead>
                 <tbody>
-                    {KakeiboDto.map(e =>
+                    {KakeiboDto
+                        .filter(e => e.softDelete != 9)
+                        .map(e =>
                         <tr key={e.id}
                             className={`${e.inOut === "IN" ? "yellow-back" : "cyan-back"}`}
                             onClick={() => {
                                 moveDetail(e.id)
                             }}
                         >
-                            <td>{e.tradeDate}</td>
-                            <td>{e.category}</td>
-                            <td>{e.amount}</td>
-                            <td>{e.memo.length < 45
-                                ? e.memo
-                                : e.memo.slice(0, 44) + "..."}
+                            <td>{e.tradeDate ?? ""}</td>
+                            <td>{e.category ?? ""}</td>
+                            <td>{e.amount ?? ""}</td>
+                            <td>{(e.memo ?? "").length < 45
+                                ? (e.memo ?? "")
+                                : (e.memo ?? "").slice(0, 44) + "..."}
                             </td>
                             <td>
                                 <img src={e.homeru === 1 ? "/img/heart.png" : "/img/heart_gray.png"}
@@ -40,6 +42,9 @@ export default function CardStyle({ KakeiboDto, moveDetail, ToggleHeart, setKake
                                     onClick={(event) => {
                                         event.stopPropagation();
                                         ToggleHeart(e.id, e.homeru, setKakeiboDto)
+                                            .catch(err => {
+                                                console.log("がんばり更新失敗:" + err);
+                                            })
                                     }}
                                 />
                             </td>

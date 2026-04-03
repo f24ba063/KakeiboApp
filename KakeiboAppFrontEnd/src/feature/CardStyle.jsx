@@ -26,7 +26,7 @@ return(
                 />
                 {/*日付文字列*/}
                 <li className="block">
-                    <h3>{dateGet(e.tradeDate)}</h3>
+                    <h3>{e.tradeDate ? dateGet(e.tradeDate) : ""}</h3>
                 </li>
 
                 {/*入出金カテゴリー文字列*/}
@@ -37,9 +37,9 @@ return(
                 {/*詳細メモ文字列*/}
 
                 <li className="comment-block" >
-                    <h3>{e.memo.length < 30
-                        ? e.memo
-                        :e.memo.slice(0,29) + "..."}</h3>
+                    <h3>{(e.memo ?? "").length < 30
+                        ? (e.memo ?? "")
+                        : (e.memo ?? "").slice(0,29) + "..."}</h3>
                 </li>
             </ul>
         ))}

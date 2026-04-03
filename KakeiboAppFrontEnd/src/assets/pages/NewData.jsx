@@ -41,6 +41,7 @@ export default function NewData() {
     //新規データ作成決定時の処理
     const handleSubmit = async e => {
         e.preventDefault();
+        setErrors({});
         try {
             const res = await authFetch("http://localhost:8080/kakeibo/save", {
                 method: "POST",
@@ -58,9 +59,11 @@ export default function NewData() {
                 }
                 throw data;
             };
-            setErrors({});
+
             navigate("/home", { state: { refresh: true } });
+
         } catch (err) {
+            //errがオブジェクトでない場合はgeneralに文字列をセット
             if (typeof err === "object" && err !== null) {
                 setErrors(err);
             } else {
@@ -178,8 +181,6 @@ export default function NewData() {
                 </form>
                 <br></br>
                 {errors.general && <div className="error">{errors.general}</div>}
-                {errors.amount && <div className="error">{errors.amount}</div>}
-                {errors.memo && <div className="error">{errors.memo}</div>}
                 <button onClick={moveHome}
                 id="back-button">戻る</button>
             </div>

@@ -4,7 +4,6 @@ import { useContext } from 'react';
 import { UserContext } from './context/UserContext';
 
 export default function PrivateRoute({ children }){
-    //const { isLoggedIn } = useAuth();
     const { loggingUsername } = useContext(UserContext);
 
 

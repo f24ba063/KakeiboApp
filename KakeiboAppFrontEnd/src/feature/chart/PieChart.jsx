@@ -1,7 +1,7 @@
 ﻿import { useState, useEffect } from 'react';
 import { PieChart, Pie, Cell, LabelList } from 'recharts';
 
-export default function PieChartDrawer({ authFetch, date, token }) {
+export default function PieChartDrawer({ authFetch, date, token, onAuthFetch }) {
     const [pieData, setPieData] = useState([]);//円グラフに入る数値
     const COLORS = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#6FDFE4'];//円グラフの塗り色
     const TEXT = ['black', 'black', 'black', 'black', 'black', 'black', 'black'];
@@ -32,17 +32,21 @@ export default function PieChartDrawer({ authFetch, date, token }) {
                     setPieData(newData);
                     //console.log(pieData);
                 } else {
-                    console.error("円グラフデータ取得に失敗しました：" + res.status);
+                    if (res.status === 401) {
+                        onAuthFetch();
+                        return;
+                    }
+                    throw new Error("データの取得に失敗しました");
                 }
             } catch (err) {
-                setError(err);
+                setError("サーバーとの通信に失敗しました：" + err);
                 console.log(error);
             } finally {
                 setLoading(false);
             }
         }
         fetch();
-    },[]);
+    }, [authFetch, date, token]);
 
 
     return (
