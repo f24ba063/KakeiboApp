@@ -1,6 +1,6 @@
 ﻿import '../css/cardStyle.css'
 
-export default function CardStyle({ KakeiboDto, moveDetail, ToggleHeart, setKakeiboDto, dateGet }) {
+export default function CardStyle({ KakeiboDto, moveDetail, ToggleHeart, setKakeiboDto, dateGet, authFetch }) {
 return(
 <div id="card-base">
     {KakeiboDto
@@ -21,7 +21,7 @@ return(
                     className="card-heart"
                     onClick={(event) => {
                         event.stopPropagation();
-                        ToggleHeart(e.id, e.homeru, setKakeiboDto)
+                        ToggleHeart(e.id, e.homeru, setKakeiboDto, authFetch)
                     }}
                 />
                 {/*日付文字列*/}

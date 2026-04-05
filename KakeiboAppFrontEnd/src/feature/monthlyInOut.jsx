@@ -6,13 +6,9 @@
     try {
         const res = await authFetch(`http://localhost:8080/kakeibo/${year}/${month}/${date}`,
             { cache: "no-store" });
-        console.log("monthlyInOut raw response:", res);
-        const data = res.json();
-        //const data = await res.json();
-        console.log("ステータス：" + data.status);
+
+        const data = await res.json();
         
-
-
         switch (data.status) {
             case "NEW_USER":
                 setWarning("初めまして！");

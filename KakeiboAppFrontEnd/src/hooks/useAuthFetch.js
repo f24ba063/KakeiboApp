@@ -12,14 +12,7 @@ export function useAuthFetch() {
 		};
 		const res = await fetch(url, { ...options, headers });
 
-		//失敗してもJSONは返す
-		let data;
-		try {
-			data = await res.json();
-		} catch {
-			data = null;
-		}
-		return { status: res.status, ok: res.ok, data };
+		return res
 	}
 	return authFetch;
 }

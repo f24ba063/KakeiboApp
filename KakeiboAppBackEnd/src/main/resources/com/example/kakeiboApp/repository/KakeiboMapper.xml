@@ -65,7 +65,7 @@
 			- interval '1 day'
 		and
 			K.username = #{username}
-	order by K.trade_date desc
+	order by K.trade_date desc, K.id desc
 </select>
 
 <!--ユーザーの給料日を取得する-->

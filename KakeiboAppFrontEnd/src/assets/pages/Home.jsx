@@ -42,8 +42,6 @@ export default function Home() {
     //日付まで取得しているのは、日付と給料日の兼ね合いで
     //出力される家計簿の月が違うから
     useEffect(() => {
-        console.log("年月日：" + year + "年" + month + "月" + date + "日");
-        console.log("ろぎにゅｚ－ねｍ:" + loggingUsername);
         if (!loggingUsername) return;//ログインしていなければ何もしない
         monthlyInOut(year, month, date,
             setWarning, setKakeiboDto, setMonthlyIncome, setMonthlyOutgo,
@@ -56,7 +54,7 @@ export default function Home() {
         const fetch = async () => {
             try {
                 const res = await authFetch(`http://localhost:8080/register/getPayday/${loggingUsername}`);
-                const data = await res.data;
+                const data = await res.json();
                 setCurrentPayday(Number(data));
             } catch (err) {
                 setWarning("給料日の取得に失敗しました：" + err);
@@ -193,7 +191,9 @@ export default function Home() {
                         moveDetail={moveDetail}
                         ToggleHeart={ToggleHeart}
                         setKakeiboDto={setKakeiboDto}
-                        dateGet={dateGet} />
+                        dateGet={dateGet}
+                        authFetch={authFetch }
+                        />
                     :
                     <ListStyle
                         KakeiboDto={KakeiboDto}
