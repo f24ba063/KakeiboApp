@@ -47,10 +47,17 @@ input {
     margin: 5px;
 }
 
+.in-out-button {
+    padding: 1px;
+    width: 90px;
+    height: 50px;
+}
+
 #sender-button {
-    padding: 8px;
+    padding: 1px;
     margin: 1px;
     width: 90px;
+    height: 50px;
     font-size: 30px;
     background-color: #99ffdd;
     border: solid 1px;

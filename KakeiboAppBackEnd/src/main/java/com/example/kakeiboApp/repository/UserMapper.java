@@ -23,4 +23,6 @@ public interface UserMapper {
 	
 	//給料日変更
 	public void updatePayday(String username, int payday);
+	
+	public UserBody getU(String username);
 }

@@ -42,7 +42,8 @@
             MonthOut.forEach(e => {
                 su += e.amount ?? 0;
             });
-            setMonthlyOutgo(su);
+        setMonthlyOutgo(su);
+
         }catch(err) {
             setWarning("データ取得に失敗しました：" + err);
             console.log("月次データ取得に失敗しました");

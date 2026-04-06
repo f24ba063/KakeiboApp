@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public RegisterDTO userCreateService(UserCreateDTO dto) {
-		RegisterDTO rd = new RegisterDTO();
+		
 		String hashed = encoder.encode(dto.getPassword());
 
 		UserBody user = new UserBody();
@@ -62,6 +62,8 @@ public class UserServiceImpl implements UserService {
 		user.setPayday(dto.getPayday());
 		user.setRoles(dto.getRoles());
 		int rtn = mapper.registerUser(user);
+		
+		RegisterDTO rd = new RegisterDTO();
 		rd.setRegistered(rtn == 1);
 		rd.setMessage(rtn == 1 ? "ユーザー登録成功" : "登録に失敗しました");
 
@@ -92,4 +94,9 @@ public class UserServiceImpl implements UserService {
 		return returnDto;
 	}
 
+	//実験用にユーザ名だけでユーあ情報取得。あとでけす(4/6)
+	public UserBody getU(String username) {
+		return mapper.getU(username);
+	}
 }
+

@@ -32,4 +32,9 @@
 		update users set payday = #{payday}
 		where username = #{username}
 	</update>
+	
+	<select id="getU">
+		select * from users
+		where username = #{username}
+	</select>
 </mapper>

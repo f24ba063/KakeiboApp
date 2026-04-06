@@ -88,7 +88,6 @@ export default function Home() {
         updateUserPayday(authFetch, loggingUsername, payday)
             .then(pd => {
                 setCurrentPayday(pd);
-                console.log("給料日は：" + pd);
                 setWarning(null);
             }).catch(err => {
                 setWarning("通信に失敗しました：" + err);
@@ -100,23 +99,28 @@ export default function Home() {
             <div id="outbounds">
                 <h1>家計簿アプリ練習</h1> 
 
+                {/*チャート画面へ*/}
                 <button type="button"
                     onClick={() => navigate("/chart")}>
                     チャート一覧へ
                 </button>
+
+                {/*給料日変更モーダル*/}
+                <span>
+                    <button
+                        type="button"
+                        onClick={() => setIsModalOpen(true)}>
+                        給料日変更
+                    </button>
+                </span>
+
                 {/*上の段・収支個別表示＋給料日表示*/}
                 <div id="first-line">
                     <h3>
                         <span className="top-lines">{formatDate2(year, month)}収入：{monthlyIncome}</span>
                         <span className="top-lines">{formatDate2(year, month)}支出：{monthlyOutgo}</span>
                         <span className="top-lines">給料日：{currentPayday}日</span>
-                        <span>
-                            <button
-                                type="button"
-                                onClick={() => setIsModalOpen(true)}>
-                                給料日変更
-                            </button>
-                        </span>
+
                     </h3>
                     {isModalOpen &&
                         <HomeModal
@@ -165,26 +169,32 @@ export default function Home() {
                         {/*前の月への移動リンク*/}
                         <button type="button" className="paging-button" onClick={() =>
                             pageMonth("back", year, month, setMonth, setYear, setWarning)}
-                            disabled={warning === "最古のデータ以前の月は閲覧できません！" }>
+                            disabled={
+                                warning === "最古のデータ以前の月は閲覧できません！" ||
+                                warning === "初めまして！"
+                            }>
                             前の月</button>
 
                         {/*次の月への移動リンク*/}
-                        <button type="button" className="paging-button" onClick={() => 
+                        <button type="button" className="paging-button" onClick={() =>
                             pageMonth("forward", year, month, setMonth, setYear, setWarning)}
-                            disabled={warning === "これより後のデータはありません"}>
+                            disabled={
+                                warning === "これより後のデータはありません" ||
+                                warning === "初めまして！"
+                        }>
                             後の月</button>
 
                         {/*新規データ登録ページへ*/}
                         <Link id="new-information-button" to="/newdata">追加</Link>
                     </span>
 
-                    {/*表示ページをめくったとき、データが無かった時の各種警告文*/}
+                    {/*表示月ページをめくったとき、データが無かった時の各種警告文*/}
                     <p id="warning">{warning}</p>
                 </div>
 
                 {/*-------------------------------------------------------------*/}
 
-                {/*収支カードの表示*/}
+                {/*収支カードorリストの表示*/}
                 {expressionStyle==="card" ? 
                     <CardStyle
                         KakeiboDto={KakeiboDto}
@@ -193,14 +203,16 @@ export default function Home() {
                         setKakeiboDto={setKakeiboDto}
                         dateGet={dateGet}
                         authFetch={authFetch }
-                        />
+                    />
                     :
                     <ListStyle
                         KakeiboDto={KakeiboDto}
                         moveDetail={moveDetail}
                         ToggleHeart={ToggleHeart}
                         setKakeiboDto={setKakeiboDto}
-                        dateGet={dateGet} />
+                        dateGet={dateGet}
+                        authFetch={authFetch}
+                    />
                 }
             </div>
         </>

@@ -1,6 +1,6 @@
 ﻿import '../css/listStyle.css'
 
-export default function CardStyle({ KakeiboDto, moveDetail, ToggleHeart, setKakeiboDto, dateGet }) {
+export default function CardStyle({ KakeiboDto, moveDetail, ToggleHeart, setKakeiboDto, dateGet, authFetch }) {
     return (
         <div>
             <table>
@@ -28,25 +28,26 @@ export default function CardStyle({ KakeiboDto, moveDetail, ToggleHeart, setKake
                                 moveDetail(e.id)
                             }}
                         >
-                            <td>{e.tradeDate ?? ""}</td>
-                            <td>{e.category ?? ""}</td>
-                            <td>{e.amount ?? ""}</td>
+                            <td>{e.tradeDate ? dateGet(e.tradeDate) : ""}</td>{/*日付*/}
+                                <td>{e.category ?? ""}</td>{/*カテゴリ*/}
+                            <td>{e.amount ?? ""}</td>{/*金額*/}
+                                {/*メモ*/}
                             <td>{(e.memo ?? "").length < 45
                                 ? (e.memo ?? "")
                                 : (e.memo ?? "").slice(0, 44) + "..."}
                             </td>
-                            <td>
+                            <td>{/*homeru*/}
                                 <img src={e.homeru === 1 ? "/img/heart.png" : "/img/heart_gray.png"}
                                     alt="heart"
                                     className="card-heart2"
                                     onClick={(event) => {
                                         event.stopPropagation();
-                                        ToggleHeart(e.id, e.homeru, setKakeiboDto)
+                                        ToggleHeart(e.id, e.homeru, setKakeiboDto, authFetch)
                                             .catch(err => {
                                                 console.log("がんばり更新失敗:" + err);
                                             })
                                     }}
-                                />
+                                    />
                             </td>
                         </tr>
                     )}

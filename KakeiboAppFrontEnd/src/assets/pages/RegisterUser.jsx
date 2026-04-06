@@ -33,7 +33,7 @@ export default function RegisterUser() {
             const normalizedPayday = Math.min(Math.max(Math.round(payday), 1), 28);
 
             //dbへのデータ転送
-            const res = await authFetch("http://localhost:8080/register/registerUser", {
+            const res = await fetch("http://localhost:8080/register/registerUser", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -44,17 +44,19 @@ export default function RegisterUser() {
                     payday  :normalizedPayday
                 })
             });
-            
-            const data = res.data;
+
+            const data = await res.json();
 
             //通信失敗、あるいはユーザー重複を検知
+            //バリデーションはバックエンド側で先に発生するので
+            //こちら側の検査は必ずしも参照にならない
             if (!res.ok) {
-                let message = "登録に失敗しました";
+                let message = "登録に失敗しました:" + res.status;
 
                 if (res.status === 400) {
                     message = "禁止されている入力文字があります";
                 } else if (res.status === 409) {
-                    message = "このユーザー名はすでに使われています";
+                    message = "そのユーザー名はすでに使われています";
                 } else if (res.status === 500) {
                     message = "サーバー側で問題が発生しています";
                 }
@@ -74,18 +76,14 @@ export default function RegisterUser() {
                         password,
                         setLoggingUsername
                     );
-
+                    
                     if (result.success) {
+                        setLoggingUsername(username);
                         navigate("/home");
                     } else {
                         setErrors({ general: result.message })
                     }
 
-                    const logindata = await result.json();
-                    sessionStorage.setItem("jws", logindata.token);
-                    setLoggingUsername(username);
-
-                    navigate("/home");
                 } catch (error) {
                     setErrors({ general: "通信エラー:" + error });
                 }

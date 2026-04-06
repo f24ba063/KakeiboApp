@@ -2,6 +2,7 @@
 export default async function LoginSequence(username,
                                     password,
                                     setLoggingUsername) {
+
     try {
         const res = await fetch("http://localhost:8080/auth/login", {
             method: "POST",
@@ -9,6 +10,7 @@ export default async function LoginSequence(username,
             body: JSON.stringify({ username, password })
         });
 
+        
         if (!res.ok) {
             if (res.status === 401)
                 return { success: false, message: "ユーザー名またはパスワードが間違っています" };
@@ -18,11 +20,12 @@ export default async function LoginSequence(username,
         }
 
         const data = await res.json();
+
         sessionStorage.setItem("jws", data.token);
         setLoggingUsername(username);
 
-        return { success: true };
-        } catch (error) {
-            return {success:false, message:"サーバーに接続できません：" + error}
-        }
+        return { success: true};
+    } catch (error) {
+        return {success:false, message:"サーバーに接続できません：" + error}
+    }
 }

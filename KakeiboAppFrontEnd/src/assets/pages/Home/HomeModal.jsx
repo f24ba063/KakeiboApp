@@ -15,7 +15,7 @@ export default function HomeModal({ setWarning, UserPaydaySet,
             setWarning("1日以前は給料日として設定できません");
         }
         else {
-            setEditPayday(e);
+            setEditPayday(Number(e));
             setWarning("");
         }
     }

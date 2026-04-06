@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.kakeiboApp.DTO.PaydayDTO;
 import com.example.kakeiboApp.DTO.RegisterDTO;
 import com.example.kakeiboApp.DTO.UserCreateDTO;
+import com.example.kakeiboApp.entity.UserBody;
 import com.example.kakeiboApp.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -41,4 +42,10 @@ public class UserController {
 		return service.updatePaydayService(dto);
 	}
 	
+	//yusenameでユーザー取得.すぐけす
+	@GetMapping("getUser/{username}")
+	public UserBody getUser(@PathVariable String username) {
+		return service.getU(username);
+	}
 }
+

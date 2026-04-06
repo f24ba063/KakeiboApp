@@ -19,6 +19,7 @@ export default function LoginForm() {
 
             if (!result.success) {
                 setError(result.message);
+                return;
             } else {
                 navigate("/home");
             } 
@@ -44,7 +45,7 @@ export default function LoginForm() {
                 
                 </span>
                 {/*エラー表示欄*/}
-                {error && <p>{error}</p>}
+                {error && <p style={{color: "red"} }>{error}</p>}
             </form>
             <button
                 type="button"
