@@ -287,6 +287,10 @@ insert into kakeibo(trade_date, category_id, amount, memo, username)
 values('2026-2-1',  11,  2000,  '食費', 'user2');
 
 insert into kakeibo(trade_date, category_id, amount, memo, username)
+values('2026-2-18',  11,  8820,  '食費', 'user2');
+
+
+insert into kakeibo(trade_date, category_id, amount, memo, username)
 values('2026-2-1',  11,  1420,  'ドーナツ、ナス、豆腐、報連相', 'user1');
 
 insert into kakeibo(trade_date, category_id, amount, memo, username)
@@ -320,7 +324,7 @@ insert into kakeibo(trade_date, category_id, amount, memo, username)
 values('2026-2-7',  11,  4892,  '材料費', 'user1');
 
 insert into kakeibo(trade_date, category_id, amount, memo, username)
-values('2026-2-11',  1,  100000,  '給与', 'user2');
+values('2026-2-24',  1,  330000,  '給与', 'user2');
 
 insert into kakeibo(trade_date, category_id, amount, memo, username)
 values('2026-2-12',  11,  20000,  '食費', 'user2');
@@ -421,10 +425,21 @@ values('2026-03-21', 11 , 650 , '食費', 'user1');
 
 insert into kakeibo(trade_date, category_id, amount, memo, username)
 values('2026-03-31', 11 , 650 , '食費', 'user1');
+
 insert into kakeibo(trade_date, category_id, amount, memo, username)
 values('2026-4-12', 1 , 160000 , '給料', 'user1');
+
 insert into kakeibo(trade_date, category_id, amount, memo, username)
 values('2026-04-16', 13 , 4700 , '電話代', 'user1');
+
+insert into kakeibo(trade_date, category_id, amount, memo, username)
+values('2026-3-16',  18,  7200, 'ガソリン代', 'user2');
+
+insert into kakeibo(trade_date, category_id, amount, memo, username)
+values('2026-3-16',  14,  35000, '保険料', 'user2');
+
+insert into kakeibo(trade_date, category_id, amount, memo, username)
+values('2026-4-1', 17 ,  15000, '漫画', 'user2');
 
 
 --8月の収支をバランスシートとして登録

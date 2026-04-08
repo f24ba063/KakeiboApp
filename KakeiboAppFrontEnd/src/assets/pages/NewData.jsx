@@ -177,13 +177,13 @@ export default function NewData() {
                     <br></br>
 
                     <button type="submit"
-                    id="sender-button">送信</button>
+                    id="sender-button">登録</button>
                     
                 </form>
                 <br></br>
                 {errors.general && <div className="error">{errors.general}</div>}
                 <button onClick={moveHome}
-                id="back-button">戻る</button>
+                id="back-button">登録をやめる</button>
             </div>
         </>
     )

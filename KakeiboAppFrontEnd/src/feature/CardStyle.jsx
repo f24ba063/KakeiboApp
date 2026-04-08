@@ -31,7 +31,7 @@ return(
 
                 {/*入出金カテゴリー文字列*/}
                 <li className="block">
-                    <h3>{e.category} : {e.amount}</h3>
+                    <h3>{e.category} : {Number(e.amount).toLocaleString()}</h3>
                 </li>
 
                 {/*詳細メモ文字列*/}

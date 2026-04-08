@@ -21,7 +21,7 @@ public interface KakeiboMapper {
 	//給料日ベースで一か月分すべての要素を取得する
 	public List<KakeiboDTO> getMonthly(
 			@Param("year")Integer year, @Param("month")Integer month, 
-			@Param("day") Integer day, @Param("username") String username);
+			@Param("username") String username);
 	
 
 	

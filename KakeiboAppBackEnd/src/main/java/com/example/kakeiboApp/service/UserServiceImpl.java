@@ -94,9 +94,5 @@ public class UserServiceImpl implements UserService {
 		return returnDto;
 	}
 
-	//実験用にユーザ名だけでユーあ情報取得。あとでけす(4/6)
-	public UserBody getU(String username) {
-		return mapper.getU(username);
-	}
 }
 

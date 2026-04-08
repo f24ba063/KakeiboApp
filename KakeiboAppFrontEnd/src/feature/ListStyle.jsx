@@ -30,7 +30,7 @@ export default function CardStyle({ KakeiboDto, moveDetail, ToggleHeart, setKake
                         >
                             <td>{e.tradeDate ? dateGet(e.tradeDate) : ""}</td>{/*日付*/}
                                 <td>{e.category ?? ""}</td>{/*カテゴリ*/}
-                            <td>{e.amount ?? ""}</td>{/*金額*/}
+                            <td>{Number(e.amount).toLocaleString() ?? ""}</td>{/*金額*/}
                                 {/*メモ*/}
                             <td>{(e.memo ?? "").length < 45
                                 ? (e.memo ?? "")

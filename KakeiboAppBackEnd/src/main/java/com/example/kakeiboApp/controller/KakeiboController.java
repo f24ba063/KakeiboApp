@@ -30,15 +30,14 @@ public class KakeiboController{
 	private final KakeiboService service;
 	
 	//ユーザー情報と入力日をもとに、
-	@GetMapping("/{year}/{month}/{day}")
+	@GetMapping("/{year}/{month}")
 	public MonthlyResponseDTO kakeiboController(
 			@PathVariable Integer year, 
 			@PathVariable Integer month, 
-			@PathVariable Integer day, 
 			@AuthenticationPrincipal UserDetails details) {
 		
 		String username = details.getUsername();
-		return service.getMonthlyDataService(year, month, day, username);
+		return service.getMonthlyDataService(year, month, username);
 	}
 
 	//カテゴリーパラメータ一覧を渡し、新規データ作成に利用する

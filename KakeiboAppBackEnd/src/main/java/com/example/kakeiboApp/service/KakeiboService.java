@@ -18,7 +18,7 @@ public interface KakeiboService {
 	
 	//一月分の要素を取得する
 	public MonthlyResponseDTO getMonthlyDataService(
-			Integer year, Integer month, Integer day, String username);
+			Integer year, Integer month, String username);
 		
 	
 	//データに何月のものが存在するかを解析する

@@ -24,7 +24,7 @@ CREATE TABLE category(
 	id serial primary key,
 	category varchar(20) unique,
 	in_out varchar(3),
-	sort_order integer not null unique,
+	sort_order serial,
 	foreign key(in_out) references in_out(in_out)
 );
 

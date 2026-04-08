@@ -47,10 +47,6 @@ export default function ShowData() {
 
                 const data = await res.json();
                 setKakeiboDto(data);
-                console.log("この収支の分類：" + data.inOut);
-                console.log("この収支のID：" + data.id);
-                console.log("この収支のユーザ名：" + kakeiboDto.username);
-                console.log("この収支の金額：" + data.amount);
             } catch (err) {
                 setError("サーバーとの通信に失敗しました:" + err.message);
             }
@@ -129,8 +125,7 @@ export default function ShowData() {
     ) : (
         <>
 
-
-                    <form className={kakeiboDto.inOut === "IN" ? "incomeShade" : "outgoShade"}>
+            <form className={kakeiboDto.inOut === "IN" ? "incomeShade" : "outgoShade"}>
                 {/*IDは隠蔽している*/}
                 {/*<h2 id="id-hidden">id: {id}</h2>*/}
                 {/*<h2 id="username-hidden">{loggingUsername}</h2>*/}
@@ -183,7 +178,7 @@ export default function ShowData() {
                     <h2>金額：</h2>
                     {isEditing ?
                         <input type="number"
-                            value={kakeiboDto.amount}
+                            value={kakeiboDto.amount.toLocaleString()}
                             onChange={(e) => setKakeiboDto({
                                 ...kakeiboDto,
                                 amount: Math.max(Number(e.target.value), 0)

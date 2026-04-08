@@ -4,7 +4,7 @@
     authFetch
 ) {
     try {
-        const res = await authFetch(`http://localhost:8080/kakeibo/${year}/${month}/${date}`,
+        const res = await authFetch(`http://localhost:8080/kakeibo/${year}/${month}`,
             { cache: "no-store" });
 
         const data = await res.json();

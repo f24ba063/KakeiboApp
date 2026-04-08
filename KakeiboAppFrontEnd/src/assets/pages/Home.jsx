@@ -74,7 +74,7 @@ export default function Home() {
         const year = y.getYear() % 100;
         const month = y.getMonth() + 1;
         const day = y.getDate();
-        return `${year}/${month}/${day}`;
+        return `${year}年${month}月${day}日`;
     }
 
     //頑張った数を計上してハート付与の参考にする
@@ -112,14 +112,23 @@ export default function Home() {
                         onClick={() => setIsModalOpen(true)}>
                         給料日変更
                     </button>
+
+                    <button
+                        type="button"
+                        onCLick={() => navigate("/NewCategory")}>
+                        新カテゴリ追加
+                    </button>
                 </span>
+
 
                 {/*上の段・収支個別表示＋給料日表示*/}
                 <div id="first-line">
                     <h3>
-                        <span className="top-lines">{formatDate2(year, month)}収入：{monthlyIncome}</span>
-                        <span className="top-lines">{formatDate2(year, month)}支出：{monthlyOutgo}</span>
-                        <span className="top-lines">給料日：{currentPayday}日</span>
+                        <span className="top-lines">{formatDate2(year, month)}収入：{monthlyIncome.toLocaleString()}</span>
+                        <span className="top-lines">{formatDate2(year, month)}支出：{monthlyOutgo.toLocaleString()}</span>
+                        <span className="top-lines">今月収入/支出：
+                            <span className={monthlyIncome < monthlyOutgo ? "red" : ""}>{monthlyIncome > monthlyOutgo ? "+" : ""}{Number(monthlyIncome - monthlyOutgo).toLocaleString()}</span>
+                        </span>
 
                     </h3>
                     {isModalOpen &&
@@ -133,7 +142,8 @@ export default function Home() {
                 {/*下の団・収支総計、次の給料日、頑張った総数表示*/}
                 <div id="second-line">
                     <h3>
-                        <span className="top-lines">今月収入/支出：{monthlyIncome > monthlyOutgo ? "+" : ""}{monthlyIncome - monthlyOutgo }</span>
+                        <span className="top-lines">給料日：{currentPayday}日</span>
+                        
                         <span className="top-lines">次の給料日： {nextPayday}</span>
                     </h3>
                     <span className="top-lines" id="heart-row">
