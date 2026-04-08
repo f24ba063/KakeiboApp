@@ -4,8 +4,8 @@ import { UserContext } from '../../context/UserContext';
 import  LoginSequence  from '../../feature/LoginSequence';
 
 export default function LoginForm() {
-    const [username, setUsername] = useState("");//ログインユーザー名受け止め先
-    const [password, setPassword] = useState("");//ログインパスワード受け止め先
+    const [username, setUsername] = useState("user1");//ログインユーザー名受け止め先
+    const [password, setPassword] = useState("1234");//ログインパスワード受け止め先
     const [error, setError] = useState("");
     const { loggingUsername, setLoggingUsername } = useContext(UserContext);
     const navigate = useNavigate();
