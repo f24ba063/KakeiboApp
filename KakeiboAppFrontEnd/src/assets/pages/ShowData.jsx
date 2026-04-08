@@ -47,10 +47,13 @@ export default function ShowData() {
 
                 const data = await res.json();
                 setKakeiboDto(data);
+                console.log("この収支の分類：" + data.inOut);
+                console.log("この収支のID：" + data.id);
+                console.log("この収支のユーザ名：" + kakeiboDto.username);
+                console.log("この収支の金額：" + data.amount);
             } catch (err) {
                 setError("サーバーとの通信に失敗しました:" + err.message);
             }
-
         }
 
         fetchData();
@@ -108,7 +111,7 @@ export default function ShowData() {
                 body: JSON.stringify(kakeiboDto)
             });
             if (!res.ok) {
-                const data = res.json();
+                const data = await res.json();
                 throw data;
             }
             navigate("/home");
@@ -127,7 +130,7 @@ export default function ShowData() {
         <>
 
 
-            <form className="area">
+                    <form className={kakeiboDto.inOut === "IN" ? "incomeShade" : "outgoShade"}>
                 {/*IDは隠蔽している*/}
                 {/*<h2 id="id-hidden">id: {id}</h2>*/}
                 {/*<h2 id="username-hidden">{loggingUsername}</h2>*/}
@@ -138,12 +141,13 @@ export default function ShowData() {
                 {isEditing ?
                     <input
                         type="date"
-                        onClick={
+                        onChange={
                             (e) => setKakeiboDto({
                                 ...kakeiboDto,
                                 tradeDate: e.target.value
                             })}
                         value={kakeiboDto.tradeDate}
+
                     />
                     :
                     <h2>{dateOutput(kakeiboDto.tradeDate)}</h2>
@@ -153,12 +157,17 @@ export default function ShowData() {
                 {/*収支表示・切替ボタン*/}
                 <div className="edit">
                     <h2>収支分類：</h2>{isEditing ?
-                        <button type="button"
-                            onClick={
-                                () => setKakeiboDto({
-                                    ...kakeiboDto,
-                                    inOut: kakeiboDto.inOut === "IN" ? "OUT" : "IN"
-                                })}
+                                <button type="button"
+                                    onClick={
+                                        () => {
+                                            setKakeiboDto({
+                                                ...kakeiboDto,
+                                                inOut: kakeiboDto.inOut === "IN" ? "OUT" : "IN",
+                                                //直前のinOutが反映される前のデータを参照しているので、入力が逆になる
+                                                categoryId: kakeiboDto.inOut === "IN" ? 11 : 1 
+                                            });
+                                            console.log(kakeiboDto.inOut);
+                                        }}
                         >
                             {kakeiboDto.inOut === "IN" ? "収入" : "支出"}
                         </button>
@@ -177,7 +186,7 @@ export default function ShowData() {
                             value={kakeiboDto.amount}
                             onChange={(e) => setKakeiboDto({
                                 ...kakeiboDto,
-                                amount: Number(e.target.value)
+                                amount: Math.max(Number(e.target.value), 0)
                             })}></input>
                         :
                         <h2>{kakeiboDto.amount}</h2>
@@ -190,14 +199,15 @@ export default function ShowData() {
                         <h2>カテゴリー：</h2>
                         <select
                             value={kakeiboDto.categoryId}
-                            onChange={e =>
-                                setKakeiboDto({
-                                    ...kakeiboDto,
-                                    categoryId: Number(e.target.value)
-                                })
+                                onChange={e => {
+                                    setKakeiboDto({
+                                        ...kakeiboDto,
+                                        categoryId: Number(e.target.value)
+                                    });
+                                }
                             }
                         >
-                            {showCategory(categories, kakeiboDto.inOut === "IN")}
+                            {showCategory(categories, kakeiboDto.inOut)}
                         </select>
                     </div>
                     :

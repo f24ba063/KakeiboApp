@@ -27,16 +27,17 @@ export default function NewData() {
 
     //ドロップリストにカテゴリー一覧を設定
     useEffect(() => {
-        try {
-            authFetch("http://localhost:8080/kakeibo/categoryParameter")
-                .then(res => res.json())
-                .then(data => {
-                    setCategories(data);
-                });
-        } catch (err) {
-            setErrors("カテゴリー情報の取得に失敗しました:" + err);
-        }
-    }, [])
+        (async () => {
+            try {
+                const res = await authFetch("http://localhost:8080/kakeibo/categoryParameter");
+                const data = await res.json();
+                setCategories(data);
+
+            } catch (err) {
+                setErrors("カテゴリー情報の取得に失敗しました:" + err);
+            }
+        })();
+    }, []);
 
     //新規データ作成決定時の処理
     const handleSubmit = async e => {
@@ -48,7 +49,7 @@ export default function NewData() {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(kakeiboDto)
+                body: await JSON.stringify(kakeiboDto)
             });
             if (!res.ok) {
                 let data;

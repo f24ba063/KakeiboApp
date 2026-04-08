@@ -1,7 +1,15 @@
-﻿.area{
-    border:solid 1px grey;
-    border-radius:100px;
-    background-color: #edfeff;
+﻿.incomeShade {
+    margin-top: 6px;
+    border: solid 1px grey;
+    border-radius: 100px;
+    background-color: #ffff99;
+}
+
+.outgoShade {
+    margin-top: 6px;
+    border: solid 1px grey;
+    border-radius: 100px;
+    background-color: #cce8ff;
 }
 
 #id-hidden{

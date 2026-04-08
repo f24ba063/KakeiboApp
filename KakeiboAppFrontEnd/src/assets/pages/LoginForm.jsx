@@ -38,7 +38,7 @@ export default function LoginForm() {
                 </div>
                 <div>
                     <label>パスワード：</label>
-                    <input value={password} onChange={e => setPassword(e.target.value)} />
+                    <input type="password" value={password} onChange={e => setPassword(e.target.value)} />
                 </div>
                 <span>
                     <button type="submit">ログイン</button>
