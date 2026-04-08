@@ -69,7 +69,7 @@ export default function BarChartDrawer({ authFetch, date, token, onAuthFetch }) 
                 <YAxis />                                {/* Y軸は自動スケール */}
                 <Tooltip />                              {/* ホバー時に値表示 */}
                 <Legend />                               {/* 収入・支出の凡例 */}
-                <Bar dataKey="income" fill="#82ca9d" />  {/* 収入の棒 */}
+                <Bar dataKey="income" fill="#A2daBd" />  {/* 収入の棒 */}
                 <Bar dataKey="outGo" fill="#8884d8" />   {/* 支出の棒 */}
             </BarChart>
         </>

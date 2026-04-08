@@ -11,7 +11,7 @@ export default function NewData() {
     //雑記メモ(memo)を入力する
     const { loggingUsername } = useContext(UserContext);//ユーザー名を受け取る
     const [categories, setCategories] = useState([]);
-    const [inOut, setInOut] = useState("IN");
+    const [inOut, setInOut] = useState("OUT");
     const [errors, setErrors] = useState({});
     const today = new Date().toISOString().split("T")[0];
     const authFetch = useAuthFetch();
