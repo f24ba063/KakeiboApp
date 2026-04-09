@@ -6,6 +6,7 @@ import Home from './assets/pages/Home.jsx';
 import Chart from './assets/pages/Chart.jsx';
 import RegisterUser from './assets/pages/RegisterUser.jsx';
 import NewData from './assets/pages/NewData.jsx';
+import NewCategory from './assets/pages/NewCategory.jsx';
 import ShowData from './assets/pages/ShowData.jsx';
 import Header from './feature/Header';
 
@@ -30,10 +31,11 @@ function App() {
                 <Route path="/registerUser" element={<RegisterUser/> } />
             
                 <Route element={<PrivateLayout />} >
-                    <Route path="/chart"        element={<PrivateRoute><Chart    /></PrivateRoute>} />
-                    <Route path="/home"         element={<PrivateRoute><Home     /></PrivateRoute>} />
-                    <Route path="/newdata"      element={<PrivateRoute><NewData  /></PrivateRoute>} />
-                    <Route path="/showdata/:id" element={<PrivateRoute><ShowData /></PrivateRoute>} />
+                    <Route path="/chart"        element={<PrivateRoute><Chart       /></PrivateRoute>} />
+                    <Route path="/home"         element={<PrivateRoute><Home        /></PrivateRoute>} />
+                    <Route path="/newdata"      element={<PrivateRoute><NewData     /></PrivateRoute>} />
+                    <Route path="/newcategory"  element={<PrivateRoute><NewCategory /></PrivateRoute>} />
+                    <Route path="/showdata/:id" element={<PrivateRoute><ShowData    /></PrivateRoute>} />
                 </Route>
             </Routes>
         </AuthProvider>

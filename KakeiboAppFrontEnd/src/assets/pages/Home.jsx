@@ -115,7 +115,7 @@ export default function Home() {
 
                     <button
                         type="button"
-                        onCLick={() => navigate("/NewCategory")}>
+                        onClick={() => navigate("/newcategory")}>
                         新カテゴリ追加
                     </button>
                 </span>

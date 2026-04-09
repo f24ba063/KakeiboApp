@@ -2,6 +2,7 @@ package com.example.kakeiboApp.service;
 
 import org.springframework.stereotype.Service;
 
+import com.example.kakeiboApp.DTO.CategoryCreateDTO;
 import com.example.kakeiboApp.repository.CategoryMapper;
 
 import lombok.AllArgsConstructor;
@@ -9,17 +10,22 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class CategorySeriviceImplment implements CategoryService {
-	CategoryMapper mapper;
+	private final CategoryMapper mapper;
 	
 	@Override
-	public String categoryAppendService(String category, String inOut) {
-		// TODO 自動生成されたメソッド・スタブ
+	public CategoryCreateDTO  categoryAppendService(String category, String inOut) {
+		var dto = new CategoryCreateDTO(category, inOut,"");
 		try {
-			String response = mapper.appendCategory(category, inOut);
-			return response;
+			int response = mapper.appendCategory(category, inOut);
+			if(response == 1) {
+			dto.setMessage("新カテゴリーの登録に成功しました");
+			
+			}
 		}catch(Exception e) {
-			return new String("だめでした");
+			dto.setMessage("新カテゴリーの登録に失敗しました:" + e);
 		}
+		
+		return dto;
 	}
 
 }
