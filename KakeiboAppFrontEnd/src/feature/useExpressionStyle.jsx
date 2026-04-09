@@ -1,7 +1,7 @@
 ﻿import { useState, useEffect } from "react";
 
 export default function useExpressionStyle() {
-    const [expressionStyle, setExpressionStyle] = useState("card");
+    const [expressionStyle, setExpressionStyle] = useState("list");
 
     useEffect(() => {
         const saved = localStorage.getItem("expressionStyle");
@@ -18,5 +18,4 @@ export default function useExpressionStyle() {
         };
     }
         return { expressionStyle, changeStyle };
-   
 }

@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+﻿import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthFetch } from '../../hooks/useAuthFetch';
 
@@ -8,17 +8,6 @@ export default function NewCategory() {
     const [message, setMessage] = useState("");
     const navigate = useNavigate();
     const authFetch = useAuthFetch();
-
-    //useEffect(() => {
-    //    if (newCategory.length > 20) {
-    //        setMessage(prev => prev === "カテゴリー名は20文字以内に納めてください"
-    //            ? prev
-    //            : "カテゴリー名は20文字以内に納めてください");
-    //    } else {
-    //        setMessage("");
-    //    }
-    //    return;
-    //}, [newCategory]);
 
     const isTooLong = newCategory.length > 20;
 

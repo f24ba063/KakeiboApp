@@ -1,6 +1,5 @@
 ﻿import { useState, useContext } from 'react';
 import { useNavigate, } from 'react-router-dom';
-import { useAuthFetch } from '../../hooks/useAuthFetch';
 import { UserContext } from '../../context/UserContext';
 import LoginSequence from '../../feature/LoginSequence';
 
@@ -11,13 +10,54 @@ import '../../css/registerUser.css';
 export default function RegisterUser() {
     const [username, setUsername] = useState("");//ユーザー名登録
     const [password, setPassword] = useState("");//パスワード登録
+    const [passwordAccept, setPasswordAccept] = useState(false);
     const [payday, setPayday] = useState(25);//給料日登録
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState({});//入力エラーを受け止めるstate
     const { loggingUsername, setLoggingUsername } = useContext(UserContext);//ログインユーザ名を格納
     const navigate = useNavigate();
-    const authFetch = useAuthFetch();
 
+    const passwordCharacterRegex = /^[A-Za-z0-9]*$/;
+    const passwordLengthRegex = /^.{0,30}$/;
+    const usernameRegex = /^.{0,20}$/;
+
+    const regexUser = user => {
+        if (!usernameRegex.test(user)) {
+            setErrors({
+                ...errors,
+                username: "ユーザー名は20文字以下にしてください"
+            });
+        } else {
+            setErrors({
+                ...errors,
+                username: ""
+            });
+            setUsername(user);
+        }
+    }
+
+    const regexPassword = pass => {
+        const isCharOk = passwordCharacterRegex.test(pass) ? true : false;
+        const isLenOk= passwordLengthRegex.test(pass) ? true : false;
+
+        if (isCharOk && isLenOk) {
+            setPasswordAccept(true);
+            setErrors({
+                ...errors,
+                passwordCharacter: "",
+                passwordLength: ""
+            });
+            setPassword(pass);
+        } else {
+            setPasswordAccept(false);
+            setErrors({
+                ...errors,
+                passwordCharacter: isCharOk ? "" : "パスワードには半角ローマ字、半角数字のみ使えます",
+                passwordLength: isLenOk ? "" : "パスワードは30文字までしか設定できません"
+            });
+        }
+    }
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -109,7 +149,10 @@ export default function RegisterUser() {
                     autoComplete="username"
                     value={username}
                     required
-                    onChange={e => setUsername(e.target.value)} />
+                    placeholder="半角/全角20文字以内"
+                    onChange={e => {
+                        regexUser(e.target.value)
+                    }} />
                 {errors.username &&
                     <div className="warning">{errors.username}</div>
                 }
@@ -124,9 +167,16 @@ export default function RegisterUser() {
                     autoComplete="new-password"
                     value={password}
                     required
-                    onChange={e => setPassword(e.target.value)} />
-                {errors.password &&
-                    <div className="warning">{errors.password}</div>
+                    placeholder="半角数字･ローマ字30文字以内"
+
+                    onChange={e => {
+                        regexPassword(e.target.value)
+                    }} />
+                {errors.passwordCharacter &&
+                    <div className="warning">{errors.passwordCharacter}</div>
+                }
+                {errors.passwordLength &&
+                    <div className="warning">{errors.passwordLength}</div>
                 }
                 <br />
                 給料日

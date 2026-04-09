@@ -4,7 +4,7 @@ drop table if exists category;
 drop table if exists in_out;
 drop table if exists users;
 
---操作者の給料日
+--ユーザー情報
 create table users(
 	id serial primary key,
 	username varchar(20) unique,
@@ -13,7 +13,23 @@ create table users(
 	roles varchar(20)
 );
 
---入出テーブル
+--グループ情報
+create table groups(
+	id serial primary key,
+	group_name varchar(30) not null,
+	created_by varchar(20) not null,
+	created_at timestamp
+);
+
+--グループに所属するユーザと、その権限
+create table group_member(
+	group_id serial,
+	user_id serial,
+	role varchar(10),
+	can_view_total boolean
+)
+
+--個々人の収支テーブル
 create table in_out(
 	id Integer primary key,
 	in_out varchar(3) unique

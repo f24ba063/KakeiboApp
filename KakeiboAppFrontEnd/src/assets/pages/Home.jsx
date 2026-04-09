@@ -25,7 +25,7 @@ export default function Home() {
     const [month, setMonth] = useState(now.getMonth() + 1);//月を取得
     const [date, setDate] = useState(now.getDate());//日を取得
 
-    const [currentPayday, setCurrentPayday] = useState(11);//毎月の給料日の設定
+    const [currentPayday, setCurrentPayday] = useState(1);//毎月の給料日の設定
     const nextPayday = getNextPayday(currentPayday);//毎月の給料日をもとに、次の給料日の年月日を取得
 
     const [warning, setWarning] = useState("");//警告文一般を乗せる
