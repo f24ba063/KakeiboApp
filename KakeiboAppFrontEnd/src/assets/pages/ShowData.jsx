@@ -6,13 +6,14 @@ import { UserContext } from '../../context/UserContext'
 import { useAuthFetch } from '../../hooks/useAuthFetch';
 import '../../css/showData.css'
 import showCategory from '../../feature/showCategory';
+import updateAmount from '../../feature/updateAmount';
 
 
 export default function ShowData() {
     const { id } = useParams();
     const [isEditing, setIsEditing] = useState(false);//編集モードボタン
     const [categories, setCategories] = useState([]);//カテゴリー情報
-    const [error, setError] = useState(null);
+    const [errors, setErrors] = useState({});
     const { loggingUsername } = useContext(UserContext);
     const authFetch = useAuthFetch();
 
@@ -38,9 +39,9 @@ export default function ShowData() {
 
                 if (!res.ok) {
                     if (res.status === 401) {
-                        setError("認証情報が消えています。もう一度ログインしてください");
+                        setErrors.general("認証情報が消えています。もう一度ログインしてください");
                     } else if (res.status === 404) {
-                        setError("そのデータは存在しません");
+                        setErrors.general("そのデータは存在しません");
                     }
                     return;
                 }
@@ -48,7 +49,7 @@ export default function ShowData() {
                 const data = await res.json();
                 setKakeiboDto(data);
             } catch (err) {
-                setError("サーバーとの通信に失敗しました:" + err.message);
+                setErrors.general("サーバーとの通信に失敗しました:" + err.message);
             }
         }
 
@@ -115,11 +116,13 @@ export default function ShowData() {
             console.log("情報更新に失敗しました：" + err);
         }
     }
+
+
      
     return (
-        error ? (
+        errors.general ? (
             <>
-                <h2 style={{ color: "red" }} > {error}</h2>
+                <h2 style={{ color: "red" }} > {errors.general}</h2>
                 <button type="button" onClick={moveHome}>ホームに戻る</button>
             </>
     ) : (
@@ -151,7 +154,8 @@ export default function ShowData() {
 
                 {/*収支表示・切替ボタン*/}
                 <div className="edit">
-                    <h2>収支分類：</h2>{isEditing ?
+                            <h2>収支分類：</h2>
+                            {isEditing ?
                                 <button type="button"
                                     onClick={
                                         () => {
@@ -159,11 +163,11 @@ export default function ShowData() {
                                                 ...kakeiboDto,
                                                 inOut: kakeiboDto.inOut === "IN" ? "OUT" : "IN",
                                                 //直前のinOutが反映される前のデータを参照しているので、入力が逆になる
-                                                categoryId: kakeiboDto.inOut === "IN" ? 11 : 1 
+                                                categoryId: kakeiboDto.inOut === "IN" ? 11 : 1
                                             });
                                             console.log(kakeiboDto.inOut);
-                                        }}
-                        >
+                                        }
+                                }>
                             {kakeiboDto.inOut === "IN" ? "収入" : "支出"}
                         </button>
                         :
@@ -177,15 +181,11 @@ export default function ShowData() {
                 <div className="edit">
                     <h2>金額：</h2>
                     {isEditing ?
-                        <input type="number"
-                            value={kakeiboDto.amount.toLocaleString()}
-                            onChange={(e) => setKakeiboDto({
-                                ...kakeiboDto,
-                                amount: Math.max(Number(e.target.value), 0)
-                            })}></input>
+                        updateAmount(kakeiboDto, setKakeiboDto, setErrors)
                         :
-                        <h2>{kakeiboDto.amount}</h2>
-                    }
+                        <h2>{kakeiboDto.amount.toLocaleString()}</h2>
+                            }
+                            {errors.amount }
                 </div>
 
                 {/*カテゴリー*/}
@@ -215,16 +215,27 @@ export default function ShowData() {
                         <h2>メモ：</h2>
                         <input type="text" value={kakeiboDto.memo}
                             onChange={e => {
+                                const value = e.target.value;
+
                                 setKakeiboDto({
                                     ...kakeiboDto,
-                                    memo: e.target.value
-                                })
+                                    memo: value
+                                });
+                                setErrors(prev => ({
+                                    ...prev,
+                                    memo: value.length > 200
+                                        ? "メモが長すぎます"
+                                        : ""
+                                }));
+
                             }}
                         ></input>
                     </div>
                     :
                     <h2>メモ：{kakeiboDto.memo}</h2>
                 }
+                        {errors.memo && <div>{errors.memo}</div>}
+
                 <h2>データ作成日：{dateOutput(datestr)}</h2>
                 <h2>最終更新日：{dateOutput(updstr)}</h2>
                 <h2>すごい！

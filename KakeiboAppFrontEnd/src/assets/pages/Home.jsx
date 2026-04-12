@@ -195,7 +195,7 @@ export default function Home() {
                             後の月</button>
 
                         {/*新規データ登録ページへ*/}
-                        <Link id="new-information-button" to="/newdata">追加</Link>
+                        <Link id="new-information-button" to="/newdata">新規データ</Link>
                     </span>
 
                     {/*表示月ページをめくったとき、データが無かった時の各種警告文*/}

@@ -5,16 +5,18 @@ import { useAuthFetch } from '../../hooks/useAuthFetch';
 import { UserContext } from '../../context/UserContext'
 import '../../css/newData.css'
 import showCategory from '../../feature/showCategory';
+import updateAmount from '../../feature/updateAmount';
 export default function NewData() {
        //カテゴリー(category)、日付(tradeDate)、
         //入出金額(amount)、数値型の誉めるフラグ( homeru =0)、
     //雑記メモ(memo)を入力する
     const { loggingUsername } = useContext(UserContext);//ユーザー名を受け取る
     const [categories, setCategories] = useState([]);
-    const [inOut, setInOut] = useState("OUT");
+    const [inOut, setInOut] = useState("IN");
     const [errors, setErrors] = useState({});
     const today = new Date().toISOString().split("T")[0];
     const authFetch = useAuthFetch();
+
     const [kakeiboDto, setKakeiboDto] = useState({
         username: loggingUsername,
         category: "",
@@ -125,17 +127,10 @@ export default function NewData() {
                     <br />
                     {/*金額*/}
                     <label htmlFor="moneyInput">金額:</label>
-                    <input
-                        type="number"
-                        value={kakeiboDto.amount}
-                        
-                        onChange={ (e) => 
-                            setKakeiboDto({
-                                ...kakeiboDto,
-                            amount:Number(e.target.value)
-                        })}
-                    />
+
+                    {updateAmount(kakeiboDto, setKakeiboDto,setErrors)}
                     {errors.amount && <div>{errors.amount}</div> }
+
                     <br />
 
                     {/*日付*/}
@@ -156,11 +151,20 @@ export default function NewData() {
                     <input type="text"
                         id="memo"
                         value={kakeiboDto.memo}
-                        onChange={e => 
+                        onChange={e => {
+                            const value = e.target.value;
+
                             setKakeiboDto({
                                 ...kakeiboDto,
-                                memo: e.target.value
-                        })}
+                                memo: value
+                            });
+                            setErrors(prev => ({
+                                ...prev,
+                                memo: value.length > 200
+                                    ? "メモが長すぎます"
+                                    : ""
+                            }))
+                        }}
                     />
                     {errors.memo && <div>{errors.memo}</div>}
                     <br />
