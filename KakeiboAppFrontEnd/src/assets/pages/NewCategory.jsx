@@ -19,9 +19,7 @@ export default function NewCategory() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ category, inOut })
             });
-            console.log(res);
             const s = await res.json();
-            console.log(s);
             setMessage(s.message || "登録成功");
         } catch (err) {
             console.log("エラー内容：" + err);
@@ -31,9 +29,10 @@ export default function NewCategory() {
     return (
         <>
             <h2>新しいカテゴリーの登録</h2>
-            <form onSubmit={e => {
+            <form onSubmit={async e => {
                 e.preventDefault();
-                insertNewCategory(newCategory, inOut)
+                await insertNewCategory(newCategory, inOut);
+                await navigate("/home");
             }}>
                 <span>
                     <label>カテゴリー名：</label>
