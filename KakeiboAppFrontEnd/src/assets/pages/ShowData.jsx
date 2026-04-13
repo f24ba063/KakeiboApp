@@ -17,6 +17,7 @@ export default function ShowData() {
     const { loggingUsername } = useContext(UserContext);
     const authFetch = useAuthFetch();
 
+    //編集時に現在入力中の値を受け取るdto
     const [kakeiboDto, setKakeiboDto] = useState({
         username: loggingUsername,
         id: 0,
@@ -31,6 +32,10 @@ export default function ShowData() {
         updatedAt: "",
         softDelete: 0
     });
+
+    //編集キャンセルしたとき、変更前データを差し戻すためのコピー容器
+    const [prevDto, setPrevDto] = useState(null);
+
     //当該idのデータを取得する
     useEffect(() => {
         async function fetchData() {
@@ -48,6 +53,8 @@ export default function ShowData() {
 
                 const data = await res.json();
                 setKakeiboDto(data);
+                setPrevDto(data);
+
             } catch (err) {
                 setErrors.general("サーバーとの通信に失敗しました:" + err.message);
             }
@@ -133,8 +140,6 @@ export default function ShowData() {
                 {/*<h2 id="id-hidden">id: {id}</h2>*/}
                 {/*<h2 id="username-hidden">{loggingUsername}</h2>*/}
 
-
-
                 {/*日付*/}
                 {isEditing ?
                     <input
@@ -151,7 +156,6 @@ export default function ShowData() {
                     <h2>{dateOutput(kakeiboDto.tradeDate)}</h2>
                 }
 
-
                 {/*収支表示・切替ボタン*/}
                 <div className="edit">
                             <h2>収支分類：</h2>
@@ -163,7 +167,8 @@ export default function ShowData() {
                                                 ...kakeiboDto,
                                                 inOut: kakeiboDto.inOut === "IN" ? "OUT" : "IN",
                                                 //直前のinOutが反映される前のデータを参照しているので、入力が逆になる
-                                                categoryId: kakeiboDto.inOut === "IN" ? 11 : 1
+                                                //id:1は「給料」、id:6は「食費」の指定になる
+                                                categoryId: kakeiboDto.inOut === "IN" ? 6 : 1
                                             });
                                             console.log(kakeiboDto.inOut);
                                         }
@@ -260,7 +265,10 @@ export default function ShowData() {
                     : <button type="button" onClick={() => setIsEditing(true)}>編集</button>
                 }
                 {isEditing ?
-                    <button type="button" onClick={() => setIsEditing(false)}>キャンセル</button>
+                            <button type="button" onClick={() => {
+                                setIsEditing(false);
+                                setKakeiboDto(prevDto);
+                            }}>キャンセル</button>
                     : <button type="button" onClick={() => handleDelete(kakeiboDto.id)}>削除</button>
                 }
             </form>

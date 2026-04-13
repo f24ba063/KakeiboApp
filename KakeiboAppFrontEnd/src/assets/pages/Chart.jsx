@@ -11,6 +11,12 @@ export default function Chart() {
     const navigate = useNavigate();
     const authFetch = useAuthFetch()
     const date = new Date();
+    let year = date.getFullYear();
+    const month = date.getMonth() === 0 ? 12 : date.getMonth();//「0月」が発生したときの処理
+    if (month === 1) year -= 1; //月またぎで去年になったときの処理
+    const sixMonthsAgo = month > 7 ? month - 5 : month + 7; //半年前の月を計算
+    const sixMonthsAgoYear = sixMonthsAgo > 6 ? year - 1: year;
+
     const token = sessionStorage.getItem("jws");
 
     const handleAuthFetch = () =>{
@@ -37,10 +43,21 @@ export default function Chart() {
             <button type="button"
                 onClick={() => navigate("/home")}
             >ホームへ
-                </button>
-            <PieChartDrawer authFetch={authFetch} date={date} token={token} onAuthFetch={handleAuthFetch} />
-            <LineChartDrawer authFetch={authFetch} date={date} token={token} onAuthFetch={handleAuthFetch} />
-            <BarChartDrawer authFetch={authFetch} date={date} token={token} onAuthFetch={handleAuthFetch} />
+            </button>
+            <div id = "chart">
+                <span>
+                    <h3>{year}年{month}月の支出</h3>
+                    <PieChartDrawer authFetch={authFetch} date={date} token={token} onAuthFetch={handleAuthFetch} />
+                </span>
+                <span>
+                    <h3>{sixMonthsAgoYear}年{sixMonthsAgo}月 ～ {year}年{month}月の支出グラフ</h3>
+                    <LineChartDrawer authFetch={authFetch} date={date} token={token} onAuthFetch={handleAuthFetch} />
+                </span>
+                <span>
+                    <h3>{sixMonthsAgoYear}年{sixMonthsAgo}月 ～ {year}年{month}月の収支バランス</h3>
+                    <BarChartDrawer authFetch={authFetch} date={date} token={token} onAuthFetch={handleAuthFetch} />
+                </span>
+            </div>
         </>
     )
 }

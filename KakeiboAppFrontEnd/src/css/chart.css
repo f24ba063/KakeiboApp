@@ -2,3 +2,10 @@
 /*    background-color:#eee;*/
     border-radius: 30px;
 }
+
+#chart{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+}

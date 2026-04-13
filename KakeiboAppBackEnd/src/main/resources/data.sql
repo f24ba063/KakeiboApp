@@ -441,6 +441,9 @@ values('2026-3-16',  9,  35000, '保険料', 'user2');
 insert into kakeibo(trade_date, category_id, amount, memo, username)
 values('2026-4-1', 12 ,  15000, '漫画', 'user2');
 
+insert into kakeibo(trade_date, category_id, amount, memo, username)
+values('2026-4-11',  6,  5250, '食費', 'user1');
+
 
 --8月の収支をバランスシートとして登録
 insert into balance_history(year_month, balance)

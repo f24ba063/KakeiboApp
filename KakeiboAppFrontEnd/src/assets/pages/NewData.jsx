@@ -84,7 +84,8 @@ export default function NewData() {
     return (
         <>
             <h2>新しい情報</h2>
-            <div className={inOut === "IN" ? "income-background" :"outgo-background" }>
+            <div className={inOut === "IN" ? "income-background" : "outgo-background"}>
+            {/*カテゴリーid:1は「給料」、id:6は「食費」の指定になる*/}
             {/*入力を「収入」に切り替えるボタン*/}
                 <button
                     className="in-out-button" onClick={() => {
@@ -101,7 +102,7 @@ export default function NewData() {
                         setInOut("OUT")
                         setKakeiboDto({
                             ...kakeiboDto,
-                            categoryId: 11
+                            categoryId: 6
                         })
                     }}>支出</button>
 

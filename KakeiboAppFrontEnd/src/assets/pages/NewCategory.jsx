@@ -8,8 +8,10 @@ export default function NewCategory() {
     const [message, setMessage] = useState("");
     const navigate = useNavigate();
     const authFetch = useAuthFetch();
+    const [error, setError] = useState("");
 
     const isTooLong = newCategory.length > 20;
+    const isTooShort = newCategory.length === 20;
 
     const insertNewCategory = async function (category, inOut) {
 
@@ -31,17 +33,30 @@ export default function NewCategory() {
             <h2>新しいカテゴリーの登録</h2>
             <form onSubmit={async e => {
                 e.preventDefault();
-                await insertNewCategory(newCategory, inOut);
-                await navigate("/home");
+                try {
+                    await insertNewCategory(newCategory, inOut);
+                    if (newCategory.length === 0 || newCategory.length > 20) {
+                        throw error;
+                    }
+                    await navigate("/home", {
+                        state: {message :"新しいカテゴリーの登録が完了しました"}
+                    });
+                } catch (e) {
+                    setError("新しいカテゴリーの登録に失敗しました：" + e);
+                }
+                
             }}>
                 <span>
                     <label>カテゴリー名：</label>
                     <input type="text" value={newCategory}
                         onChange={e => {
                             setNewCategory(e.target.value);
-                        }} />
+                            e.target.value.trim().length > 20  ? setError("カテゴリー名が長すぎます") :
+                            e.target.value.trim().length === 0 ? setError("カテゴリー名を入力してください") :
+                            setError("") 
+                        } } />
                 </span>
-                <p>カテゴリー名は２０文字以下です</p>
+                <p>カテゴリー名は1文字以上20文字以下です</p>
 
                 <select
                     value={inOut}
@@ -51,11 +66,11 @@ export default function NewCategory() {
                 </select>
 
                 <button type="submit">カテゴリ作成</button>
-                <h4 style={{color:"red"} }>{isTooLong ? "カテゴリー名が長すぎます。登録できません" : ""}</h4>
             </form>
             <button onClick={() => navigate("/home")}>
                 ホーム画面へ
             </button>
+            {error && <h3>{error}</h3>}
         </>
     )
     
